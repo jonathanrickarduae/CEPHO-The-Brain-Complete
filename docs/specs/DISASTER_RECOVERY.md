@@ -21,12 +21,12 @@ This document defines the Disaster Recovery (DR) plan and database migration pro
 
 ## 2. Recovery Objectives
 
-| Metric | Target | Notes |
-|--------|--------|-------|
-| **RTO** (Recovery Time Objective) | ≤ 4 hours | Time to restore full service after a major incident |
-| **RPO** (Recovery Point Objective) | ≤ 24 hours | Maximum acceptable data loss window |
-| **MTTR** (Mean Time to Recover) | ≤ 2 hours | Target for routine incidents |
-| **Availability SLA** | 99.5% | ~3.6 hours downtime/month |
+| Metric                             | Target     | Notes                                               |
+| ---------------------------------- | ---------- | --------------------------------------------------- |
+| **RTO** (Recovery Time Objective)  | ≤ 4 hours  | Time to restore full service after a major incident |
+| **RPO** (Recovery Point Objective) | ≤ 24 hours | Maximum acceptable data loss window                 |
+| **MTTR** (Mean Time to Recover)    | ≤ 2 hours  | Target for routine incidents                        |
+| **Availability SLA**               | 99.5%      | ~3.6 hours downtime/month                           |
 
 ---
 
@@ -62,19 +62,20 @@ CEPHO uses TiDB Cloud which provides:
 - **Manual snapshots** — triggered via GitHub Actions workflow (`.github/workflows/db-backup.yml`)
 
 The `db-backup.yml` workflow runs daily at 02:00 UTC and:
+
 1. Triggers a TiDB Cloud snapshot via the API
 2. Exports a logical dump (SQL) to an S3-compatible bucket
 3. Sends a Slack notification on success/failure
 
 ### 4.2 Application State Backups
 
-| Asset | Backup Method | Frequency | Retention |
-|-------|--------------|-----------|-----------|
-| Database (TiDB) | Automated snapshot + logical dump | Daily | 14 days |
-| Environment variables | Render.com encrypted secrets | On change | Permanent |
-| File uploads (S3) | S3 versioning enabled | Continuous | 90 days |
-| Auth sessions (Supabase) | Supabase managed | N/A | Rolling |
-| GitHub repository | GitHub + local mirrors | Continuous | Permanent |
+| Asset                    | Backup Method                     | Frequency  | Retention |
+| ------------------------ | --------------------------------- | ---------- | --------- |
+| Database (TiDB)          | Automated snapshot + logical dump | Daily      | 14 days   |
+| Environment variables    | Render.com encrypted secrets      | On change  | Permanent |
+| File uploads (S3)        | S3 versioning enabled             | Continuous | 90 days   |
+| Auth sessions (Supabase) | Supabase managed                  | N/A        | Rolling   |
+| GitHub repository        | GitHub + local mirrors            | Continuous | Permanent |
 
 ---
 
@@ -85,6 +86,7 @@ The `db-backup.yml` workflow runs daily at 02:00 UTC and:
 **Symptoms:** 502/503 errors, health check at `/api/health` fails.
 
 **Steps:**
+
 1. Check Render.com dashboard → Services → CEPHO API → Logs
 2. If OOM: increase RAM tier in Render settings
 3. If crash loop: roll back to previous deploy via Render "Rollback" button
@@ -100,6 +102,7 @@ The `db-backup.yml` workflow runs daily at 02:00 UTC and:
 **Symptoms:** `ECONNREFUSED` or `ER_ACCESS_DENIED` errors in server logs.
 
 **Steps:**
+
 1. Check TiDB Cloud console → Cluster status
 2. If cluster is paused (free tier auto-pause): resume via console or API
 3. If connection string changed: update `DATABASE_URL` in Render environment variables
@@ -115,6 +118,7 @@ The `db-backup.yml` workflow runs daily at 02:00 UTC and:
 **Symptoms:** Login fails, `/api/auth/me` returns 401 for all users.
 
 **Steps:**
+
 1. Check Supabase dashboard → Project health
 2. Check Supabase status page (status.supabase.com)
 3. If JWT secret rotated: update `SUPABASE_JWT_SECRET` in Render env vars and redeploy
@@ -128,6 +132,7 @@ The `db-backup.yml` workflow runs daily at 02:00 UTC and:
 ### Scenario D: Full Data Loss / Catastrophic Failure
 
 **Steps:**
+
 1. Declare incident — notify all engineering team members
 2. Spin up a new TiDB Cloud cluster from latest snapshot (see §6)
 3. Update `DATABASE_URL` in Render environment variables
@@ -287,15 +292,15 @@ Next update in: <X minutes>
 
 ## 11. Key Contacts & Escalation
 
-| Role | Responsibility | Contact |
-|------|---------------|---------|
-| Engineering Lead | Primary incident commander | Internal |
-| Database Admin | TiDB / schema issues | Internal |
-| DevOps | Render / infra issues | Internal |
-| Supabase Support | Auth platform issues | support.supabase.com |
-| TiDB Cloud Support | Database platform issues | tidbcloud.com/support |
-| Render Support | Hosting platform issues | render.com/support |
+| Role               | Responsibility             | Contact               |
+| ------------------ | -------------------------- | --------------------- |
+| Engineering Lead   | Primary incident commander | Internal              |
+| Database Admin     | TiDB / schema issues       | Internal              |
+| DevOps             | Render / infra issues      | Internal              |
+| Supabase Support   | Auth platform issues       | support.supabase.com  |
+| TiDB Cloud Support | Database platform issues   | tidbcloud.com/support |
+| Render Support     | Hosting platform issues    | render.com/support    |
 
 ---
 
-*This document is a living runbook. Update it after every incident and every major infrastructure change.*
+_This document is a living runbook. Update it after every incident and every major infrastructure change._

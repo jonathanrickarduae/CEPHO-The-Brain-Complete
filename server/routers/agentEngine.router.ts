@@ -1203,7 +1203,12 @@ export const agentEngineRouter = router({
       });
 
       // p5-9: Track AI usage
-      void logAiUsage(ctx.user.id, "agentEngine.executeTask", completion.model, completion.usage ?? null);
+      void logAiUsage(
+        ctx.user.id,
+        "agentEngine.executeTask",
+        completion.model,
+        completion.usage ?? null
+      );
       const result =
         completion.choices[0]?.message?.content ?? "No response generated";
 

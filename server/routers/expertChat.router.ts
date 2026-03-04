@@ -1172,7 +1172,12 @@ Tailor your advice, examples, and communication style to match this profile. Ref
       let confidenceScore = 75; // default when logprobs unavailable
       try {
         // p5-9: Track AI usage
-        void logAiUsage(ctx.user.id, "expertChat.sendMessage", completion.model, completion.usage ?? null);
+        void logAiUsage(
+          ctx.user.id,
+          "expertChat.sendMessage",
+          completion.model,
+          completion.usage ?? null
+        );
         const logprobsData = completion.choices[0]?.logprobs?.content;
         if (logprobsData && logprobsData.length > 0) {
           const avgLogProb =

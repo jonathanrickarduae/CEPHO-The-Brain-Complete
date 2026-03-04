@@ -165,7 +165,12 @@ Format as JSON: { "score": number, "strengths": string[], "improvements": string
             temperature: 0.7,
           });
           // p5-9: Track AI usage
-          void logAiUsage(ctx.user.id, "businessPlanReview.analyzeSectionWithAllExperts", completion.model, completion.usage ?? null);
+          void logAiUsage(
+            ctx.user.id,
+            "businessPlanReview.analyzeSectionWithAllExperts",
+            completion.model,
+            completion.usage ?? null
+          );
 
           const content = completion.choices[0]?.message?.content ?? "{}";
           let analysis: Record<string, unknown> = {};
@@ -240,7 +245,12 @@ Return only a JSON array of IDs: ["id1", "id2", ...]`,
           temperature: 0.3,
         });
         // p5-9: Track AI usage
-        void logAiUsage(ctx.user.id, "businessPlanReview.selectExpertTeam", completion.model, completion.usage ?? null);
+        void logAiUsage(
+          ctx.user.id,
+          "businessPlanReview.selectExpertTeam",
+          completion.model,
+          completion.usage ?? null
+        );
         const content = completion.choices[0]?.message?.content ?? "[]";
         try {
           selectedExperts = JSON.parse(
@@ -363,7 +373,12 @@ Provide a concise, expert response (2-3 sentences).`;
         temperature: 0.7,
       });
       // p5-9: Track AI usage
-      void logAiUsage(ctx.user.id, "businessPlanReview.askFollowUp", completion.model, completion.usage ?? null);
+      void logAiUsage(
+        ctx.user.id,
+        "businessPlanReview.askFollowUp",
+        completion.model,
+        completion.usage ?? null
+      );
 
       return {
         answer:

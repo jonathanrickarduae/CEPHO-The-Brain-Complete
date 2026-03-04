@@ -4765,7 +4765,9 @@ export const digitalTwinCognitiveModel = pgTable(
       }>()
       .default({ formality: 0.7, verbosity: 0.5, humor: 0.3, useEmoji: false }),
     riskTolerance: text("riskTolerance").default("0.5"),
-    decisionHeuristics: json("decisionHeuristics").$type<string[]>().default([]),
+    decisionHeuristics: json("decisionHeuristics")
+      .$type<string[]>()
+      .default([]),
     strategicPriorities: json("strategicPriorities")
       .$type<{ priority: string; weight: number }[]>()
       .default([]),
@@ -4781,8 +4783,10 @@ export const digitalTwinCognitiveModel = pgTable(
   }
 );
 
-export type DigitalTwinCognitiveModel = typeof digitalTwinCognitiveModel.$inferSelect;
-export type InsertDigitalTwinCognitiveModel = typeof digitalTwinCognitiveModel.$inferInsert;
+export type DigitalTwinCognitiveModel =
+  typeof digitalTwinCognitiveModel.$inferSelect;
+export type InsertDigitalTwinCognitiveModel =
+  typeof digitalTwinCognitiveModel.$inferInsert;
 
 /**
  * Digital Twin Vocabulary - stores preferred/avoided terms and writing samples.
@@ -4790,7 +4794,9 @@ export type InsertDigitalTwinCognitiveModel = typeof digitalTwinCognitiveModel.$
 export const digitalTwinVocabulary = pgTable("digital_twin_vocabulary", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull().unique(),
-  preferredTerms: json("preferredTerms").$type<Record<string, string>>().default({}),
+  preferredTerms: json("preferredTerms")
+    .$type<Record<string, string>>()
+    .default({}),
   avoidedTerms: json("avoidedTerms").$type<string[]>().default([]),
   commonPhrases: json("commonPhrases").$type<string[]>().default([]),
   writingSamples: json("writingSamples").$type<string[]>().default([]),
@@ -4802,7 +4808,8 @@ export const digitalTwinVocabulary = pgTable("digital_twin_vocabulary", {
 });
 
 export type DigitalTwinVocabulary = typeof digitalTwinVocabulary.$inferSelect;
-export type InsertDigitalTwinVocabulary = typeof digitalTwinVocabulary.$inferInsert;
+export type InsertDigitalTwinVocabulary =
+  typeof digitalTwinVocabulary.$inferInsert;
 
 /**
  * Digital Twin Decision Log - logs every user decision for model calibration.
@@ -4824,7 +4831,8 @@ export const digitalTwinDecisionLog = pgTable("digital_twin_decision_log", {
 });
 
 export type DigitalTwinDecisionLog = typeof digitalTwinDecisionLog.$inferSelect;
-export type InsertDigitalTwinDecisionLog = typeof digitalTwinDecisionLog.$inferInsert;
+export type InsertDigitalTwinDecisionLog =
+  typeof digitalTwinDecisionLog.$inferInsert;
 
 // =============================================================================
 // PHASE 3: AUTONOMOUS OPERATIONS & INTELLIGENCE
@@ -4956,7 +4964,9 @@ export type InsertMeetingNote = typeof meetingNotes.$inferInsert;
 export const briefingPreferences = pgTable("briefing_preferences", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull().unique(),
-  preferredLength: varchar("preferredLength", { length: 20 }).default("standard"),
+  preferredLength: varchar("preferredLength", { length: 20 }).default(
+    "standard"
+  ),
   tone: varchar("tone", { length: 20 }).default("professional"),
   enabledSections: json("enabledSections"),
   deliveryTime: varchar("deliveryTime", { length: 10 }).default("06:00"),
@@ -5037,7 +5047,8 @@ export const marketLaunchCampaigns = pgTable("market_launch_campaigns", {
     .notNull(),
 });
 export type MarketLaunchCampaign = typeof marketLaunchCampaigns.$inferSelect;
-export type InsertMarketLaunchCampaign = typeof marketLaunchCampaigns.$inferInsert;
+export type InsertMarketLaunchCampaign =
+  typeof marketLaunchCampaigns.$inferInsert;
 
 // ─── Real-World Integration Layer ─────────────────────────────────────────────
 /**
@@ -5049,7 +5060,9 @@ export const realWorldIntegrations = pgTable("real_world_integrations", {
   userId: integer("userId").notNull(),
   provider: varchar("provider", { length: 100 }).notNull(),
   displayName: varchar("displayName", { length: 200 }).notNull(),
-  credentialsVaultKey: varchar("credentialsVaultKey", { length: 500 }).notNull(),
+  credentialsVaultKey: varchar("credentialsVaultKey", {
+    length: 500,
+  }).notNull(),
   metadata: text("metadata").default("{}"),
   status: varchar("status", { length: 20 }).default("active").notNull(),
   errorMessage: text("errorMessage"),
@@ -5060,7 +5073,8 @@ export const realWorldIntegrations = pgTable("real_world_integrations", {
     .notNull(),
 });
 export type RealWorldIntegration = typeof realWorldIntegrations.$inferSelect;
-export type InsertRealWorldIntegration = typeof realWorldIntegrations.$inferInsert;
+export type InsertRealWorldIntegration =
+  typeof realWorldIntegrations.$inferInsert;
 
 // ─── Email Accounts ────────────────────────────────────────────────────────────
 /**

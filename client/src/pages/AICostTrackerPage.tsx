@@ -109,10 +109,7 @@ export default function AICostTrackerPage() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <Select
-            value={String(days)}
-            onValueChange={v => setDays(Number(v))}
-          >
+          <Select value={String(days)} onValueChange={v => setDays(Number(v))}>
             <SelectTrigger className="w-40">
               <SelectValue />
             </SelectTrigger>
@@ -252,7 +249,10 @@ export default function AICostTrackerPage() {
                   tickFormatter={v => `$${v.toFixed(4)}`}
                 />
                 <Tooltip
-                  formatter={(value: number) => [`$${value.toFixed(6)}`, "Cost"]}
+                  formatter={(value: number) => [
+                    `$${value.toFixed(6)}`,
+                    "Cost",
+                  ]}
                   contentStyle={{
                     background: "#1a1a2e",
                     border: "1px solid #333",
@@ -372,21 +372,19 @@ export default function AICostTrackerPage() {
       )}
 
       {/* Empty state */}
-      {!isLoading &&
-        !summaryError &&
-        (summary?.totalCalls ?? 0) === 0 && (
-          <Card>
-            <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-              <Cpu className="w-12 h-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No usage data yet</h3>
-              <p className="text-muted-foreground text-sm max-w-sm">
-                AI cost data will appear here once you start using features like
-                Voice Notes, Digital Twin, AI Experts, and other LLM-powered
-                tools.
-              </p>
-            </CardContent>
-          </Card>
-        )}
+      {!isLoading && !summaryError && (summary?.totalCalls ?? 0) === 0 && (
+        <Card>
+          <CardContent className="flex flex-col items-center justify-center py-16 text-center">
+            <Cpu className="w-12 h-12 text-muted-foreground mb-4" />
+            <h3 className="text-lg font-semibold mb-2">No usage data yet</h3>
+            <p className="text-muted-foreground text-sm max-w-sm">
+              AI cost data will appear here once you start using features like
+              Voice Notes, Digital Twin, AI Experts, and other LLM-powered
+              tools.
+            </p>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

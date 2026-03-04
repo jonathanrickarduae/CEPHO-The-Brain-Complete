@@ -39,7 +39,10 @@ router.get("/health/ready", async (req, res) => {
   try {
     const client = await getRawClient();
     if (!client) {
-      checks.database = { status: "error", error: "No database client available" };
+      checks.database = {
+        status: "error",
+        error: "No database client available",
+      };
       allReady = false;
     } else {
       const result = await client`SELECT 1 as health`;
@@ -113,7 +116,10 @@ router.get("/health/detailed", async (req, res) => {
     const start = Date.now();
     const client = await getRawClient();
     if (!client) {
-      checks.database = { status: "error", error: "No database client available" };
+      checks.database = {
+        status: "error",
+        error: "No database client available",
+      };
     } else {
       await client`SELECT 1 as health`;
       const duration = Date.now() - start;

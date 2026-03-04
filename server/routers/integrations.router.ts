@@ -82,7 +82,10 @@ export const authRouter = router({
         } else {
           await db
             .update(userSettings)
-            .set({ onboardingComplete: input.onboardingComplete, updatedAt: new Date() })
+            .set({
+              onboardingComplete: input.onboardingComplete,
+              updatedAt: new Date(),
+            })
             .where(eq(userSettings.userId, ctx.user.id));
         }
       }

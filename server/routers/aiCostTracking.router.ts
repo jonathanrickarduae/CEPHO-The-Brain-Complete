@@ -183,10 +183,15 @@ export async function logAiUsage(
   userId: number,
   feature: string,
   model: string,
-  usage: { prompt_tokens?: number; completion_tokens?: number } | null | undefined,
+  usage:
+    | { prompt_tokens?: number; completion_tokens?: number }
+    | null
+    | undefined,
   errorCode?: string
 ) {
-  if (!usage) { return; }
+  if (!usage) {
+    return;
+  }
   const promptTokens = usage.prompt_tokens ?? 0;
   const completionTokens = usage.completion_tokens ?? 0;
   const totalTokens = promptTokens + completionTokens;

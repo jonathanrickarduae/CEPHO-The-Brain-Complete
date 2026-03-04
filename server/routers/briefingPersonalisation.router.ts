@@ -181,7 +181,12 @@ Generate the morning briefing.`,
     temperature: 0.6,
   });
   // p5-9: Track AI usage
-  void logAiUsage(userId, "briefingPersonalisation.generate", completion.model, completion.usage ?? null);
+  void logAiUsage(
+    userId,
+    "briefingPersonalisation.generate",
+    completion.model,
+    completion.usage ?? null
+  );
 
   const content = JSON.parse(
     completion.choices[0]?.message?.content ?? "{}"

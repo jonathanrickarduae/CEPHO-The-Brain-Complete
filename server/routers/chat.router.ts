@@ -95,7 +95,12 @@ export const chatRouter = router({
       });
 
       // p5-9: Track AI token usage and cost
-      void logAiUsage(ctx.user.id, "chat.send", completion.model, completion.usage ?? null);
+      void logAiUsage(
+        ctx.user.id,
+        "chat.send",
+        completion.model,
+        completion.usage ?? null
+      );
       const assistantMessage =
         completion.choices[0]?.message?.content ??
         "I apologise, I was unable to generate a response. Please try again.";

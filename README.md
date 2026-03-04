@@ -119,16 +119,16 @@ All project documentation lives in `/docs`:
 
 All sensitive credentials, tokens, and environment-specific configurations are stored in `.env.local`. This file is **never** committed to Git. A template is available at `.env.example`.
 
-| Item | Location | Notes |
-| :--- | :--- | :--- |
-| **GitHub PAT** | `.env.local` | `GITHUB_PAT` — for `git push` and API access |
-| **Supabase Keys** | `.env.local` | `SUPABASE_URL`, `SUPABASE_ANON_KEY`, etc. |
-| **Database URL** | `.env.local` | `DATABASE_URL` for TiDB Cloud or Supabase Postgres |
-| **OpenAI Key** | `.env.local` | `OPENAI_API_KEY` |
-| **Sentry DSN** | `.env.local` | `SENTRY_DSN` (server) and `VITE_SENTRY_DSN` (client) |
-| **Disaster Recovery** | `docs/specs/DISASTER_RECOVERY.md` | Full runbook for backups, restores, and migrations |
-| **Live Dashboard** | `docs/dashboard/index.html` | The HTML file for the live project dashboard |
-| **Grand Master Plan** | `docs/CEPHO_Grand_Master_Plan_v12_FINAL.md` | The single source of truth for the project plan |
+| Item                  | Location                                    | Notes                                                |
+| :-------------------- | :------------------------------------------ | :--------------------------------------------------- |
+| **GitHub PAT**        | `.env.local`                                | `GITHUB_PAT` — for `git push` and API access         |
+| **Supabase Keys**     | `.env.local`                                | `SUPABASE_URL`, `SUPABASE_ANON_KEY`, etc.            |
+| **Database URL**      | `.env.local`                                | `DATABASE_URL` for TiDB Cloud or Supabase Postgres   |
+| **OpenAI Key**        | `.env.local`                                | `OPENAI_API_KEY`                                     |
+| **Sentry DSN**        | `.env.local`                                | `SENTRY_DSN` (server) and `VITE_SENTRY_DSN` (client) |
+| **Disaster Recovery** | `docs/specs/DISASTER_RECOVERY.md`           | Full runbook for backups, restores, and migrations   |
+| **Live Dashboard**    | `docs/dashboard/index.html`                 | The HTML file for the live project dashboard         |
+| **Grand Master Plan** | `docs/CEPHO_Grand_Master_Plan_v12_FINAL.md` | The single source of truth for the project plan      |
 
 ---
 
@@ -184,16 +184,16 @@ pnpm dev
 
 ## Project Phases Overview
 
-| Phase       | Name                                 | Status          |
-| :---------- | :----------------------------------- | :-------------- |
-| **Phase 0** | Pre-Conditions & Foundation          | **Complete**    |
-| **Phase 1** | Security, Stability & Code Cleanup   | **Complete**    |
-| **Phase 2** | AI Agents, Memory & Digital Twin     | **Complete**    |
-| **Phase 3** | Autonomous Operations & Intelligence | **Complete**    |
-| **Phase 4** | UX, Design System & Scale            | **Complete**    |
-| **Phase 5** | Ops Excellence & Observability       | **Complete**    |
-| **Phase 6** | Enhancements, Agents & Innovation    | Not started     |
-| **Phase 7** | Monetisation & Enterprise            | Not started     |
+| Phase       | Name                                 | Status       |
+| :---------- | :----------------------------------- | :----------- |
+| **Phase 0** | Pre-Conditions & Foundation          | **Complete** |
+| **Phase 1** | Security, Stability & Code Cleanup   | **Complete** |
+| **Phase 2** | AI Agents, Memory & Digital Twin     | **Complete** |
+| **Phase 3** | Autonomous Operations & Intelligence | **Complete** |
+| **Phase 4** | UX, Design System & Scale            | **Complete** |
+| **Phase 5** | Ops Excellence & Observability       | **Complete** |
+| **Phase 6** | Enhancements, Agents & Innovation    | Not started  |
+| **Phase 7** | Monetisation & Enterprise            | Not started  |
 
 Full task breakdown for every phase is on the **[Live Dashboard](https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/)**.
 
@@ -215,12 +215,12 @@ The single source of truth for all credentials, API keys, and recovery procedure
 
 All environment variables for local development are stored in `.env.local`. This file is created by copying `.env.example` and filling in the values from the Master Recovery Document.
 
-| File | Purpose |
-| :--- | :--- |
-| `.env.local` | Contains all 71+ environment variables for local development. **Gitignored**. |
-| `.env.example` | A template file that lists all required environment variables. |
-| `docs/CEPHO_MASTER_RECOVERY_DOCUMENT.md` | Contains the actual values for all credentials. **Gitignored**. |
-| `scripts/restore_all_render.py` | Script to restore all Render & GitHub credentials. **Gitignored**. |
+| File                                     | Purpose                                                                       |
+| :--------------------------------------- | :---------------------------------------------------------------------------- |
+| `.env.local`                             | Contains all 71+ environment variables for local development. **Gitignored**. |
+| `.env.example`                           | A template file that lists all required environment variables.                |
+| `docs/CEPHO_MASTER_RECOVERY_DOCUMENT.md` | Contains the actual values for all credentials. **Gitignored**.               |
+| `scripts/restore_all_render.py`          | Script to restore all Render & GitHub credentials. **Gitignored**.            |
 
 ### How to Restore All Credentials (Render & GitHub)
 
@@ -237,6 +237,7 @@ Render occasionally loses environment variables. A script is provided to restore
     ```
 
 This script will:
+
 - Read all credentials from its own source code.
 - Update all 71+ environment variables on the Render production service (`cepho-the-brain-complete`).
 - Update all 14 corresponding secrets in the GitHub repository for GitHub Actions.
