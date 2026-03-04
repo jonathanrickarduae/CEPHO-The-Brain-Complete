@@ -115,7 +115,7 @@ All project documentation lives in `/docs`:
 
 ---
 
-## Credentials & File Locations
+## Operations, Recovery & Credentials
 
 All sensitive credentials, tokens, and environment-specific configurations are stored in `.env.local`. This file is **never** committed to Git. A template is available at `.env.example`.
 
@@ -196,3 +196,50 @@ pnpm dev
 | **Phase 7** | Monetisation & Enterprise            | Not started     |
 
 Full task breakdown for every phase is on the **[Live Dashboard](https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/)**.
+
+---
+
+## Operations & Recovery
+
+> **CRITICAL:** This section outlines how to manage credentials and recover the application. All files mentioned here contain sensitive information and are **gitignored**.
+
+### The Master Recovery Document
+
+The single source of truth for all credentials, API keys, and recovery procedures is the **Master Recovery Document**. This is the first place to look if you are locked out or need a password.
+
+- **Location**: `docs/CEPHO_MASTER_RECOVERY_DOCUMENT.md`
+- **Status**: **Gitignored**. It will never be committed to the repository.
+- **Backup**: A copy is also maintained in the project's Google Drive.
+
+### Environment Variables & Credentials
+
+All environment variables for local development are stored in `.env.local`. This file is created by copying `.env.example` and filling in the values from the Master Recovery Document.
+
+| File | Purpose |
+| :--- | :--- |
+| `.env.local` | Contains all 71+ environment variables for local development. **Gitignored**. |
+| `.env.example` | A template file that lists all required environment variables. |
+| `docs/CEPHO_MASTER_RECOVERY_DOCUMENT.md` | Contains the actual values for all credentials. **Gitignored**. |
+| `scripts/restore_all_render.py` | Script to restore all Render & GitHub credentials. **Gitignored**. |
+
+### How to Restore All Credentials (Render & GitHub)
+
+Render occasionally loses environment variables. A script is provided to restore all 71+ variables to the Render service and all 14 secrets to the GitHub repository via their respective APIs.
+
+**To run the restore script:**
+
+1.  **Locate the script:** The script is at `scripts/restore_all_render.py`. It is gitignored.
+2.  **Run from the project root:**
+
+    ```bash
+    # Run this from the /home/ubuntu/cepho-audit/ directory
+    python3 scripts/restore_all_render.py
+    ```
+
+This script will:
+- Read all credentials from its own source code.
+- Update all 71+ environment variables on the Render production service (`cepho-the-brain-complete`).
+- Update all 14 corresponding secrets in the GitHub repository for GitHub Actions.
+- Automatically trigger a new deployment on Render.
+
+> **Note:** The script uses the `RENDER_API_KEY` and `GITHUB_TOKEN` defined within it to authenticate. If these tokens expire, they must be updated in the script itself and in the Master Recovery Document.
