@@ -305,7 +305,7 @@ function BrainLayoutContent({
     // Voice input is processed through the Chief of Staff interface
     // Navigate to COS page with the transcript as context
     if (transcript.trim()) {
-      setLocation("/chief-of-staff?voice=" + encodeURIComponent(transcript));
+      setLocation("/tasks?voice=" + encodeURIComponent(transcript));
     }
   };
 

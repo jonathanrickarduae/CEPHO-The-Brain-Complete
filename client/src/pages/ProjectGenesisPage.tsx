@@ -189,7 +189,20 @@ export default function ProjectGenesisPage() {
       setTimeout(() => {
         setViewMode("dashboard");
       }, 1500);
-    } catch {}
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (
+        msg.includes("10001") ||
+        msg.toLowerCase().includes("login") ||
+        msg.toLowerCase().includes("unauthorized")
+      ) {
+        toast.error(
+          "Session not active. Please ensure PIN_GATE_ONLY is enabled on the server, then refresh and try again."
+        );
+      } else {
+        toast.error(`Failed to create project: ${msg}`);
+      }
+    }
   };
 
   const getStatusColor = (status: GenesisBlueprint["status"]) => {

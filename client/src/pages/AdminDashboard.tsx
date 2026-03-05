@@ -47,7 +47,11 @@ function StatCard({
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
 
-  const { data: cephoScore } = trpc.cephoScore.get.useQuery(undefined, {
+  const {
+    data: cephoScore,
+    isLoading: cephoScoreLoading,
+    isError: cephoScoreError,
+  } = trpc.cephoScore.get.useQuery(undefined, {
     retry: false,
   });
   const { data: flywheelStats } = trpc.innovation.getFlywheelStats.useQuery(
@@ -127,7 +131,13 @@ export default function AdminDashboard() {
                 label="CEPHO Score"
                 value={cephoScore?.score ?? "—"}
                 sub={
-                  cephoScore?.grade ? `Grade ${cephoScore.grade}` : "Loading..."
+                  cephoScoreLoading
+                    ? "Calculating..."
+                    : cephoScoreError
+                      ? "Unavailable"
+                      : cephoScore?.grade
+                        ? `Grade ${cephoScore.grade}`
+                        : "No data yet"
                 }
                 color="text-primary"
               />

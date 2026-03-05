@@ -198,19 +198,42 @@ export default function WarRoom() {
               </div>
             </div>
 
-            {/* Agent Status */}
+            {/* Agent Status — reflects actual state: Ready / Working / Complete */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
               {[
                 {
                   label: "Chief of Staff",
-                  status: "Coordinating",
+                  activeStatus: "Coordinating",
                   icon: Brain,
                 },
-                { label: "Risk Agent", status: "Analysing", icon: Shield },
-                { label: "Strategy Agent", status: "Planning", icon: Target },
-                { label: "Comms Agent", status: "Drafting", icon: Send },
+                {
+                  label: "Risk Agent",
+                  activeStatus: "Analysing",
+                  icon: Shield,
+                },
+                {
+                  label: "Strategy Agent",
+                  activeStatus: "Planning",
+                  icon: Target,
+                },
+                { label: "Comms Agent", activeStatus: "Drafting", icon: Send },
               ].map(agent => {
                 const Icon = agent.icon;
+                const label = isGenerating
+                  ? agent.activeStatus
+                  : responseplan
+                    ? "Complete"
+                    : "Standby";
+                const dotCls = isGenerating
+                  ? "bg-amber-500 animate-pulse"
+                  : responseplan
+                    ? "bg-emerald-500"
+                    : "bg-muted-foreground";
+                const textCls = isGenerating
+                  ? "text-amber-500"
+                  : responseplan
+                    ? "text-emerald-400"
+                    : "text-muted-foreground";
                 return (
                   <div
                     key={agent.label}
@@ -221,10 +244,8 @@ export default function WarRoom() {
                       {agent.label}
                     </p>
                     <div className="flex items-center gap-1.5 mt-1">
-                      <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-                      <span className="text-xs text-amber-500">
-                        {agent.status}
-                      </span>
+                      <div className={`w-1.5 h-1.5 rounded-full ${dotCls}`} />
+                      <span className={`text-xs ${textCls}`}>{label}</span>
                     </div>
                   </div>
                 );

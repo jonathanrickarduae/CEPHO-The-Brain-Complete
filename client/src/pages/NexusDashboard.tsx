@@ -135,6 +135,7 @@ function ActivityItem({
 export default function NexusDashboard() {
   const [, setLocation] = useLocation();
   const [inputValue, setInputValue] = useState("");
+  const [clawOpen, setClawOpen] = useState(false);
   const _inputRef = useRef<HTMLTextAreaElement>(null); // reserved for future textarea binding
   const { mode, requestModeChange } = useGovernance();
 
@@ -203,8 +204,29 @@ export default function NexusDashboard() {
     e.target.style.height = Math.min(e.target.scrollHeight, 100) + "px";
   };
 
-  // Quick Access Skill Buttons
+  // Quick Access Skill Buttons — ordered by daily workflow priority
   const skillButtons = [
+    {
+      label: "Chief of Staff",
+      icon: User,
+      path: "/tasks",
+      gradient: "from-emerald-500/20 to-teal-500/20",
+      border: "border-emerald-500/50 hover:border-emerald-400",
+    },
+    {
+      label: "Daily Briefing",
+      icon: Sun,
+      path: "/daily-brief",
+      gradient: "from-amber-500/20 to-orange-500/20",
+      border: "border-amber-500/50 hover:border-amber-400",
+    },
+    {
+      label: "Innovation Hub",
+      icon: Lightbulb,
+      path: "/innovation-hub",
+      gradient: "from-yellow-500/20 to-amber-500/20",
+      border: "border-yellow-500/50 hover:border-yellow-400",
+    },
     {
       label: "Project Genesis",
       icon: Rocket,
@@ -222,35 +244,14 @@ export default function NexusDashboard() {
     {
       label: "Digital Twin",
       icon: Users,
-      path: "/tasks",
+      path: "/twin-training",
       gradient: "from-blue-500/20 to-indigo-500/20",
       border: "border-blue-500/50 hover:border-blue-400",
     },
     {
-      label: "The Signal",
-      icon: Sun,
-      path: "/the-signal",
-      gradient: "from-amber-500/20 to-orange-500/20",
-      border: "border-amber-500/50 hover:border-amber-400",
-    },
-    {
-      label: "Chief of Staff",
-      icon: User,
-      path: "/chief-of-staff",
-      gradient: "from-emerald-500/20 to-teal-500/20",
-      border: "border-emerald-500/50 hover:border-emerald-400",
-    },
-    {
-      label: "Innovation Hub",
-      icon: Lightbulb,
-      path: "/innovation-hub",
-      gradient: "from-yellow-500/20 to-amber-500/20",
-      border: "border-yellow-500/50 hover:border-yellow-400",
-    },
-    {
-      label: "Knowledge Library",
+      label: "Knowledge Base",
       icon: BookOpen,
-      path: "/library",
+      path: "/knowledge-base",
       gradient: "from-indigo-500/20 to-purple-500/20",
       border: "border-indigo-500/50 hover:border-indigo-400",
     },
@@ -438,9 +439,23 @@ export default function NexusDashboard() {
         </div>
       </div>
 
-      {/* OpenClaw AI Assistant - Fixed Bottom Right (Desktop only) */}
-      <div className="hidden lg:block fixed bottom-6 right-6 z-50 w-96 h-[500px] border-2 border-cyan-400/50 rounded-xl overflow-hidden bg-card/95 backdrop-blur-lg shadow-[0_0_30px_rgba(0,212,255,0.3)]">
-        <OpenClawChat />
+      {/* OpenClaw AI Assistant - Collapsible Fixed Bottom Right (Desktop only) */}
+      <div className="hidden lg:block fixed bottom-6 right-6 z-50">
+        {clawOpen && (
+          <div className="mb-3 w-96 h-[500px] border-2 border-cyan-400/50 rounded-xl overflow-hidden bg-card/95 backdrop-blur-lg shadow-[0_0_30px_rgba(0,212,255,0.3)]">
+            <OpenClawChat />
+          </div>
+        )}
+        <button
+          onClick={() => setClawOpen(o => !o)}
+          className="ml-auto flex items-center gap-2 px-4 py-3 rounded-xl border-2 border-cyan-400/50 bg-card/95 backdrop-blur-lg shadow-[0_0_20px_rgba(0,212,255,0.2)] text-cyan-400 hover:border-cyan-400 hover:shadow-[0_0_30px_rgba(0,212,255,0.4)] transition-all duration-200"
+          title={clawOpen ? "Close ClawBot" : "Open ClawBot"}
+        >
+          <Brain className="w-5 h-5" />
+          <span className="text-sm font-semibold">
+            {clawOpen ? "Close" : "ClawBot"}
+          </span>
+        </button>
       </div>
     </PageShell>
   );

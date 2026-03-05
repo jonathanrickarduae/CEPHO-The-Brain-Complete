@@ -1,7 +1,13 @@
 // p5-2: Sentry client-side error tracking — must be imported before everything else
 import * as Sentry from "@sentry/react";
 import { trpc } from "@/lib/trpc";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  QueryCache,
+  MutationCache,
+} from "@tanstack/react-query";
+import { toast } from "sonner";
 import { httpBatchLink } from "@trpc/client";
 import { createRoot } from "react-dom/client";
 import superjson from "superjson";
@@ -52,7 +58,19 @@ if ("serviceWorker" in navigator && import.meta.env.PROD) {
   });
 }
 
+const handleAuthError = (error: unknown) => {
+  const msg = error instanceof Error ? error.message : String(error);
+  if (msg.includes("UNAUTHORIZED") || msg.includes("10001")) {
+    toast.error(
+      "Session not active — please refresh. If this persists, check server configuration.",
+      { id: "auth-error", duration: 6000 }
+    );
+  }
+};
+
 const queryClient = new QueryClient({
+  queryCache: new QueryCache({ onError: handleAuthError }),
+  mutationCache: new MutationCache({ onError: handleAuthError }),
   defaultOptions: {
     queries: {
       retry: 0,
