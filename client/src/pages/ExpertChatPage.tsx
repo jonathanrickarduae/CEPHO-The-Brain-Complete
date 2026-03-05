@@ -15,6 +15,7 @@ import {
   User,
   Bot,
   BookOpen,
+  Download,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useVoiceInput, useVoiceWaveform } from "@/hooks/useVoiceInput";
@@ -392,7 +393,7 @@ ${messages
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setShowExportModal(true)}
+            onClick={() => setShowExportMenu(true)}
           >
             <Download className="w-4 h-4 mr-1" /> Export
           </Button>
