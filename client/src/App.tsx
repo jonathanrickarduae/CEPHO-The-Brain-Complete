@@ -32,7 +32,6 @@ function PageLoader() {
 
 // ── Core pages ──────────────────────────────────────────────────────────────
 const NotFound = lazy(() => import("@/pages/NotFound"));
-const LandingPage = lazy(() => import("./pages/LandingPage"));
 const NexusDashboard = lazy(() => import("@/pages/NexusDashboard"));
 
 // ── The Signal ───────────────────────────────────────────────────────────────
@@ -122,7 +121,6 @@ function Router() {
     <Suspense fallback={<PageLoader />}>
       <Switch>
         {/* Auth */}
-        <Route path="/login" component={LandingPage} />
         <Route path="/onboarding">
           <Onboarding />
         </Route>

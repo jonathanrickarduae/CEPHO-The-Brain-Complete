@@ -314,7 +314,7 @@ export default function NexusDashboard() {
       fillHeight
     >
       {/* Main Content - Single Column Layout */}
-      <div className="flex-1 flex flex-col gap-4 sm:gap-4 p-3 sm:p-4 md:p-6 pb-[50vh] lg:pb-6 overflow-auto">
+      <div className="flex-1 flex flex-col gap-4 sm:gap-4 p-3 sm:p-4 md:p-6 pb-6 overflow-auto">
         {/* Top Section - Dashboard Info */}
         <div className="flex flex-col gap-4">
           {/* RAG Status Row */}
@@ -438,13 +438,8 @@ export default function NexusDashboard() {
         </div>
       </div>
 
-      {/* OpenClaw AI Assistant - Fixed Bottom Right (Hidden on Mobile) */}
+      {/* OpenClaw AI Assistant - Fixed Bottom Right (Desktop only) */}
       <div className="hidden lg:block fixed bottom-6 right-6 z-50 w-96 h-[500px] border-2 border-cyan-400/50 rounded-xl overflow-hidden bg-card/95 backdrop-blur-lg shadow-[0_0_30px_rgba(0,212,255,0.3)]">
-        <OpenClawChat />
-      </div>
-
-      {/* Mobile OpenClaw - Full Width at Bottom */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 h-[50vh] border-t-2 border-cyan-400/50 bg-card/95 backdrop-blur-lg shadow-[0_-4px_20px_rgba(0,212,255,0.2)]">
         <OpenClawChat />
       </div>
     </PageShell>

@@ -496,16 +496,14 @@ function BrainLayoutContent({
                 </span>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <button
                 onClick={() => setShowGlobalSearch(true)}
-                className="flex items-center gap-2 px-3 py-1.5 text-sm text-foreground/70 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
+                className="flex items-center justify-center w-9 h-9 text-foreground/70 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
+                aria-label="Search"
               >
                 <Search className="w-4 h-4" />
-                <span className="hidden sm:inline">Search...</span>
               </button>
-              <LanguageSwitcher />
-              <ThemeToggle />
               <NotificationBell />
             </div>
           </div>

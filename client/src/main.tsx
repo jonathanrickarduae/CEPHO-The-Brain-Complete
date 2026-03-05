@@ -1,14 +1,11 @@
 // p5-2: Sentry client-side error tracking — must be imported before everything else
 import * as Sentry from "@sentry/react";
 import { trpc } from "@/lib/trpc";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { UNAUTHED_ERR_MSG } from "@shared/const";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { httpBatchLink, TRPCClientError } from "@trpc/client";
+import { httpBatchLink } from "@trpc/client";
 import { createRoot } from "react-dom/client";
 import superjson from "superjson";
 import App from "./App";
-import { getLoginUrl } from "./const";
 import "./index.css";
 import { checkAppVersion } from "./utils/cacheBuster";
 
@@ -63,31 +60,6 @@ const queryClient = new QueryClient({
       staleTime: 30000,
     },
   },
-});
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const redirectToLoginIfUnauthorized = (error: any) => {
-  // P1-SEC-01: Redirect to login page on UNAUTHORIZED or FORBIDDEN errors
-  if (
-    error instanceof TRPCClientError &&
-    (error.data?.code === "UNAUTHORIZED" || error.data?.code === "FORBIDDEN")
-  ) {
-    window.location.href = getLoginUrl();
-  }
-};
-
-queryClient.getQueryCache().subscribe(event => {
-  if (event.type === "updated" && event.action.type === "error") {
-    const error = event.query.state.error;
-    redirectToLoginIfUnauthorized(error);
-  }
-});
-
-queryClient.getMutationCache().subscribe(event => {
-  if (event.type === "updated" && event.action.type === "error") {
-    const error = event.mutation.state.error;
-    redirectToLoginIfUnauthorized(error);
-  }
 });
 
 // Cache CSRF token to avoid fetching it on every request

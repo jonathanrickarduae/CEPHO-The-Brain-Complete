@@ -3,7 +3,7 @@ import type { User } from "../../drizzle/schema";
 import { verifySupabaseSession } from "./supabase-auth";
 import { db } from "../db";
 import { users } from "../../drizzle/schema";
-import { eq } from "drizzle-orm";
+import { eq, asc } from "drizzle-orm";
 import jwt from "jsonwebtoken";
 
 export type TrpcContext = {
@@ -12,9 +12,39 @@ export type TrpcContext = {
   user: User | null;
 };
 
-// P1-SEC-01: MOCK_ADMIN_USER removed. All unauthenticated requests will have
-// ctx.user = null and will be rejected by the protectedProcedure middleware.
-// This closes the critical security vulnerability where any visitor had admin access.
+// Cached admin user for PIN_GATE_ONLY mode — avoids a DB hit on every request.
+let cachedAdminUser: User | null = null;
+
+/**
+ * Load the admin user from the DB for PIN_GATE_ONLY mode.
+ * Looks up by ADMIN_EMAIL env var, falls back to the first user in the table.
+ */
+async function getAdminUserFromDb(): Promise<User | null> {
+  if (cachedAdminUser) return cachedAdminUser;
+  try {
+    const adminEmail = process.env.ADMIN_EMAIL;
+    if (adminEmail) {
+      const rows = await db
+        .select()
+        .from(users)
+        .where(eq(users.email, adminEmail))
+        .limit(1);
+      if (rows.length > 0) {
+        cachedAdminUser = rows[0];
+        return cachedAdminUser;
+      }
+    }
+    // Fallback: first user in the table (seeded admin)
+    const rows = await db.select().from(users).orderBy(asc(users.id)).limit(1);
+    if (rows.length > 0) {
+      cachedAdminUser = rows[0];
+      return cachedAdminUser;
+    }
+  } catch {
+    // DB not available — return null
+  }
+  return null;
+}
 
 export async function createContext(
   opts: CreateExpressContextOptions
@@ -22,20 +52,26 @@ export async function createContext(
   let user: User | null = null;
 
   try {
-    // Try Supabase session first (Authorization: Bearer <jwt>)
-    const supabaseUser = await verifySupabaseSession(opts.req);
+    // ── PIN_GATE_ONLY mode ────────────────────────────────────────────────────
+    // When the app uses the PinGate as the sole authentication layer (no
+    // Supabase Auth, no email/password login), every request is treated as
+    // coming from the admin user.  Security is enforced by the client-side
+    // PinGate — the server trusts all requests that reach it.
+    if (process.env.PIN_GATE_ONLY === "true") {
+      user = await getAdminUserFromDb();
+      return { req: opts.req, res: opts.res, user };
+    }
 
+    // ── Supabase JWT ──────────────────────────────────────────────────────────
+    const supabaseUser = await verifySupabaseSession(opts.req);
     if (supabaseUser) {
-      // Find or create user in our database
       const existingUsers = await db
         .select()
         .from(users)
         .where(eq(users.email, supabaseUser.email ?? ""));
-
       if (existingUsers.length > 0) {
         user = existingUsers[0];
       } else {
-        // Create new user from Supabase auth
         const [newUser] = await db
           .insert(users)
           .values({
@@ -52,7 +88,7 @@ export async function createContext(
       }
     }
 
-    // Fallback: verify session_token cookie set by simple-auth (/api/auth/login)
+    // ── session_token cookie (simple-auth) ────────────────────────────────────
     if (!user) {
       const sessionToken = opts.req.cookies?.session_token as
         | string
@@ -80,17 +116,9 @@ export async function createContext(
         }
       }
     }
-
-    // No valid session — user is unauthenticated. ctx.user remains null.
-    // protectedProcedure will throw UNAUTHORIZED for all protected routes.
   } catch {
-    // On any auth error, treat as unauthenticated.
     user = null;
   }
 
-  return {
-    req: opts.req,
-    res: opts.res,
-    user,
-  };
+  return { req: opts.req, res: opts.res, user };
 }
