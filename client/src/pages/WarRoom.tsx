@@ -111,7 +111,7 @@ export default function WarRoom() {
       CRISIS_TYPES.find(c => c.id === activeCrisis)?.label ?? activeCrisis;
     executeMutation.mutate({
       goal: `WAR ROOM ACTIVATION — ${crisisLabel}: ${crisisDescription}. This is a critical situation requiring immediate autonomous response. Analyse all relevant data, identify risks, assign tasks to appropriate agents, and generate a rapid response plan.`,
-      priority: "critical",
+      autoApprove: true,
     });
   };
 
