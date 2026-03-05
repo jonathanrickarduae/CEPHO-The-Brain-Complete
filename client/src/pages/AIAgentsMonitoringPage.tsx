@@ -566,7 +566,7 @@ export default function AIAgentsMonitoringPage() {
                       </span>
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      {m.totalRatings} ratings &middot; {m.totalReports} reports
+                      {m.totalRatings} ratings &middot; {m.totalTasks ?? 0} tasks
                     </div>
                   </div>
                 ))}
@@ -575,7 +575,7 @@ export default function AIAgentsMonitoringPage() {
           )}
 
           {/* Live Activity Feed */}
-          {activityFeedData && activityFeedData.activities.length > 0 && (
+          {activityFeedData && (activityFeedData.activities ?? activityFeedData.items ?? []).length > 0 && (
             <div className="bg-card rounded-xl p-4 border border-border">
               <div className="flex items-center gap-2 mb-3">
                 <Zap className="w-4 h-4 text-amber-400" />
@@ -591,7 +591,7 @@ export default function AIAgentsMonitoringPage() {
                 </button>
               </div>
               <div className="space-y-2 max-h-64 overflow-y-auto">
-                {activityFeedData.activities.map((item, i) => (
+                {(activityFeedData.activities ?? activityFeedData.items ?? []).map((item, i) => (
                   <div key={i} className="flex items-start gap-3 text-sm">
                     <span className="text-xs text-muted-foreground mt-0.5 shrink-0 w-16">
                       {formatTimestamp(item.createdAt)}
