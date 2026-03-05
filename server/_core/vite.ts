@@ -67,11 +67,14 @@ export function serveStatic(app: Express) {
   if (!fs.existsSync(distPath)) {
   }
 
-  app.use(express.static(distPath));
+  // index: false prevents express.static from serving index.html directly for GET /.
+  // Without this, express.static intercepts the request and sends index.html without the
+  // per-request CSP nonce, causing the inline service-worker script to be blocked by CSP
+  // and React to never mount (blank white screen).
+  app.use(express.static(distPath, { index: false }));
 
   // S1-01 FIX: Serve index.html with CSP nonce injected into all inline <script> tags.
-  // Previously used res.sendFile() which bypassed nonce injection, causing a blank screen
-  // in production because the service worker registration script was blocked by CSP.
+  // All HTML requests (including GET /) fall through to here so the nonce is always injected.
   app.use("*", (req: Request, res: Response) => {
     const indexPath = path.resolve(distPath, "index.html");
     fs.readFile(indexPath, "utf-8", (err, html) => {
