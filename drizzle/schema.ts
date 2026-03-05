@@ -3049,11 +3049,6 @@ export type KpiSnapshot = typeof kpiSnapshots.$inferSelect;
 export type InsertKpiSnapshot = typeof kpiSnapshots.$inferInsert;
 
 /**
- * Expert conversation logs - one-on-one discussions about scores
- */
-  typeof expertConversationLogs.$inferInsert;
-
-/**
  * Central Insights Repository
  *
  * Captures and stores all insights from customer feedback, SME assessments,
