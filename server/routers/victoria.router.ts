@@ -227,6 +227,17 @@ async function logVictoriaAction(
 }
 
 // ─── Router ───────────────────────────────────────────────────────────────────
+
+// ─── Safe wrapper for buildUserContext ────────────────────────────────────────
+async function buildUserContextSafe(userId: number): Promise<string> {
+  try {
+    return await buildUserContext(userId);
+  } catch (_e) {
+    // DB tables may not exist yet (pre-migration) — return minimal context
+    return `## Current Situation\nContext unavailable — database tables are being initialized.`;
+  }
+}
+
 export const victoriaRouter = router({
   // ── 1. Get Victoria's full context ──────────────────────────────────────────
   getContext: protectedProcedure.query(async ({ ctx }) => {
@@ -337,7 +348,7 @@ export const victoriaRouter = router({
   generateMorningBriefing: aiProcedure.mutation(async ({ ctx }) => {
     const userId = ctx.user.id;
     const openai = getOpenAI();
-    const userContext = await buildUserContext(userId);
+    const userContext = await buildUserContextSafe(userId);
 
     const completion = await openai.chat.completions.create({
       model: getModelForTask("generate"),
@@ -410,7 +421,7 @@ export const victoriaRouter = router({
     .mutation(async ({ input, ctx }) => {
       const userId = ctx.user.id;
       const openai = getOpenAI();
-      const userContext = await buildUserContext(userId);
+      const userContext = await buildUserContextSafe(userId);
 
       // Get recent conversation history
       const recentConversations = await db
@@ -649,17 +660,21 @@ export const victoriaRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
-      const conditions = [eq(victoriaActions.userId, ctx.user.id)];
-      if (input.actionType)
-        conditions.push(eq(victoriaActions.actionType, input.actionType));
-
-      const actions = await db
-        .select()
-        .from(victoriaActions)
-        .where(and(...conditions))
-        .orderBy(desc(victoriaActions.createdAt))
-        .limit(input.limit);
-      return actions;
+      try {
+        const conditions = [eq(victoriaActions.userId, ctx.user.id)];
+        if (input.actionType)
+          conditions.push(eq(victoriaActions.actionType, input.actionType));
+        const actions = await db
+          .select()
+          .from(victoriaActions)
+          .where(and(...conditions))
+          .orderBy(desc(victoriaActions.createdAt))
+          .limit(input.limit);
+        return actions;
+      } catch (_e) {
+        // victoriaActions table may not exist yet (pre-migration)
+        return [];
+      }
     }),
 
   // ── 10. Get pending SME review triggers ─────────────────────────────────────
@@ -754,7 +769,7 @@ export const victoriaRouter = router({
   identifyAutomationOpportunities: aiProcedure.mutation(async ({ ctx }) => {
     const userId = ctx.user.id;
     const openai = getOpenAI();
-    const userContext = await buildUserContext(userId);
+    const userContext = await buildUserContextSafe(userId);
 
     const completion = await openai.chat.completions.create({
       model: getModelForTask("analyse"),

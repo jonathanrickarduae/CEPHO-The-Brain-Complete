@@ -537,16 +537,20 @@ export const aiAgentsMonitoringRouter = router({
     )
     .query(async ({ input, ctx }) => {
       // Try real DB reports first (populated by daily scheduler at 06:30)
-      const conditions = [eq(agentDailyReports.userId, ctx.user.id)];
-      if (input.agentId)
-        conditions.push(eq(agentDailyReports.agentId, input.agentId));
-
-      const dbReports = await db
-        .select()
-        .from(agentDailyReports)
-        .where(and(...conditions))
-        .orderBy(desc(agentDailyReports.date))
-        .limit(input.agentId ? 5 : 51);
+      let dbReports: typeof agentDailyReports.$inferSelect[] = [];
+      try {
+        const conditions = [eq(agentDailyReports.userId, ctx.user.id)];
+        if (input.agentId)
+          conditions.push(eq(agentDailyReports.agentId, input.agentId));
+        dbReports = await db
+          .select()
+          .from(agentDailyReports)
+          .where(and(...conditions))
+          .orderBy(desc(agentDailyReports.date))
+          .limit(input.agentId ? 5 : 51);
+      } catch (_e) {
+        // Table may not exist yet — fall through to generated reports
+      }
 
       if (dbReports.length > 0) {
         const reports = dbReports.map(r => ({
@@ -663,19 +667,23 @@ export const aiAgentsMonitoringRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const conditions: Parameters<typeof and>[0][] = [
-        eq(activityFeed.userId, ctx.user.id),
-      ];
-      if (input.agentId) {
-        conditions.push(eq(activityFeed.targetName, input.agentId));
+      let items: typeof activityFeed.$inferSelect[] = [];
+      try {
+        const conditions: Parameters<typeof and>[0][] = [
+          eq(activityFeed.userId, ctx.user.id),
+        ];
+        if (input.agentId) {
+          conditions.push(eq(activityFeed.targetName, input.agentId));
+        }
+        items = await db
+          .select()
+          .from(activityFeed)
+          .where(and(...conditions))
+          .orderBy(desc(activityFeed.createdAt))
+          .limit(input.limit);
+      } catch (_e) {
+        // Table may not exist yet
       }
-      const items = await db
-        .select()
-        .from(activityFeed)
-        .where(and(...conditions))
-        .orderBy(desc(activityFeed.createdAt))
-        .limit(input.limit);
-
       return {
         items: items.map(item => ({
           id: item.id,
@@ -728,14 +736,17 @@ export const aiAgentsMonitoringRouter = router({
         .where(eq(agentRatings.userId, ctx.user.id))
         .groupBy(agentRatings.agentId);
 
-      const [metrics, ratings] = await Promise.all([
-        metricsQuery,
-        ratingsQuery,
-      ]);
+      let metrics: any[] = [];
+      let ratings: any[] = [];
+      try {
+        [metrics, ratings] = await Promise.all([metricsQuery, ratingsQuery]);
+      } catch (_e) {
+        // Tables may not exist yet — return generated fallback below
+      }
 
-      const ratingsMap = new Map(ratings.map(r => [r.agentId, r]));
+      const ratingsMap = new Map(ratings.map((r: any) => [r.agentId, r]));
 
-      const combined = metrics.map(m => ({
+      const combined = metrics.map((m: any) => ({
         agentId: m.agentId,
         agentName: m.agentName,
         overallScore: Number(m.avgOverallScore ?? 0).toFixed(1),

@@ -47,19 +47,20 @@ export default function AIAgentsMonitoringPage() {
   } = trpc.aiAgentsMonitoring.getAllStatus.useQuery(undefined, { retry: 2 });
 
   const { data: reportsData } =
-    trpc.aiAgentsMonitoring.getDailyReports.useQuery({});
-  const { data: victoriaLog } = trpc.victoria.getActionLog.useQuery({
-    limit: 10,
-  });
+    trpc.aiAgentsMonitoring.getDailyReports.useQuery({}, { retry: false, throwOnError: false });
+  const { data: victoriaLog } = trpc.victoria.getActionLog.useQuery(
+    { limit: 10 },
+    { retry: false, throwOnError: false }
+  );
   const { data: activityFeedData, refetch: refetchFeed } =
     trpc.aiAgentsMonitoring.getLiveActivityFeed.useQuery(
       { limit: 20 },
-      { refetchInterval: 30000 }
+      { refetchInterval: 30000, retry: false, throwOnError: false }
     );
   const { data: perfMetricsData } =
     trpc.aiAgentsMonitoring.getPerformanceMetrics.useQuery(
       { agentId: selectedAgent ?? undefined },
-      { enabled: true }
+      { enabled: true, retry: false, throwOnError: false }
     );
   const utils = trpc.useUtils();
   const reviewRequest = trpc.aiAgentsMonitoring.reviewRequest.useMutation({
