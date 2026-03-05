@@ -144,13 +144,12 @@ export function configureSecurityHeaders(app: Express) {
             "https://accounts.google.com",
             "https://www.gstatic.com",
           ],
-          // Style allowlist: nonce for injected styles + unsafe-inline for
-          // component inline styles (e.g. recharts, framer-motion)
+          // Style allowlist: unsafe-inline required for component inline styles
+          // (recharts, framer-motion, etc.). NOTE: per CSP spec, 'unsafe-inline'
+          // is ignored when a nonce is also present, so we use only unsafe-inline here.
           styleSrc: [
             "'self'",
             "'unsafe-inline'",
-            (_req: IncomingMessage, res: ServerResponse) =>
-              `'nonce-${(res as unknown as Response).locals.cspNonce}'`,
             "https://fonts.googleapis.com",
           ],
           // Allow blob: workers for mermaid diagram rendering
