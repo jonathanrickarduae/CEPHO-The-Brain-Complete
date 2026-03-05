@@ -17,31 +17,66 @@ let cachedAdminUser: User | null = null;
 
 /**
  * Load the admin user from the DB for PIN_GATE_ONLY mode.
- * Looks up by ADMIN_EMAIL env var, falls back to the first user in the table.
+ *
+ * Resolution order:
+ *   1. In-memory cache (avoids a DB hit on every tRPC request)
+ *   2. Row matching ADMIN_EMAIL env var
+ *   3. First row in the users table (seeded admin)
+ *   4. AUTO-CREATE — if the table is empty, insert an admin user using
+ *      ADMIN_EMAIL / ADMIN_NAME env vars so the app works on a fresh DB
+ *      without requiring a manual seed step.
  */
 async function getAdminUserFromDb(): Promise<User | null> {
   if (cachedAdminUser) return cachedAdminUser;
   try {
-    const adminEmail = process.env.ADMIN_EMAIL;
-    if (adminEmail) {
-      const rows = await db
-        .select()
-        .from(users)
-        .where(eq(users.email, adminEmail))
-        .limit(1);
-      if (rows.length > 0) {
-        cachedAdminUser = rows[0];
-        return cachedAdminUser;
-      }
-    }
-    // Fallback: first user in the table (seeded admin)
-    const rows = await db.select().from(users).orderBy(asc(users.id)).limit(1);
-    if (rows.length > 0) {
-      cachedAdminUser = rows[0];
+    const adminEmail = process.env.ADMIN_EMAIL || "admin@cepho.ai";
+    const adminName = process.env.ADMIN_NAME || "Admin";
+
+    // 1. Look up by ADMIN_EMAIL
+    const byEmail = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, adminEmail))
+      .limit(1);
+    if (byEmail.length > 0) {
+      cachedAdminUser = byEmail[0];
       return cachedAdminUser;
     }
-  } catch {
-    // DB not available — return null
+
+    // 2. Fallback: first user in the table
+    const firstRow = await db
+      .select()
+      .from(users)
+      .orderBy(asc(users.id))
+      .limit(1);
+    if (firstRow.length > 0) {
+      cachedAdminUser = firstRow[0];
+      return cachedAdminUser;
+    }
+
+    // 3. AUTO-CREATE: table is empty (fresh production DB, seed never ran).
+    //    Insert a minimal admin user so PIN_GATE_ONLY works out of the box.
+    console.log(
+      `[PIN_GATE_ONLY] No users found — auto-creating admin: ${adminEmail}`
+    );
+    const [newAdmin] = await db
+      .insert(users)
+      .values({
+        openId: `pin-gate-admin-${Date.now()}`,
+        email: adminEmail,
+        name: adminName,
+        role: "admin",
+        themePreference: "dark",
+      })
+      .returning();
+    cachedAdminUser = newAdmin;
+    console.log(
+      `[PIN_GATE_ONLY] Admin user created (id: ${newAdmin.id}, email: ${newAdmin.email})`
+    );
+    return cachedAdminUser;
+  } catch (err) {
+    // DB not available — return null and let the request fail gracefully
+    console.error("[PIN_GATE_ONLY] Failed to get/create admin user:", err);
   }
   return null;
 }
