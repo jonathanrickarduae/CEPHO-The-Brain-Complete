@@ -80,14 +80,18 @@ const queryClient = new QueryClient({
   },
 });
 
-// Cache CSRF token to avoid fetching it on every request
+// Cache CSRF token with TTL — expires after 25 minutes to avoid stale tokens after server restart
 let cachedCsrfToken: string | null = null;
-async function getCsrfToken(): Promise<string> {
-  if (cachedCsrfToken) return cachedCsrfToken;
+let csrfTokenExpiry: number = 0;
+async function getCsrfToken(forceRefresh = false): Promise<string> {
+  if (!forceRefresh && cachedCsrfToken && Date.now() < csrfTokenExpiry) {
+    return cachedCsrfToken;
+  }
   try {
     const resp = await fetch("/api/csrf-token", { credentials: "include" });
     const data = await resp.json();
     cachedCsrfToken = data.csrfToken || "";
+    csrfTokenExpiry = Date.now() + 25 * 60 * 1000; // 25 min TTL
     return cachedCsrfToken as string;
   } catch {
     return "";
@@ -127,6 +131,23 @@ const trpcClient = trpc.createClient({
         return globalThis.fetch(input, {
           ...(init ?? {}),
           credentials: "include",
+        }).then(async resp => {
+          // On 403 CSRF error, clear cache and retry once with fresh token
+          if (resp.status === 403) {
+            cachedCsrfToken = null;
+            csrfTokenExpiry = 0;
+            const freshToken = await getCsrfToken(true);
+            const newInit = {
+              ...(init ?? {}),
+              credentials: "include" as RequestCredentials,
+              headers: {
+                ...(init?.headers ?? {}),
+                "x-csrf-token": freshToken,
+              },
+            };
+            return globalThis.fetch(input, newInit);
+          }
+          return resp;
         });
       },
     }),
