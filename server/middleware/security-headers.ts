@@ -144,12 +144,26 @@ export function configureSecurityHeaders(app: Express) {
             "https://accounts.google.com",
             "https://www.gstatic.com",
           ],
-          // Nonce-based style allowlist — no unsafe-inline
+          // Style allowlist: nonce for injected styles + unsafe-inline for
+          // component inline styles (e.g. recharts, framer-motion)
           styleSrc: [
             "'self'",
+            "'unsafe-inline'",
             (_req: IncomingMessage, res: ServerResponse) =>
               `'nonce-${(res as unknown as Response).locals.cspNonce}'`,
             "https://fonts.googleapis.com",
+          ],
+          // Allow blob: workers for mermaid diagram rendering
+          workerSrc: ["'self'", "blob:"],
+          childSrc: ["'self'", "blob:"],
+          scriptSrcAttr: ["'none'"],
+          scriptSrcElem: [
+            "'self'",
+            (_req: IncomingMessage, res: ServerResponse) =>
+              `'nonce-${(res as unknown as Response).locals.cspNonce}'`,
+            "https://cdn.jsdelivr.net",
+            "https://accounts.google.com",
+            "https://www.gstatic.com",
           ],
           fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
           imgSrc: ["'self'", "data:", "blob:", "https:"],
@@ -158,8 +172,9 @@ export function configureSecurityHeaders(app: Express) {
             "https://accounts.google.com",
             "https://www.googleapis.com",
             "https://oauth.manus.im",
-            // Sentry error reporting (FIX-09 audit-09)
+            // Sentry error reporting — both US and EU ingest endpoints
             "https://*.ingest.sentry.io",
+            "https://*.ingest.de.sentry.io",
             "https://sentry.io",
           ],
           frameSrc: ["'self'", "https://accounts.google.com"],
