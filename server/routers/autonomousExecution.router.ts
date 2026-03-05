@@ -9,7 +9,7 @@
  */
 import { z } from "zod";
 import { eq, desc } from "drizzle-orm";
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import {
@@ -19,12 +19,12 @@ import {
   activityFeed,
 } from "../../drizzle/schema";
 
-let _anthropic: Anthropic | null = null;
-function getAnthropic(): Anthropic {
-  if (!_anthropic) {
-    _anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY ?? "" });
+let _openaiClient: OpenAI | null = null;
+function getOpenAIClient(): OpenAI {
+  if (!_openaiClient) {
+    _openaiClient = new OpenAI({ apiKey: process.env.OPENAI_API_KEY ?? "" });
   }
-  return _anthropic;
+  return _openaiClient;
 }
 
 // ─── SME Agent definitions ────────────────────────────────────────────────────
@@ -101,13 +101,7 @@ async function decomposeGoal(
     ? `Executive profile: measurement-driven (${twinProfile.measurementDriven ?? 5}/10), automation preference (${twinProfile.automationPreference ?? 5}/10), structure preference (${twinProfile.structurePreference ?? 5}/10).`
     : "Executive profile: not yet calibrated, use balanced defaults.";
 
-  const message = await getAnthropic().messages.create({
-    model: "claude-opus-4-5",
-    max_tokens: 2000,
-    messages: [
-      {
-        role: "user",
-        content: `You are CEPHO, an elite AI Chief of Staff. Decompose this executive goal into a complete, actionable project plan.
+  const prompt = `You are CEPHO, an elite AI Chief of Staff. Decompose this executive goal into a complete, actionable project plan.
 
 Goal: "${goal}"
 ${twinContext}
@@ -130,16 +124,19 @@ Respond ONLY with valid JSON matching this exact structure:
   ],
   "risks": ["risk 1", "risk 2"],
   "successMetrics": ["metric 1", "metric 2"]
-}`,
-      },
-    ],
+}`;
+
+  const completion = await getOpenAIClient().chat.completions.create({
+    model: "gpt-4o-mini",
+    max_tokens: 2000,
+    messages: [{ role: "user", content: prompt }],
+    response_format: { type: "json_object" },
   });
 
-  const content = message.content[0];
-  if (content.type !== "text")
-    throw new Error("Unexpected response type from AI");
+  const text = completion.choices[0]?.message?.content;
+  if (!text) throw new Error("No response from AI");
 
-  return JSON.parse(content.text) as ExecutionPlan;
+  return JSON.parse(text) as ExecutionPlan;
 }
 
 export const autonomousExecutionRouter = router({
