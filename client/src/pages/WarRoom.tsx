@@ -61,9 +61,36 @@ export default function WarRoom() {
 
   const executeMutation = trpc.autonomousExecution.execute.useMutation({
     onSuccess: data => {
-      setResponsePlan(
-        data.plan ?? "Response plan generated. Agents have been deployed."
-      );
+      // data.plan is an object — format it as a readable string
+      const planObj = data.plan as {
+        estimatedDuration?: string;
+        risks?: string[];
+        successMetrics?: string[];
+        phases?: { name: string; agent: string; taskCount: number }[];
+      } | null | undefined;
+      if (planObj && typeof planObj === "object") {
+        const lines: string[] = [];
+        if (planObj.estimatedDuration)
+          lines.push(`Estimated Duration: ${planObj.estimatedDuration}`);
+        if (planObj.phases?.length) {
+          lines.push(`\nPhases (${planObj.phases.length} total):`);
+          planObj.phases.forEach((p, i) =>
+            lines.push(`  ${i + 1}. ${p.name} — ${p.agent} (${p.taskCount} tasks)`)
+          );
+        }
+        if (planObj.risks?.length) {
+          lines.push(`\nKey Risks:`);
+          planObj.risks.forEach(r => lines.push(`  • ${r}`));
+        }
+        if (planObj.successMetrics?.length) {
+          lines.push(`\nSuccess Metrics:`);
+          planObj.successMetrics.forEach(m => lines.push(`  • ${m}`));
+        }
+        lines.push(`\n${data.tasksCreated} tasks created across ${data.phasesCreated} phases. Project is now live in your dashboard.`);
+        setResponsePlan(lines.join("\n"));
+      } else {
+        setResponsePlan("Response plan generated. Agents have been deployed.");
+      }
       setIsGenerating(false);
       toast.success("War Room activated. AI team deployed.");
     },

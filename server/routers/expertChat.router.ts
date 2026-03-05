@@ -1041,6 +1041,7 @@ export const expertChatRouter = router({
         expertId: z.string(),
         expertName: z.string().optional(),
         initialContext: z.string().optional(),
+        systemPrompt: z.string().optional(), // accepted from client but server uses its own prompts
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -1060,6 +1061,7 @@ export const expertChatRouter = router({
       });
 
       return {
+        id: sessionId, // client accesses session.id
         sessionId,
         expertId: input.expertId,
         expertName: memberName,

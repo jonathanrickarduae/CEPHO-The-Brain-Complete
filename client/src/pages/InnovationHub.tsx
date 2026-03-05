@@ -147,7 +147,8 @@ export default function InnovationHub() {
       setShowArticleDialog(false);
       setArticleUrl("");
       setArticleContext("");
-      refetchIdeas();
+      // Delay refetch slightly to ensure DB write is committed before re-querying
+      setTimeout(() => refetchIdeas(), 600);
     },
     onError: error => toast.error(error.message),
   });

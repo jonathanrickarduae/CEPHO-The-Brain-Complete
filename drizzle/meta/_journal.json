@@ -204,6 +204,104 @@
       "when": 1768717571451,
       "tag": "0028_tired_human_robot",
       "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "5",
+      "when": 1768717631451,
+      "tag": "0030_project_genesis_complete",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "5",
+      "when": 1768717691451,
+      "tag": "0031_add_generated_documents",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "5",
+      "when": 1768717751451,
+      "tag": "0032_fix_generated_documents_schema",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "5",
+      "when": 1768717811451,
+      "tag": "0033_add_performance_indexes",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "5",
+      "when": 1768717871451,
+      "tag": "0034_add_indexes_existing_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "5",
+      "when": 1768717931451,
+      "tag": "0035_add_2fa_to_users",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "5",
+      "when": 1768717991451,
+      "tag": "0036_add_analytics_feature_flags",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "5",
+      "when": 1768718051451,
+      "tag": "0037_add_agent_ratings_api_keys",
+      "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "5",
+      "when": 1768718111451,
+      "tag": "0038_fix_agent_ratings_schema",
+      "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "5",
+      "when": 1768718171451,
+      "tag": "0039_add_cepho_workflows",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "5",
+      "when": 1768718231451,
+      "tag": "0040_add_document_email_history",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "5",
+      "when": 1768718291451,
+      "tag": "0041_phase4_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "5",
+      "when": 1768718351451,
+      "tag": "0042_email_messages_table",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "5",
+      "when": 1768718411451,
+      "tag": "0043_missing_core_tables",
+      "breakpoints": true
     }
   ]
 }
