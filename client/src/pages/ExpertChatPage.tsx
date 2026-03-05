@@ -61,7 +61,7 @@ export default function ExpertChatPage() {
   const [, setLocation] = useLocation();
   const [message, setMessage] = useState("");
   const [isRecording, setIsRecording] = useState(false);
-  const [_isSpeaking, _setIsSpeaking] = useState(false);
+  const [_isSpeaking, setIsSpeaking] = useState(false);
   const [speakingMessageIndex, setSpeakingMessageIndex] = useState<
     number | null
   >(null);
