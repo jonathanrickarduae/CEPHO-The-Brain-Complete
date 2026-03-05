@@ -43,8 +43,13 @@ export const authRouter = router({
     };
   }),
 
-  logout: protectedProcedure.mutation(async () => {
-    // Session is managed by simple-auth cookie — client clears it
+  logout: protectedProcedure.mutation(async ({ ctx }) => {
+    // Clear the session_token cookie set by simple-auth
+    ctx.res.clearCookie("session_token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
     return { success: true };
   }),
 

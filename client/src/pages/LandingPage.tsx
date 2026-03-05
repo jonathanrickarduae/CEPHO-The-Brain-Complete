@@ -7,8 +7,6 @@ import { Loader2, Lock, Mail } from "lucide-react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
 import LoadingScreen from "@/components/LoadingScreen";
-import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
-
 export default function LandingPage() {
   const [, navigate] = useLocation();
   const [email, setEmail] = useState("");
@@ -31,8 +29,6 @@ export default function LandingPage() {
     setTimeout(() => setShowLogin(true), 1000);
   }, []);
 
-  const { signIn } = useSupabaseAuth();
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -47,16 +43,33 @@ export default function LandingPage() {
         localStorage.removeItem("cepho_remember");
       }
 
-      // Sign in with Supabase
-      const { data, error: signInError } = await signIn(email, password);
+      // Get CSRF token first
+      const csrfResp = await fetch("/api/csrf-token", {
+        credentials: "include",
+      });
+      const csrfData = await csrfResp.json();
+      const csrfToken = csrfData.csrfToken || "";
 
-      if (signInError) {
-        toast.error(signInError.message || "Failed to sign in");
+      // Sign in via simple-auth endpoint
+      const resp = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-csrf-token": csrfToken,
+        },
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+      });
+
+      const result = await resp.json();
+
+      if (!resp.ok) {
+        toast.error(result.error || "Failed to sign in");
         setIsLoading(false);
         return;
       }
 
-      if (data?.user) {
+      if (result.success) {
         toast.success("Welcome to CEPHO.AI");
         navigate("/nexus");
       } else {

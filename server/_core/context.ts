@@ -4,6 +4,7 @@ import { verifySupabaseSession } from "./supabase-auth";
 import { db } from "../db";
 import { users } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
+import jwt from "jsonwebtoken";
 
 export type TrpcContext = {
   req: CreateExpressContextOptions["req"];
@@ -21,7 +22,7 @@ export async function createContext(
   let user: User | null = null;
 
   try {
-    // Try Supabase session first
+    // Try Supabase session first (Authorization: Bearer <jwt>)
     const supabaseUser = await verifySupabaseSession(opts.req);
 
     if (supabaseUser) {
@@ -50,7 +51,37 @@ export async function createContext(
         user = newUser;
       }
     }
-    // No Supabase session — user is unauthenticated. ctx.user remains null.
+
+    // Fallback: verify session_token cookie set by simple-auth (/api/auth/login)
+    if (!user) {
+      const sessionToken = opts.req.cookies?.session_token as
+        | string
+        | undefined;
+      const jwtSecret = process.env.JWT_SECRET;
+      if (sessionToken && jwtSecret) {
+        try {
+          const decoded = jwt.verify(sessionToken, jwtSecret) as {
+            id?: number;
+            email?: string;
+            openId?: string;
+          };
+          if (decoded?.email) {
+            const cookieUsers = await db
+              .select()
+              .from(users)
+              .where(eq(users.email, decoded.email))
+              .limit(1);
+            if (cookieUsers.length > 0) {
+              user = cookieUsers[0];
+            }
+          }
+        } catch {
+          // Invalid or expired cookie token — remain unauthenticated
+        }
+      }
+    }
+
+    // No valid session — user is unauthenticated. ctx.user remains null.
     // protectedProcedure will throw UNAUTHORIZED for all protected routes.
   } catch {
     // On any auth error, treat as unauthenticated.
