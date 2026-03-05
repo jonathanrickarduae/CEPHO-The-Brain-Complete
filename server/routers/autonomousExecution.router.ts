@@ -153,6 +153,7 @@ export const autonomousExecutionRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       const userId = ctx.user.id;
+      try {
 
       // 1. Get Digital Twin profile for personalisation
       const [twinProfile] = await db
@@ -161,7 +162,7 @@ export const autonomousExecutionRouter = router({
         .where(eq(digitalTwinProfile.userId, userId))
         .limit(1);
 
-      // 2. Decompose the goal using Claude
+      // 2. Decompose the goal using OpenAI
       const plan = await decomposeGoal(input.goal, twinProfile ?? null);
 
       // 3. Create the project
@@ -242,6 +243,11 @@ export const autonomousExecutionRouter = router({
           })),
         },
       };
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.error('[War Room execute error]', msg);
+        throw new Error(`War Room execution failed: ${msg}`);
+      }
     }),
 
   /**
