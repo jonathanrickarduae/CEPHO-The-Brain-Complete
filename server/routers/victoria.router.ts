@@ -374,28 +374,38 @@ export const victoriaRouter = router({
       completion.choices[0]?.message?.content ??
       "Good morning. Your briefing is ready.";
 
-    // Persist to briefings table
-    const [savedBriefing] = await db
-      .insert(briefings)
-      .values({
-        userId,
-        date: new Date(),
-        title: `Victoria's Morning Briefing — ${new Date().toLocaleDateString("en-GB")}`,
-        content: { text: content, generatedAt: new Date().toISOString() },
-        status: "ready",
-      })
-      .returning();
+    // Persist to briefings table (graceful fallback if table missing)
+    let savedBriefing: { id: number } | undefined;
+    try {
+      const [inserted] = await db
+        .insert(briefings)
+        .values({
+          userId,
+          date: new Date(),
+          title: `Victoria's Morning Briefing — ${new Date().toLocaleDateString("en-GB")}`,
+          content: { text: content, generatedAt: new Date().toISOString() },
+          status: "ready",
+        })
+        .returning();
+      savedBriefing = inserted;
+    } catch (_dbErr) {
+      // briefings table may not exist yet — still return content to user
+    }
 
-    // Log Victoria action
-    await logVictoriaAction(
-      userId,
-      "briefing_generated",
-      "Morning Briefing Generated",
-      `Victoria prepared the morning briefing for ${new Date().toLocaleDateString("en-GB")}`,
-      "briefing",
-      savedBriefing?.id,
-      true
-    );
+    // Log Victoria action (best-effort)
+    try {
+      await logVictoriaAction(
+        userId,
+        "briefing_generated",
+        "Morning Briefing Generated",
+        `Victoria prepared the morning briefing for ${new Date().toLocaleDateString("en-GB")}`,
+        "briefing",
+        savedBriefing?.id,
+        true
+      );
+    } catch (_logErr) {
+      // victoria_actions table may not exist yet
+    }
 
     return {
       briefingId: savedBriefing?.id,
@@ -406,13 +416,18 @@ export const victoriaRouter = router({
 
   // ── 3. Get latest briefing ──────────────────────────────────────────────────
   getLatestBriefing: protectedProcedure.query(async ({ ctx }) => {
-    const [latest] = await db
-      .select()
-      .from(briefings)
-      .where(eq(briefings.userId, ctx.user.id))
-      .orderBy(desc(briefings.createdAt))
-      .limit(1);
-    return latest ?? null;
+    try {
+      const [latest] = await db
+        .select()
+        .from(briefings)
+        .where(eq(briefings.userId, ctx.user.id))
+        .orderBy(desc(briefings.createdAt))
+        .limit(1);
+      return latest ?? null;
+    } catch (_e) {
+      // briefings table may not exist yet
+      return null;
+    }
   }),
 
   // ── 4. Chat with Victoria (real-time AI conversation) ──────────────────────
