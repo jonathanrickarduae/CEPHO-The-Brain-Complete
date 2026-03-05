@@ -29,6 +29,8 @@ export const expertConsultationRouter = router({
     .input(
       z.object({
         expertId: z.string(),
+        expertName: z.string().optional(), // sent by client, informational
+        topic: z.string().optional(), // sent by client, informational
         rating: z.number().min(1).max(10).optional(),
         notes: z.string().optional(),
       })
