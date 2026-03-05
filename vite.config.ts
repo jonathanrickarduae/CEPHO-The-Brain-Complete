@@ -180,7 +180,7 @@ export default defineConfig({
           if (id.includes("lucide-react")) {
             return "icons-vendor";
           }
-          if (id.includes("recharts") || id.includes("d3-") || id.includes("victory")) {
+          if (id.includes("recharts") || id.includes("victory")) {
             return "charts-vendor";
           }
           if (id.includes("framer-motion")) {
@@ -197,7 +197,16 @@ export default defineConfig({
           if (id.includes("cytoscape")) {
             return "cytoscape-vendor";
           }
-          if (id.includes("mermaid")) {
+          // mermaid-vendor: mermaid + all d3 packages it depends on
+          // d3 must be in the same chunk as mermaid to avoid cross-chunk
+          // function reference errors (e.g. "Q2 is not a function")
+          if (
+            id.includes("mermaid") ||
+            id.includes("/d3") ||
+            id.includes("d3-") ||
+            id.includes("dagre") ||
+            id.includes("d3_")
+          ) {
             return "mermaid-vendor";
           }
           // PDF/Document libraries (large)

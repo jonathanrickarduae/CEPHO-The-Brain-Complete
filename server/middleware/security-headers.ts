@@ -137,8 +137,6 @@ export function configureSecurityHeaders(app: Express) {
           // Nonce-based script allowlist — no unsafe-inline or unsafe-eval
           scriptSrc: [
             "'self'",
-            // DIAGNOSTIC: unsafe-inline added temporarily to confirm nonce is the issue
-            "'unsafe-inline'",
             // Helmet passes node:http IncomingMessage/ServerResponse; cast to access res.locals
             (_req: IncomingMessage, res: ServerResponse) =>
               `'nonce-${(res as unknown as Response).locals.cspNonce}'`,
@@ -146,10 +144,9 @@ export function configureSecurityHeaders(app: Express) {
             "https://accounts.google.com",
             "https://www.gstatic.com",
           ],
-          // Style allowlist with unsafe-inline for diagnostic
+          // Nonce-based style allowlist — no unsafe-inline
           styleSrc: [
             "'self'",
-            "'unsafe-inline'",
             (_req: IncomingMessage, res: ServerResponse) =>
               `'nonce-${(res as unknown as Response).locals.cspNonce}'`,
             "https://fonts.googleapis.com",
