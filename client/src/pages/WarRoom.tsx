@@ -124,21 +124,21 @@ export default function WarRoom() {
   };
 
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div className="min-h-screen bg-background p-4 sm:p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <div className="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center">
-            <AlertTriangle className="w-6 h-6 text-red-500" />
+        <div className="flex items-center gap-3 mb-6 sm:mb-8">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-red-500/20 flex items-center justify-center shrink-0">
+            <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6 text-red-500" />
           </div>
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">War Room</h1>
-            <p className="text-muted-foreground text-sm">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold text-foreground">War Room</h1>
+            <p className="text-muted-foreground text-xs sm:text-sm">
               Crisis management — activate your full AI team for rapid response
             </p>
           </div>
           {isActivated && (
-            <div className="ml-auto flex items-center gap-2 px-3 py-1.5 bg-red-500/20 border border-red-500/40 rounded-full">
+            <div className="ml-auto flex items-center gap-2 px-3 py-1.5 bg-red-500/20 border border-red-500/40 rounded-full shrink-0">
               <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
               <span className="text-xs font-semibold text-red-400">ACTIVE</span>
             </div>

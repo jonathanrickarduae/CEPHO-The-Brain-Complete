@@ -482,21 +482,28 @@ function BrainLayoutContent({
 
       <SidebarInset className="bg-background">
         {isMobile && (
-          <div className="flex border-b border-border h-14 items-center justify-between bg-black px-2 backdrop-blur supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40">
-            <div className="flex items-center gap-2">
-              <SidebarTrigger className="h-9 w-9 rounded-lg bg-white/5 text-white" />
-              <div className="flex items-center gap-3">
+          <div
+            className="flex border-b border-border items-center justify-between bg-card/98 backdrop-blur-xl supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40"
+            style={{ height: "56px", paddingTop: "env(safe-area-inset-top, 0px)" }}
+          >
+            <div className="flex items-center gap-2 px-3">
+              <SidebarTrigger className="h-9 w-9 rounded-lg bg-white/5 text-white shrink-0" />
+              <div className="flex items-center gap-2 min-w-0">
                 <AnimatedBrainLogo
                   size="xs"
                   intensity="active"
                   color="#00d4ff"
                 />
-                <span className="tracking-tight text-white font-bold">
-                  CEPHO | {activeMenuItem?.label ?? "The Nexus"}
+                <span className="tracking-tight text-white font-bold text-sm truncate">
+                  CEPHO
+                </span>
+                <span className="text-muted-foreground/50 text-sm">|</span>
+                <span className="text-muted-foreground text-sm truncate">
+                  {activeMenuItem?.label ?? "The Nexus"}
                 </span>
               </div>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 px-3 shrink-0">
               <button
                 onClick={() => setShowGlobalSearch(true)}
                 className="flex items-center justify-center w-9 h-9 text-foreground/70 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
@@ -515,7 +522,7 @@ function BrainLayoutContent({
           role="main"
           aria-label="Main content"
           tabIndex={-1}
-          className={`flex-1 ${isMobile ? "pb-20" : ""} focus:outline-none`}
+          className={`flex-1 ${isMobile ? "pb-24" : ""} focus:outline-none`}
         >
           {children}
         </main>

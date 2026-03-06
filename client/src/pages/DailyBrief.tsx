@@ -651,49 +651,54 @@ export default function DailyBrief() {
       {/* Header */}
       <div className="border-b border-border bg-card/80 backdrop-blur-xl sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-xl md:text-3xl font-bold text-foreground flex items-center gap-3">
-                <Zap className="h-8 w-8 text-primary" />
-                Victoria's Briefing
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <h1 className="text-lg sm:text-xl md:text-3xl font-bold text-foreground flex items-center gap-2">
+                <Zap className="h-6 w-6 sm:h-8 sm:w-8 text-primary shrink-0" />
+                <span className="truncate">Victoria's Briefing</span>
               </h1>
-              <p className="text-muted-foreground mt-1">
-                Your daily executive briefing •{" "}
+              <p className="text-muted-foreground mt-1 text-sm truncate">
                 {liveBrief
                   ? new Date(liveBrief.date).toLocaleDateString("en-GB", {
-                      weekday: "long",
-                      year: "numeric",
-                      month: "long",
+                      weekday: "short",
+                      month: "short",
                       day: "numeric",
                     })
                   : BRIEF_DATA.date}
               </p>
             </div>
 
-            <div className="flex items-center gap-2">
+            {/* Export buttons — icon-only on mobile, labelled on desktop */}
+            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
               <Button
                 variant="outline"
                 size="sm"
-                className="border-border hover:bg-secondary"
+                className="border-border hover:bg-secondary px-2 sm:px-3"
                 onClick={() => handleExport("pdf")}
+                title="Export PDF"
               >
-                <Download className="w-4 h-4 mr-2" /> PDF
+                <Download className="w-4 h-4" />
+                <span className="hidden sm:inline ml-2">PDF</span>
               </Button>
               <Button
                 variant="outline"
                 size="sm"
-                className="border-border hover:bg-secondary"
+                className="border-border hover:bg-secondary px-2 sm:px-3"
                 onClick={() => handleExport("video")}
+                title="Watch Video"
               >
-                <Play className="w-4 h-4 mr-2" /> Video
+                <Play className="w-4 h-4" />
+                <span className="hidden sm:inline ml-2">Video</span>
               </Button>
               <Button
                 variant="outline"
                 size="sm"
-                className="border-border hover:bg-secondary"
+                className="border-border hover:bg-secondary px-2 sm:px-3"
                 onClick={() => handleExport("audio")}
+                title="Listen as Podcast"
               >
-                <Headphones className="w-4 h-4 mr-2" /> Podcast
+                <Headphones className="w-4 h-4" />
+                <span className="hidden sm:inline ml-2">Podcast</span>
               </Button>
             </div>
           </div>

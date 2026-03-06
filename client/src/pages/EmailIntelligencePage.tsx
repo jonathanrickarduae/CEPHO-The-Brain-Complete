@@ -493,13 +493,13 @@ export default function EmailIntelligencePage() {
       </div>
 
       {/* Actions Bar */}
-      <div className="flex items-center justify-between mb-4 gap-3 flex-wrap">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
+        <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-hide">
           {(["all", "urgent", "high", "normal", "low"] as const).map(f => (
             <button
               key={f}
               onClick={() => setPriorityFilter(f)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap shrink-0 ${
                 priorityFilter === f
                   ? "bg-blue-600 text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"

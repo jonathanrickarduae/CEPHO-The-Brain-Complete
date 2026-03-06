@@ -435,7 +435,8 @@ export default function InnovationHub() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex items-center justify-between px-4 md:px-8 py-4">
+            <div className="overflow-x-auto -mx-4 px-4">
+            <div className="flex items-center justify-between min-w-[480px] px-4 md:px-8 py-4">
               {FLYWHEEL_STAGES.map((stage, index) => (
                 <div key={stage.id} className="flex items-center">
                   <div className="flex flex-col items-center">
@@ -461,11 +462,12 @@ export default function InnovationHub() {
                 </div>
               ))}
             </div>
+            </div>
           </CardContent>
         </Card>
 
         {/* Main Content */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           {/* Ideas List */}
           <div className="col-span-2">
             <Card className="bg-card/50 border-border/50 h-full">

@@ -160,18 +160,18 @@ export default function VictoriaTrackerPage() {
     tasks.length > 0 ? Math.round((complete / tasks.length) * 100) : 0;
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white p-6">
+    <div className="min-h-screen bg-[#0a0a0f] text-white p-4 sm:p-6">
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-xl bg-violet-500/20 border border-violet-500/30 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-violet-500/20 border border-violet-500/30 flex items-center justify-center shrink-0">
             <Brain size={20} className="text-violet-400" />
           </div>
-          <div>
-            <h1 className="text-2xl font-bold text-white">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold text-white">
               Victoria — Sub-Phase Tracker
             </h1>
-            <p className="text-sm text-zinc-400">
+            <p className="text-xs sm:text-sm text-zinc-400">
               Auditable record of all DT-COS tasks and Victoria's autonomous
               activity
             </p>
@@ -180,7 +180,7 @@ export default function VictoriaTrackerPage() {
       </div>
 
       {/* Progress Summary */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4 mb-6 sm:mb-8">
         <div className="col-span-2 md:col-span-1 bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 flex flex-col items-center justify-center">
           <div className="text-4xl font-bold text-violet-400">{pct}%</div>
           <div className="text-xs text-zinc-400 mt-1">Overall Complete</div>

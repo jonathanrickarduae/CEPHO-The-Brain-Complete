@@ -649,7 +649,7 @@ export default function Settings() {
     >
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Sidebar */}
+          {/* Sidebar — vertical on desktop, horizontal scroll on mobile */}
           <div className="lg:w-64 flex-shrink-0">
             {/* Settings Search */}
             <div className="relative mb-4">
@@ -661,7 +661,33 @@ export default function Settings() {
                 className="pl-9 bg-card border-border"
               />
             </div>
-            <nav className="bg-card rounded-xl border border-border overflow-hidden">
+            {/* Mobile: horizontal scroll tab bar */}
+            <div className="lg:hidden overflow-x-auto -mx-1 px-1 pb-2 scrollbar-hide">
+              <div className="flex gap-2 min-w-max">
+                {tabs
+                  .filter(
+                    tab =>
+                      searchQuery === "" ||
+                      tab.label.toLowerCase().includes(searchQuery.toLowerCase())
+                  )
+                  .map(tab => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                        activeTab === tab.id
+                          ? "bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)] border border-cyan-400/50"
+                          : "bg-card text-foreground/70 border border-border hover:text-foreground"
+                      }`}
+                    >
+                      <tab.icon className="w-4 h-4 shrink-0" />
+                      <span>{tab.label}</span>
+                    </button>
+                  ))}
+              </div>
+            </div>
+            {/* Desktop: vertical nav */}
+            <nav className="hidden lg:block bg-card rounded-xl border border-border overflow-hidden">
               {tabs
                 .filter(
                   tab =>

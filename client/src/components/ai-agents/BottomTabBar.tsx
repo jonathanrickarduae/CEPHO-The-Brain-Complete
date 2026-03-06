@@ -1,13 +1,30 @@
+import { useState } from "react";
 import { useLocation } from "wouter";
 import {
   LayoutDashboard,
   Sun,
-  Users,
   User,
   Rocket,
-  Lock,
+  Grid3X3,
+  X,
   TrendingUp,
   Moon,
+  Lock,
+  Settings,
+  AlertTriangle,
+  Activity,
+  Mail,
+  Target,
+  Bot,
+  Workflow,
+  Users,
+  BarChart3,
+  ClipboardList,
+  Database,
+  Zap,
+  Video,
+  Library,
+  Shield,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -18,130 +35,215 @@ interface TabItem {
   path: string;
 }
 
-// Mobile bottom nav — mirrors the desktop sidebar navigation
-const getTabs = (): TabItem[] => [
+interface MoreItem {
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  path: string;
+  group: string;
+}
+
+// The 5 primary tabs always visible in the bottom bar
+const PRIMARY_TABS: TabItem[] = [
   { id: "nexus", label: "Nexus", icon: LayoutDashboard, path: "/nexus" },
-  { id: "brief", label: "Briefing", icon: Sun, path: "/daily-brief" },
-  { id: "cos", label: "Chief of Staff", icon: User, path: "/operations" },
-  { id: "experts", label: "AI-SMEs", icon: Users, path: "/ai-experts" },
+  { id: "signal", label: "Signal", icon: Sun, path: "/daily-brief" },
+  { id: "cos", label: "Chief", icon: User, path: "/operations" },
   { id: "genesis", label: "Genesis", icon: Rocket, path: "/project-genesis" },
-  {
-    id: "innovation",
-    label: "Innovation",
-    icon: TrendingUp,
-    path: "/innovation-hub",
-  },
-  { id: "evening", label: "Evening", icon: Moon, path: "/evening-review" },
-  { id: "vault", label: "Vault", icon: Lock, path: "/vault" },
+  { id: "more", label: "More", icon: Grid3X3, path: "" },
+];
+
+// All remaining navigation items shown in the More sheet
+const MORE_ITEMS: MoreItem[] = [
+  // Odyssey Engine
+  { label: "Innovation Hub", icon: TrendingUp, path: "/innovation-hub", group: "Odyssey Engine" },
+  { label: "Workflows", icon: Workflow, path: "/workflows", group: "Odyssey Engine" },
+  { label: "War Room", icon: AlertTriangle, path: "/war-room", group: "Odyssey Engine" },
+  { label: "Persephone", icon: Users, path: "/persephone", group: "Odyssey Engine" },
+  // Chief of Staff
+  { label: "AI Agents", icon: Bot, path: "/ai-agents", group: "Chief of Staff" },
+  { label: "Agent Monitor", icon: Activity, path: "/ai-agents-monitoring", group: "Chief of Staff" },
+  { label: "Victoria", icon: ClipboardList, path: "/victoria-tracker", group: "Chief of Staff" },
+  { label: "AI-SMEs", icon: Users, path: "/ai-experts", group: "Chief of Staff" },
+  { label: "Analytics", icon: BarChart3, path: "/analytics", group: "Chief of Staff" },
+  { label: "KPIs & OKRs", icon: Target, path: "/kpis", group: "Chief of Staff" },
+  // Intelligence
+  { label: "Email Intel", icon: Mail, path: "/email-intelligence", group: "Intelligence" },
+  { label: "Meetings", icon: Video, path: "/meeting-intelligence", group: "Intelligence" },
+  { label: "Evening Review", icon: Moon, path: "/evening-review", group: "Intelligence" },
+  // Resources
+  { label: "Knowledge Base", icon: Database, path: "/knowledge-base", group: "Resources" },
+  { label: "Documents", icon: Library, path: "/documents", group: "Resources" },
+  { label: "Integrations", icon: Zap, path: "/integrations", group: "Resources" },
+  // System
+  { label: "Vault", icon: Lock, path: "/settings?tab=vault", group: "System" },
+  { label: "Settings", icon: Settings, path: "/settings", group: "System" },
+  { label: "Admin", icon: Shield, path: "/admin", group: "System" },
 ];
 
 interface BottomTabBarProps {
-  onMorePress?: () => void;
   className?: string;
 }
 
 export function BottomTabBar({ className }: BottomTabBarProps) {
   const [location, setLocation] = useLocation();
+  const [showMore, setShowMore] = useState(false);
 
   const isActive = (path: string) => {
     if (!path) return false;
     return location === path || location.startsWith(path + "/");
   };
 
-  return (
-    <nav
-      className={cn(
-        "fixed bottom-0 left-0 right-0 z-40 md:hidden",
-        "h-16 bg-card/95 backdrop-blur-xl border-t border-white/10",
-        "overflow-x-auto scrollbar-hide",
-        className
-      )}
-      style={{ paddingBottom: "env(safe-area-inset-bottom, 0)" }}
-    >
-      <div className="flex items-center h-full px-2 min-w-max">
-        {getTabs().map(tab => {
-          const active = isActive(tab.path);
-          const Icon = tab.icon;
+  // Check if any "more" item is currently active (to highlight the More tab)
+  const isMoreActive = MORE_ITEMS.some(item => isActive(item.path));
 
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setLocation(tab.path)}
-              className={cn(
-                "flex flex-col items-center justify-center gap-1 py-2 px-3 min-w-[56px] relative",
-                "transition-colors duration-200",
-                active ? "text-primary" : "text-muted-foreground"
-              )}
-              aria-label={tab.label}
-              aria-current={active ? "page" : undefined}
-            >
-              <Icon
-                className={cn(
-                  "w-5 h-5",
-                  active && "drop-shadow-[0_0_8px_var(--color-primary)]"
-                )}
-              />
-              <span className="text-[10px] font-medium whitespace-nowrap">
-                {tab.label}
-              </span>
-              {active && (
-                <span className="absolute bottom-1 w-1 h-1 rounded-full bg-primary" />
-              )}
-            </button>
-          );
-        })}
-      </div>
-    </nav>
-  );
-}
+  const handleTabPress = (tab: TabItem) => {
+    if (tab.id === "more") {
+      setShowMore(prev => !prev);
+    } else {
+      setShowMore(false);
+      setLocation(tab.path);
+    }
+  };
 
-// More menu sheet — additional navigation options
-export function MoreMenuSheet({
-  isOpen,
-  onClose,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-}) {
-  const [, setLocation] = useLocation();
+  const handleMoreItemPress = (path: string) => {
+    setLocation(path);
+    setShowMore(false);
+  };
 
-  const moreItems = [
-    { label: "Workflows", path: "/workflows", icon: Rocket },
-    { label: "Documents", path: "/documents", icon: TrendingUp },
-    { label: "Persephone", path: "/persephone", icon: Users },
-    { label: "Evening Review", path: "/evening-review", icon: Moon },
-  ];
-
-  if (!isOpen) return null;
+  // Group the more items by their group label
+  const groups = MORE_ITEMS.reduce<Record<string, MoreItem[]>>((acc, item) => {
+    if (!acc[item.group]) acc[item.group] = [];
+    acc[item.group].push(item);
+    return acc;
+  }, {});
 
   return (
     <>
-      <div
-        className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm md:hidden"
-        onClick={onClose}
-      />
-      <div className="fixed bottom-16 left-0 right-0 z-50 bg-card border-t border-white/10 rounded-t-2xl p-4 md:hidden animate-in slide-in-from-bottom duration-200">
-        <div className="w-12 h-1 bg-muted-foreground/30 rounded-full mx-auto mb-4" />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {moreItems.map(item => (
+      {/* More Sheet Overlay */}
+      {showMore && (
+        <div
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
+          onClick={() => setShowMore(false)}
+        />
+      )}
+
+      {/* More Sheet Panel */}
+      {showMore && (
+        <div
+          className="fixed left-0 right-0 bottom-14 z-50 md:hidden rounded-t-2xl border-t border-white/10 bg-card/98 backdrop-blur-xl overflow-y-auto"
+          style={{ maxHeight: "70vh" }}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-white/5">
+            <span className="text-sm font-semibold text-foreground">All Sections</span>
             <button
-              key={item.path}
-              onClick={() => {
-                setLocation(item.path);
-                onClose();
-              }}
-              className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-secondary/50 transition-colors"
+              onClick={() => setShowMore(false)}
+              className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Close menu"
             >
-              <div className="w-12 h-12 rounded-xl bg-secondary/50 flex items-center justify-center">
-                <item.icon className="w-6 h-6 text-muted-foreground" />
-              </div>
-              <span className="text-xs text-muted-foreground">
-                {item.label}
-              </span>
+              <X className="w-4 h-4" />
             </button>
-          ))}
+          </div>
+
+          {/* Navigation groups */}
+          <div className="px-4 py-3 space-y-4" style={{ paddingBottom: "calc(1rem + env(safe-area-inset-bottom, 0px))" }}>
+            {Object.entries(groups).map(([groupName, items]) => (
+              <div key={groupName}>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-2 px-1">
+                  {groupName}
+                </p>
+                <div className="grid grid-cols-4 gap-2">
+                  {items.map(item => {
+                    const active = isActive(item.path);
+                    const Icon = item.icon;
+                    return (
+                      <button
+                        key={item.path}
+                        onClick={() => handleMoreItemPress(item.path)}
+                        className={cn(
+                          "flex flex-col items-center justify-center gap-1.5 p-2 rounded-xl transition-all duration-150",
+                          "min-h-[68px]",
+                          active
+                            ? "bg-primary/15 text-primary border border-primary/30"
+                            : "bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-foreground"
+                        )}
+                      >
+                        <Icon
+                          className={cn(
+                            "w-5 h-5 shrink-0",
+                            active && "drop-shadow-[0_0_6px_var(--color-primary)]"
+                          )}
+                        />
+                        <span className="text-[10px] font-medium text-center leading-tight">
+                          {item.label}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Fixed Bottom Tab Bar — 5 equal tabs, no horizontal scroll */}
+      <nav
+        className={cn(
+          "fixed bottom-0 left-0 right-0 z-50 md:hidden",
+          "bg-card/98 backdrop-blur-xl border-t border-white/10",
+          className
+        )}
+        style={{
+          height: "calc(56px + env(safe-area-inset-bottom, 0px))",
+          paddingBottom: "env(safe-area-inset-bottom, 0)",
+        }}
+        aria-label="Primary navigation"
+      >
+        <div className="flex items-stretch h-14">
+          {PRIMARY_TABS.map(tab => {
+            const active =
+              tab.id === "more"
+                ? showMore || isMoreActive
+                : isActive(tab.path);
+            const Icon = tab.icon;
+
+            return (
+              <button
+                key={tab.id}
+                onClick={() => handleTabPress(tab)}
+                className={cn(
+                  "flex-1 flex flex-col items-center justify-center gap-0.5 relative",
+                  "transition-colors duration-150",
+                  active ? "text-primary" : "text-muted-foreground"
+                )}
+                aria-label={tab.label}
+                aria-current={active && tab.id !== "more" ? "page" : undefined}
+                aria-expanded={tab.id === "more" ? showMore : undefined}
+              >
+                {/* Active indicator bar at top */}
+                {active && (
+                  <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-primary shadow-[0_0_8px_var(--color-primary)]" />
+                )}
+
+                <Icon
+                  className={cn(
+                    "w-5 h-5 shrink-0",
+                    active && "drop-shadow-[0_0_8px_var(--color-primary)]"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-[10px] font-semibold",
+                    active ? "text-primary" : "text-muted-foreground/70"
+                  )}
+                >
+                  {tab.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </nav>
     </>
   );
 }
