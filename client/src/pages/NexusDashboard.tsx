@@ -263,7 +263,7 @@ export default function NexusDashboard() {
       title="The Nexus"
       subtitle="Command Center"
       actions={
-        <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+        <div className="hidden sm:flex flex-wrap items-center gap-2 sm:gap-4">
           {/* Governance Mode Toggle */}
           <div className="flex items-center gap-2">
             <button
