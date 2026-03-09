@@ -100,6 +100,7 @@ const STATUS_COLORS: Record<string, string> = {
 export default function InnovationHub() {
   const [, setLocation] = useLocation();
   const [_activeTab, _setActiveTab] = useState("ideas");
+  const [sourceFilter, setSourceFilter] = useState<"all" | "manual" | "agent" | "sme">("all");
   const [showNewIdeaDialog, setShowNewIdeaDialog] = useState(false);
   const [showArticleDialog, setShowArticleDialog] = useState(false);
   const [selectedIdea, setSelectedIdea] = useState<number | null>(null);
@@ -480,10 +481,34 @@ export default function InnovationHub() {
           <div className="col-span-2">
             <Card className="bg-card/50 border-border/50 h-full">
               <CardHeader>
-                <CardTitle className="text-lg">Ideas Pipeline</CardTitle>
+                <div className="flex flex-col gap-2">
+                  <CardTitle className="text-lg">Ideas Pipeline</CardTitle>
+                  <div className="flex gap-1 flex-wrap">
+                    {(["all", "manual", "agent", "sme"] as const).map(f => (
+                      <button
+                        key={f}
+                        onClick={() => setSourceFilter(f)}
+                        className={`px-2 py-1 text-xs rounded-md transition-colors ${
+                          sourceFilter === f
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-muted text-muted-foreground hover:bg-muted/80"
+                        }`}
+                      >
+                        {f === "all" ? `All (${ideas?.length ?? 0})` : f === "manual" ? "Manual" : f === "agent" ? "Agents" : "SMEs"}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </CardHeader>
               <CardContent className="space-y-3 max-h-[500px] overflow-y-auto">
-                {ideas?.length === 0 ? (
+                {(() => {
+                  const filtered = (ideas ?? []).filter(i =>
+                    sourceFilter === "all" ? true :
+                    sourceFilter === "manual" ? (!i.source || i.source === "manual" || i.source === "ai_generated") :
+                    sourceFilter === "agent" ? (i.source ?? "").startsWith("agent:") :
+                    (i.source ?? "").startsWith("sme:")
+                  );
+                  return filtered.length === 0 ? (
                   <div className="text-center py-8 text-muted-foreground">
                     <Lightbulb className="h-12 w-12 mx-auto mb-3 opacity-50" />
                     <p>No ideas yet</p>
@@ -492,7 +517,7 @@ export default function InnovationHub() {
                     </p>
                   </div>
                 ) : (
-                  ideas?.map(idea => (
+                  filtered.map(idea => (
                     <div
                       key={idea.id}
                       onClick={() => setSelectedIdea(idea.id)}
@@ -524,6 +549,14 @@ export default function InnovationHub() {
                             </span>
                           </>
                         )}
+                        {idea.source && idea.source !== "manual" && (
+                          <>
+                            <span>•</span>
+                            <span className="capitalize text-cyan-400">
+                              {idea.source.startsWith("agent:") ? `🤖 ${idea.source.replace("agent:", "").replace(/_/g, " ")}` : idea.source.startsWith("sme:") ? `👥 SME` : idea.source}
+                            </span>
+                          </>
+                        )}
                       </div>
                       <Progress
                         value={(idea.currentStage / 5) * 100}
@@ -531,8 +564,8 @@ export default function InnovationHub() {
                       />
                     </div>
                   ))
-                )}
-              </CardContent>
+                );
+                })()}              </CardContent>
             </Card>
           </div>
 

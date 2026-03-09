@@ -1105,6 +1105,29 @@ function scheduleAgentDailyReports() {
                       : "not_required",
                   });
 
+                  // ── Insert agent suggestions as Innovation Hub ideas ────────────
+                  if (raw.suggestions && raw.suggestions.length > 0) {
+                    for (const suggestion of raw.suggestions.slice(0, 3)) {
+                      if (suggestion.title) {
+                        try {
+                          await db.insert(innovationIdeas).values({
+                            userId: user.id,
+                            title: suggestion.title,
+                            description: suggestion.description ?? null,
+                            source: `agent:${agentKey}`,
+                            status: "submitted",
+                            priority: "medium",
+                            currentStage: 1,
+                            category: "agent-generated",
+                            sourceMetadata: { agentName, agentKey },
+                          });
+                        } catch (_ideaErr) {
+                          // non-fatal — idea may already exist
+                        }
+                      }
+                    }
+                  }
+
                   // Log to Victoria's action log
                   await db.insert(victoriaActions).values({
                     userId: user.id,
@@ -1208,6 +1231,30 @@ function scheduleSmeReviewProcessor() {
                 reviewResult: review,
               })
               .where(eq(smeReviewTriggers.id, trigger.id));
+
+            // ── Insert SME key opportunities as Innovation Hub ideas ────────
+            const opportunities = review.keyOpportunities as string[] | undefined;
+            if (opportunities && opportunities.length > 0) {
+              for (const opp of opportunities.slice(0, 2)) {
+                if (opp && opp.length > 10) {
+                  try {
+                    await db.insert(innovationIdeas).values({
+                      userId: trigger.userId,
+                      title: opp.length > 200 ? opp.slice(0, 200) : opp,
+                      description: `Identified by SME panel (${expertNames.join(", ")}) during review of "${trigger.sourceTitle}".`,
+                      source: `sme:${trigger.expertType ?? "panel"}`,
+                      status: "submitted",
+                      priority: "high",
+                      currentStage: 1,
+                      category: "sme-generated",
+                      sourceMetadata: { experts: expertNames, sourceTitle: trigger.sourceTitle, triggerType: trigger.triggerType },
+                    });
+                  } catch (_ideaErr) {
+                    // non-fatal
+                  }
+                }
+              }
+            }
 
             // Log to Victoria's action log
             await db.insert(victoriaActions).values({
