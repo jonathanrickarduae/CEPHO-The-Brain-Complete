@@ -49,7 +49,7 @@ interface Task {
   title: string;
   description: string;
   project: string;
-  status: "active" | "review" | "completed" | "blocked";
+  status: "not_started" | "active" | "review" | "completed" | "blocked";
   progress: number;
   qaStatus: QAStatus;
   assignedExperts: string[];
@@ -237,6 +237,8 @@ export default function ChiefOfStaff() {
   const [showTaskDetail, setShowTaskDetail] = useState(false);
   const [reviewScore, setReviewScore] = useState<number>(8);
   const [reviewFeedback, setReviewFeedback] = useState("");
+  // Task status filter — null means show all
+  const [taskStatusFilter, setTaskStatusFilter] = useState<string | null>(null);
 
   // tRPC hooks for QA workflow
   const utils = trpc.useUtils();
@@ -309,7 +311,7 @@ export default function ChiefOfStaff() {
       description: t.description || "",
       project: "General", // FUTURE: Join with projects table
       status: (t.status === "not_started"
-        ? "active"
+        ? "not_started"
         : t.status === "in_progress"
           ? "active"
           : t.status === "completed"
@@ -751,32 +753,45 @@ export default function ChiefOfStaff() {
                 {[
                   {
                     label: "Active",
+                    filterKey: "active",
                     value: taskStats.active,
                     color: "text-primary",
                     bg: "bg-primary/10",
                   },
                   {
                     label: "In Review",
+                    filterKey: "review",
                     value: taskStats.review,
                     color: "text-amber-400",
                     bg: "bg-amber-500/10",
                   },
                   {
                     label: "Completed",
+                    filterKey: "completed",
                     value: taskStats.completed,
                     color: "text-emerald-400",
                     bg: "bg-emerald-500/10",
                   },
                   {
                     label: "QA Verified",
+                    filterKey: "verified",
                     value: taskStats.verified,
                     color: "text-purple-400",
                     bg: "bg-purple-500/10",
                   },
                 ].map(stat => (
-                  <div
+                  <button
                     key={stat.label}
-                    className={`p-4 rounded-xl ${stat.bg} border border-white/10`}
+                    onClick={() =>
+                      setTaskStatusFilter(f =>
+                        f === stat.filterKey ? null : stat.filterKey
+                      )
+                    }
+                    className={`p-4 rounded-xl ${stat.bg} border-2 transition-all text-left w-full ${
+                      taskStatusFilter === stat.filterKey
+                        ? "border-white/40 ring-2 ring-white/20"
+                        : "border-white/10 hover:border-white/30"
+                    }`}
                   >
                     <p className={`text-2xl font-bold ${stat.color}`}>
                       {stat.value}
@@ -784,16 +799,32 @@ export default function ChiefOfStaff() {
                     <p className="text-xs text-muted-foreground">
                       {stat.label}
                     </p>
-                  </div>
+                  </button>
                 ))}
               </div>
 
               {/* Task List */}
               <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-foreground/70 uppercase tracking-wider">
-                  All Tasks
-                </h3>
-                {tasks.map(task => {
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-semibold text-foreground/70 uppercase tracking-wider">
+                    {taskStatusFilter ? `${taskStatusFilter.replace("_", " ")} Tasks` : "All Tasks"}
+                  </h3>
+                  {taskStatusFilter && (
+                    <button
+                      onClick={() => setTaskStatusFilter(null)}
+                      className="text-xs text-foreground/50 hover:text-foreground/80 underline"
+                    >
+                      Clear filter
+                    </button>
+                  )}
+                </div>
+                {tasks
+                  .filter(task => {
+                    if (!taskStatusFilter) return true;
+                    if (taskStatusFilter === "verified") return task.qaStatus === "verified";
+                    return task.status === taskStatusFilter;
+                  })
+                  .map(task => {
                   const qaConfig = QA_STATUS_CONFIG[task.qaStatus];
                   const QAIcon = qaConfig.icon;
                   return (
@@ -885,7 +916,7 @@ export default function ChiefOfStaff() {
                           className="mt-3 flex flex-wrap gap-2"
                           onClick={e => e.stopPropagation()}
                         >
-                          {task.status !== "active" && task.status !== "completed" && (
+                          {(task.status === "not_started" || task.status === "blocked") && (
                             <button
                               onClick={() =>
                                 updateTaskMutation.mutate({

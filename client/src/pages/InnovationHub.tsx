@@ -162,6 +162,14 @@ export default function InnovationHub() {
       },
       onError: error => toast.error(error.message),
     });
+  const backfillAgentIdeasMutation =
+    trpc.innovation.backfillAgentIdeas.useMutation({
+      onSuccess: data => {
+        toast.success(`Generated ${data.inserted} ideas from AI agents!`);
+        refetchIdeas();
+      },
+      onError: error => toast.error(error.message),
+    });
 
   const runAssessmentMutation = trpc.innovation.runAssessment.useMutation({
     onSuccess: () => {
@@ -282,6 +290,17 @@ export default function InnovationHub() {
             {generateDailyIdeasMutation.isPending
               ? "Generating..."
               : "Generate Daily Ideas"}
+          </Button>
+          <Button
+            variant="outline"
+            className="gap-2 hidden sm:flex"
+            onClick={() => backfillAgentIdeasMutation.mutate()}
+            disabled={backfillAgentIdeasMutation.isPending}
+          >
+            <Brain className="h-4 w-4" />
+            {backfillAgentIdeasMutation.isPending
+              ? "Generating..."
+              : "Get Agent Ideas"}
           </Button>
           <Dialog open={showArticleDialog} onOpenChange={setShowArticleDialog}>
             <DialogTrigger asChild>

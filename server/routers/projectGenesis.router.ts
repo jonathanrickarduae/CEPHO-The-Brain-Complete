@@ -263,15 +263,20 @@ export const projectGenesisRouter = router({
         throw new Error("Project not found");
       }
 
+      // Build update payload — only include notes when explicitly provided
+      // (avoids column-not-found errors on DB instances before migration 0044)
+      const phaseUpdateSet: Partial<typeof projectGenesisPhases.$inferInsert> = {
+        status: input.status,
+        completedAt: input.status === "completed" ? new Date() : null,
+        startedAt: input.status === "in_progress" ? new Date() : undefined,
+        updatedAt: new Date(),
+      };
+      if (input.notes !== undefined) {
+        phaseUpdateSet.notes = input.notes;
+      }
       await db
         .update(projectGenesisPhases)
-        .set({
-          status: input.status,
-          notes: input.notes ?? null,
-          completedAt: input.status === "completed" ? new Date() : null,
-          startedAt: input.status === "in_progress" ? new Date() : undefined,
-          updatedAt: new Date(),
-        })
+        .set(phaseUpdateSet)
         .where(
           and(
             eq(projectGenesisPhases.projectId, input.projectId),

@@ -167,7 +167,7 @@ export default function DevelopmentPathway() {
           onValueChange={setActiveTab}
           className="space-y-4"
         >
-          <TabsList className="bg-gray-900/50 border border-border/50">
+          <TabsList className="bg-gray-900/50 border border-border/50 flex overflow-x-auto scrollbar-hide w-full h-auto flex-nowrap">
             <TabsTrigger
               value="overview"
               className="data-[state=active]:bg-card"

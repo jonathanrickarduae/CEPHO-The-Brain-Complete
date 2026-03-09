@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Check,
   ChevronRight,
@@ -42,6 +42,11 @@ export function ValueChainProgress({
   const [expandedPhase, setExpandedPhase] = useState<number | null>(
     currentPhaseId
   );
+
+  // Auto-expand the current (in-progress) phase when it changes after a phase completes
+  useEffect(() => {
+    setExpandedPhase(currentPhaseId);
+  }, [currentPhaseId]);
 
   const getPhaseStatus = (phaseId: number): ProjectPhaseStatus => {
     const progress = phaseProgress.find(p => p.phaseId === phaseId);
@@ -301,31 +306,31 @@ export function ValueChainProgress({
                       </div>
 
                       {/* Actions */}
-                      <div className="flex flex-wrap gap-2">
-                        {status === "not_started" &&
-                          phase.id === currentPhaseId && (
-                            <Button
-                              size="sm"
-                              onClick={() => onStartPhase?.(phase.id)}
-                              className="bg-gradient-to-r from-cyan-500 to-fuchsia-500"
-                            >
-                              Start Phase
-                            </Button>
-                          )}
+                      <div className="flex flex-wrap gap-2 items-center">
+                        {/* Start Phase — for not_started phases at or before currentPhaseId */}
+                        {status === "not_started" && phase.id <= currentPhaseId + 1 && (
+                          <Button
+                            size="sm"
+                            onClick={() => onStartPhase?.(phase.id)}
+                            className="bg-gradient-to-r from-cyan-500 to-fuchsia-500"
+                          >
+                            Start Phase
+                          </Button>
+                        )}
+                        {/* Complete Phase — always shown when in_progress */}
                         {status === "in_progress" && (
                           <>
-                            {checkProgress === 100 ? (
-                              <Button
-                                size="sm"
-                                onClick={() => onRequestReview?.(phase.id)}
-                                className="bg-gradient-to-r from-amber-500 to-orange-500"
-                              >
-                                <Shield className="w-4 h-4 mr-2" />
-                                Complete Phase
-                              </Button>
-                            ) : (
-                              <p className="text-xs text-foreground/50 self-center">
-                                Tick all {phase.qualityGateChecks.length} checks above to complete this phase
+                            <Button
+                              size="sm"
+                              onClick={() => onRequestReview?.(phase.id)}
+                              className="bg-gradient-to-r from-amber-500 to-orange-500"
+                            >
+                              <Shield className="w-4 h-4 mr-2" />
+                              {checkProgress === 100 ? "Complete Phase" : `Complete Phase (${completedChecks.length}/${phase.qualityGateChecks.length} checks)`}
+                            </Button>
+                            {checkProgress < 100 && (
+                              <p className="text-xs text-foreground/40">
+                                Tip: tick checks above to track progress
                               </p>
                             )}
                           </>

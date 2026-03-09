@@ -349,6 +349,12 @@ export default function DailyBrief() {
   const [showVideoBriefing, setShowVideoBriefing] = useState(false);
   const [pendingVideoId, setPendingVideoId] = useState<string | null>(null);
 
+  // Live data for Intelligence and Strategy tabs
+  const { data: emailStats } = trpc.emailIntelligence.getSummaryStats.useQuery();
+  const { data: emailList } = trpc.emailIntelligence.list.useQuery({ limit: 5, priority: "high" });
+  const { data: kpiList } = trpc.kpiOkr.list.useQuery();
+  const { data: genesisProjects } = trpc.projectGenesis.listProjects.useQuery();
+
   // Live briefing data from AI
   const { data: liveBrief, isLoading: briefLoading } =
     trpc.victoriaBriefing.getDailyBriefing.useQuery(undefined, {
@@ -396,9 +402,21 @@ export default function DailyBrief() {
   const generateVideoMutation = trpc.victoriasBrief.generateVideo.useMutation();
   const generateAudioMutation = trpc.victoriasBrief.generateAudio.useMutation();
 
+  // Helper: trigger a browser download from a data URL or regular URL
+  const triggerDownload = (url: string, filename: string) => {
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => document.body.removeChild(a), 100);
+  };
+
   const handleExport = async (format: "pdf" | "video" | "audio") => {
-    // P1-BUG-02: Guard against null URLs before calling window.open
     const briefDate = liveBrief?.date ?? new Date().toISOString();
+    const dateSlug = new Date().toISOString().slice(0, 10);
     const briefText =
       liveBrief?.briefing ??
       `Good morning! Here's your daily brief for ${new Date().toLocaleDateString()}.`;
@@ -410,12 +428,10 @@ export default function DailyBrief() {
           content: liveBrief ?? BRIEF_DATA,
         });
         if (result.pdfUrl) {
-          window.open(result.pdfUrl, "_blank");
-          toast.success("PDF generated successfully!");
+          triggerDownload(result.pdfUrl, `victoria-brief-${dateSlug}.pdf`);
+          toast.success("PDF downloaded!");
         } else {
-          toast.info(
-            result.message || "PDF generation queued. Check back shortly."
-          );
+          toast.error(result.message || "PDF generation failed.");
         }
       } else if (format === "video") {
         toast.info("Creating video brief with Victoria...");
@@ -425,16 +441,12 @@ export default function DailyBrief() {
         });
         if (result.status === "processing" && result.videoId) {
           setPendingVideoId(result.videoId);
-          toast.info(
-            "Video is being generated. This page will auto-open it when ready."
-          );
+          toast.info("Video is being generated. You'll be notified when ready.");
         } else if (result.videoUrl) {
-          window.open(result.videoUrl, "_blank");
-          toast.success("Video generated successfully!");
+          triggerDownload(result.videoUrl, `victoria-brief-${dateSlug}.mp4`);
+          toast.success("Video downloaded!");
         } else {
-          toast.info(
-            result.message || "Video generation requires Synthesia API key."
-          );
+          toast.info(result.message || "Video generation requires Synthesia API key.");
         }
       } else if (format === "audio") {
         toast.info("Creating podcast version with Victoria's voice...");
@@ -443,12 +455,10 @@ export default function DailyBrief() {
           voiceId: "victoria",
         });
         if (result.audioUrl) {
-          window.open(result.audioUrl, "_blank");
-          toast.success("Audio generated successfully!");
+          triggerDownload(result.audioUrl, `victoria-brief-${dateSlug}.mp3`);
+          toast.success("Audio downloaded!");
         } else {
-          toast.info(
-            result.message || "Audio generation requires ElevenLabs API key."
-          );
+          toast.error(result.message || "Audio generation requires ElevenLabs API key. Check Integrations.");
         }
       }
     } catch {
@@ -1066,188 +1076,132 @@ export default function DailyBrief() {
 
         {/* Intelligence Tab */}
         {activeTab === "intelligence" && (
-          <Card className="bg-card/60 border-border">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-foreground">
-                <TrendingUp className="w-5 h-5 text-[var(--brain-cyan)]" />
-                Intelligence Feed
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {BRIEF_DATA.intelligence.map(item => (
-                <div
-                  key={item.id}
-                  className={`p-4 rounded-xl border ${getSentimentColor(item.sentiment)} ${isActioned(`intel-${item.id}`) ? "opacity-60" : ""}`}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Badge variant="outline" className="text-xs">
-                          {item.source}
-                        </Badge>
-                        <Badge className={getSentimentColor(item.sentiment)}>
-                          {item.sentiment}
-                        </Badge>
+          <div className="space-y-6">
+            {/* Email Intelligence */}
+            <Card className="bg-card/60 border-border">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-foreground">
+                  <TrendingUp className="w-5 h-5 text-[var(--brain-cyan)]" />
+                  Intelligence Feed
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {emailList && emailList.length > 0 ? (
+                  emailList.map(item => (
+                    <div
+                      key={item.id}
+                      className={`p-4 rounded-xl border border-border bg-background/50 ${isActioned(`intel-${item.id}`) ? "opacity-60" : ""}`}
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge variant="outline" className="text-xs">
+                              {item.fromName ?? item.fromEmail ?? "Email"}
+                            </Badge>
+                            <Badge variant={item.aiPriority === "urgent" ? "destructive" : item.aiPriority === "high" ? "default" : "secondary"}>
+                              {item.aiPriority}
+                            </Badge>
+                          </div>
+                          <h3 className="font-bold text-foreground mb-1">
+                            {item.subject}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            {item.aiSummary ?? item.bodyPreview ?? ""}
+                          </p>
+                        </div>
+                        <ActionButtons
+                          itemId={`intel-${item.id}`}
+                          title={item.subject}
+                          description={item.aiSummary ?? item.bodyPreview ?? ""}
+                          category="Email"
+                          source="intelligence"
+                        />
                       </div>
-                      <h3 className="font-bold text-foreground mb-1">
-                        {item.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        {item.summary}
-                      </p>
                     </div>
-                    {item.actionable && (
-                      <ActionButtons
-                        itemId={`intel-${item.id}`}
-                        title={item.title}
-                        description={item.summary}
-                        category={item.source}
-                        source="intelligence"
-                      />
-                    )}
+                  ))
+                ) : (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <TrendingUp className="w-10 h-10 mx-auto mb-3 opacity-30" />
+                    <p className="font-medium">No high-priority intelligence yet</p>
+                    <p className="text-sm mt-1">Connect your email in Integrations to see live intelligence</p>
                   </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         )}
 
         {/* Strategy Tab */}
         {activeTab === "strategy" && (
           <div className="space-y-6">
-            {/* Market Position */}
+            {/* KPI Overview */}
             <Card className="bg-card/60 border-border">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-foreground">
                   <TrendingUp className="w-5 h-5 text-primary" />
-                  Market Position
+                  KPI Overview
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl font-bold text-green-400">
-                      {BRIEF_DATA.strategyBriefing.marketPosition.status}
-                    </span>
-                    <TrendingUp className="w-5 h-5 text-green-400" />
-                  </div>
-                  <p className="text-muted-foreground">
-                    {BRIEF_DATA.strategyBriefing.marketPosition.summary}
-                  </p>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {BRIEF_DATA.strategyBriefing.keyMetrics.map((metric, i) => (
-                    <div key={i} className="bg-background/50 rounded-lg p-4">
-                      <div className="text-sm text-muted-foreground mb-1">
-                        {metric.label}
-                      </div>
-                      <div className="text-xl font-bold text-foreground">
-                        {metric.value}
-                      </div>
-                      <div
-                        className={`text-sm ${metric.trend === "up" ? "text-green-400" : metric.trend === "down" ? "text-red-400" : "text-muted-foreground"}`}
-                      >
-                        {metric.change}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Competitor Alerts */}
-            <Card className="bg-card/60 border-border">
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2 text-foreground">
-                  <AlertTriangle className="w-5 h-5 text-orange-400" />
-                  Competitor Activity
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {BRIEF_DATA.strategyBriefing.competitorAlerts.map(
-                    (alert, i) => (
-                      <div
-                        key={i}
-                        className="flex items-start justify-between p-4 bg-background/50 rounded-lg"
-                      >
-                        <div>
-                          <div className="font-medium text-foreground">
-                            {alert.competitor}
-                          </div>
-                          <div className="text-sm text-muted-foreground">
-                            {alert.alert}
-                          </div>
-                          <div className="text-sm text-primary mt-1">
-                            → {alert.recommendation}
-                          </div>
+                {kpiList && kpiList.length > 0 ? (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {kpiList.slice(0, 8).map((kpi) => (
+                      <div key={kpi.id} className="bg-background/50 rounded-lg p-4">
+                        <div className="text-sm text-muted-foreground mb-1">{kpi.name}</div>
+                        <div className="text-xl font-bold text-foreground">
+                          {kpi.currentValue !== null ? `${kpi.currentValue}${kpi.unit ?? ""}` : "—"}
                         </div>
-                        <Badge
-                          variant={
-                            alert.impact === "high"
-                              ? "destructive"
-                              : alert.impact === "medium"
-                                ? "default"
-                                : "secondary"
-                          }
-                        >
-                          {alert.impact} impact
-                        </Badge>
+                        <div className="text-sm text-muted-foreground">
+                          Target: {kpi.targetValue}{kpi.unit ?? ""}
+                        </div>
                       </div>
-                    )
-                  )}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-6 text-muted-foreground">
+                    <p className="font-medium">No KPIs configured yet</p>
+                    <p className="text-sm mt-1">Add KPIs in the KPI & OKR section</p>
+                  </div>
+                )}
               </CardContent>
             </Card>
 
-            {/* Strategic Priorities */}
+            {/* Active Projects — Strategic Priorities */}
             <Card className="bg-card/60 border-border">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-foreground">
                   <Lightbulb className="w-5 h-5 text-yellow-400" />
-                  Strategic Priorities
+                  Active Projects
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {BRIEF_DATA.strategyBriefing.strategicPriorities.map(
-                    (priority, i) => (
-                      <div key={i} className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="font-medium text-foreground">
-                            {priority.priority}
-                          </span>
-                          <Badge
-                            variant={
-                              priority.status === "ahead"
-                                ? "default"
-                                : priority.status === "on-track"
-                                  ? "secondary"
-                                  : "destructive"
-                            }
-                          >
-                            {priority.status}
-                          </Badge>
+                {genesisProjects && genesisProjects.length > 0 ? (
+                  <div className="space-y-4">
+                    {genesisProjects.slice(0, 6).map((project) => {
+                      const progress = project.currentPhase ? Math.round((project.currentPhase / 7) * 100) : 0;
+                      const statusColor = project.status === "active" ? "bg-primary" : project.status === "completed" ? "bg-green-500" : "bg-orange-500";
+                      return (
+                        <div key={project.id} className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="font-medium text-foreground">{project.name}</span>
+                            <Badge variant={project.status === "active" ? "default" : project.status === "completed" ? "secondary" : "destructive"}>
+                              {project.status}
+                            </Badge>
+                          </div>
+                          <div className="h-2 bg-background rounded-full overflow-hidden">
+                            <div className={`h-full rounded-full ${statusColor}`} style={{ width: `${progress}%` }} />
+                          </div>
+                          <div className="text-sm text-muted-foreground text-right">Phase {project.currentPhase ?? 0} of 7</div>
                         </div>
-                        <div className="h-2 bg-background rounded-full overflow-hidden">
-                          <div
-                            className={`h-full rounded-full ${
-                              priority.status === "ahead"
-                                ? "bg-green-500"
-                                : priority.status === "on-track"
-                                  ? "bg-primary"
-                                  : "bg-orange-500"
-                            }`}
-                            style={{ width: `${priority.progress}%` }}
-                          />
-                        </div>
-                        <div className="text-sm text-muted-foreground text-right">
-                          {priority.progress}% complete
-                        </div>
-                      </div>
-                    )
-                  )}
-                </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-center py-6 text-muted-foreground">
+                    <p className="font-medium">No active projects</p>
+                    <p className="text-sm mt-1">Create a project in Genesis to see it here</p>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>

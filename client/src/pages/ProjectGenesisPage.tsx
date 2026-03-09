@@ -138,15 +138,20 @@ export default function ProjectGenesisPage() {
     },
   });
 
-  // Selected project ID for phase detail query
+  // Selected project ID for phase detail query — updated via useEffect (never during render)
   const [selectedProjectId, setSelectedProjectId] = React.useState<number | null>(null);
-
   // Fetch phases with completedChecks for the selected project
   const { data: projectPhasesData, refetch: refetchPhases } =
     trpc.projectGenesis.getProjectPhases.useQuery(
       { projectId: selectedProjectId! },
       { enabled: selectedProjectId !== null, refetchOnWindowFocus: false }
     );
+  // Sync selectedProjectId when currentBlueprint changes (safe: in useEffect, not during render)
+  React.useEffect(() => {
+    if (currentBlueprint?.id != null) {
+      setSelectedProjectId(Number(currentBlueprint.id));
+    }
+  }, [currentBlueprint?.id]);
 
   // Transform API data to match existing interface
   const [savedProjects, setSavedProjects] = useState<SavedProject[]>([]);
@@ -510,18 +515,27 @@ export default function ProjectGenesisPage() {
           const qmsProject = savedProjects.find(
             p => String(p.id) === String(currentBlueprint.id)
           );
-          // Set selectedProjectId so getProjectPhases query runs
-          if (qmsProject && selectedProjectId !== Number(qmsProject.id)) {
-            setSelectedProjectId(Number(qmsProject.id));
-          }
-          // Merge completedChecks from live DB data into phaseProgress
-          const enrichedPhaseProgress = qmsProject?.phaseProgress.map(pp => {
+          // Merge completedChecks and real status from live DB data into phaseProgress
+          const enrichedPhaseProgress: ProjectPhaseProgress[] = qmsProject?.phaseProgress.map(pp => {
             const livePhase = projectPhasesData?.find(lp => lp.phaseNumber === pp.phaseId);
+            // Use real DB status if available
+            const realStatus: ProjectPhaseStatus = livePhase
+              ? (livePhase.status === "completed" ? "approved"
+                : livePhase.status === "in_progress" ? "in_progress"
+                : livePhase.status === "blocked" ? "blocked"
+                : "not_started")
+              : pp.status;
             return {
               ...pp,
+              status: realStatus,
               completedChecks: livePhase?.completedChecks ?? pp.completedChecks,
             };
           }) ?? [];
+          // Determine current phase from enriched data (first in_progress, or first not_started)
+          const currentPhaseFromDb = enrichedPhaseProgress.find(p => p.status === "in_progress")?.phaseId
+            ?? enrichedPhaseProgress.find(p => p.status === "not_started")?.phaseId
+            ?? qmsProject?.currentPhaseId
+            ?? 1;
           return (
             <div className="space-y-6 max-w-7xl mx-auto">
               {/* Back button */}
@@ -536,7 +550,7 @@ export default function ProjectGenesisPage() {
               {qmsProject && (
                 <ValueChainProgress
                   phaseProgress={enrichedPhaseProgress}
-                  currentPhaseId={qmsProject.currentPhaseId}
+                  currentPhaseId={currentPhaseFromDb}
                   projectName={qmsProject.name}
                   onStartPhase={phaseId => {
                     updatePhaseMutation.mutate({

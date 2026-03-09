@@ -76,6 +76,7 @@ import {
   useChangelog,
 } from "@/components/shared/ChangelogModal";
 import { GlobalSearch } from "@/components/shared/GlobalSearch";
+import OpenClawChat from "@/components/ai-agents/OpenClawChat";
 import _NeonBrain from "@/components/ai-agents/NeonBrain";
 import AnimatedBrainLogo from "@/components/ai-agents/AnimatedBrainLogo";
 import { NotificationBell } from "@/components/communication/NotificationCenter";
@@ -228,7 +229,8 @@ function BrainLayoutContent({
   const isCollapsed = state === "collapsed";
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const activeMenuItem = menuItems.find(item => item.path === location);
+  const activeMenuItem = menuItems.find(item => item.path === location)
+    ?? menuItems.flatMap(item => item.children ?? []).find(child => child.path === location);
   const isMobile = useIsMobile();
 
   // Accessibility settings state
@@ -244,6 +246,9 @@ function BrainLayoutContent({
 
   // Global search state
   const [showGlobalSearch, setShowGlobalSearch] = useState(false);
+
+  // Global ClawBot state
+  const [clawOpen, setClawOpen] = useState(false);
 
   // Collapsible navigation groups state - collapsed by default for clean look
   const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
@@ -564,6 +569,23 @@ function BrainLayoutContent({
         isOpen={showGlobalSearch}
         onClose={() => setShowGlobalSearch(false)}
       />
+
+      {/* Global ClawBot floating button — accessible from every page */}
+      <div className={`fixed z-50 ${isMobile ? "bottom-24 right-4" : "bottom-6 right-20"}`}>
+        {clawOpen && (
+          <div className="mb-3">
+            <OpenClawChat />
+          </div>
+        )}
+        <button
+          onClick={() => setClawOpen(v => !v)}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white text-sm font-semibold shadow-lg hover:from-fuchsia-500 hover:to-purple-500 transition-all"
+          aria-label={clawOpen ? "Close ClawBot" : "Open ClawBot"}
+        >
+          <Bot className="w-4 h-4" />
+          {clawOpen ? "Close" : "ClawBot"}
+        </button>
+      </div>
 
       {/* p5-7: PWA offline / reconnected banner */}
       <OfflineIndicator />

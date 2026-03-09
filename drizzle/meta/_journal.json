@@ -302,6 +302,13 @@
       "when": 1768718411451,
       "tag": "0043_missing_core_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "5",
+      "when": 1773085796258,
+      "tag": "0044_genesis_phases_add_columns",
+      "breakpoints": true
     }
   ]
 }

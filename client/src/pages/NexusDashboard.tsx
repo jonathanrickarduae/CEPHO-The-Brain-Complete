@@ -330,6 +330,10 @@ export default function NexusDashboard() {
   const { data: tasksData } = trpc.tasks.list.useQuery({ limit: 100 });
   const { data: projectsData } = trpc.projects.list.useQuery({});
   const { data: flywheelStats } = trpc.innovation.getFlywheelStats.useQuery();
+  // Live Recent Activity feed — refreshes every 30s
+  const { data: activityData } = trpc.admin.getRecentActivity.useQuery(undefined, {
+    refetchInterval: 30_000,
+  });
 
   const completedTasks = (tasksData?.tasks ?? []).filter(
     t => t.status === "completed"
@@ -553,15 +557,6 @@ export default function NexusDashboard() {
                 onClick={() => setLocation("/innovation-hub")}
               />
               <MetricCard
-                icon={Brain}
-                label="CEPHO Score"
-                value={
-                  cephoScoreData?.total ? `${cephoScoreData.total}/100` : "--"
-                }
-                trend="stable"
-                onClick={() => setLocation("/statistics")}
-              />
-              <MetricCard
                 icon={CheckCircle2}
                 label="Tasks Completed"
                 value={completedTasks}
@@ -592,41 +587,22 @@ export default function NexusDashboard() {
             RECENT ACTIVITY
           </h2>
           <div className="border-2 border-border rounded-xl bg-card p-4 space-y-2">
-            <ActivityItem
-              icon={Brain}
-              title="AI-SME: Dr. Sarah Chen"
-              subtitle="Completed analysis on market trends"
-              time="5m ago"
-              status="complete"
-            />
-            <ActivityItem
-              icon={Lightbulb}
-              title="Innovation Hub"
-              subtitle="New idea generated from TechCrunch article"
-              time="12m ago"
-              status="active"
-            />
-            <ActivityItem
-              icon={User}
-              title="Chief of Staff"
-              subtitle="3 tasks require your attention"
-              time="1h ago"
-              status="pending"
-            />
-            <ActivityItem
-              icon={Sun}
-              title="Morning Signal"
-              subtitle="Daily brief ready for review"
-              time="2h ago"
-              status="complete"
-            />
-            <ActivityItem
-              icon={Rocket}
-              title="Project Genesis"
-              subtitle="Blueprint updated: CEPHO Platform"
-              time="3h ago"
-              status="active"
-            />
+            {activityData?.activities && activityData.activities.length > 0 ? (
+              activityData.activities.slice(0, 8).map(item => (
+                <ActivityItem
+                  key={item.id}
+                  icon={Brain}
+                  title={item.actorName ?? item.actorType}
+                  subtitle={item.description ?? `${item.action} ${item.targetType ?? ""}`.trim()}
+                  time={new Date(item.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                  status={item.action === "completed" ? "complete" : item.action === "created" ? "active" : "pending"}
+                />
+              ))
+            ) : (
+              <p className="text-sm text-muted-foreground text-center py-4">
+                No recent activity yet — agents will log activity here as they work.
+              </p>
+            )}
           </div>
         </div>
       </div>

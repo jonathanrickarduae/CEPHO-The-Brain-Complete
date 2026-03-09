@@ -320,6 +320,7 @@ export const integrationsRouter = router({
     if (env.githubToken) autoConnect.push("github");
     if (env.smtpUser && env.smtpPass) autoConnect.push("gmail");
     if (env.anthropicApiKey) autoConnect.push("anthropic");
+    if (env.elevenLabsApiKey) autoConnect.push("elevenlabs");
     if (env.synthesiaApiKey) autoConnect.push("synthesia");
 
     for (const provider of autoConnect) {
@@ -447,6 +448,19 @@ export const integrationsRouter = router({
             });
             const data = (await r.json()) as { ok: boolean };
             ok = data.ok;
+            break;
+          }
+          case "elevenlabs": {
+            if (!env.elevenLabsApiKey) break;
+            const elR = await fetch("https://api.elevenlabs.io/v1/user", {
+              headers: { "xi-api-key": env.elevenLabsApiKey },
+            });
+            ok = elR.ok;
+            break;
+          }
+          case "anthropic": {
+            // Verify key format — no cheap status endpoint available
+            ok = !!env.anthropicApiKey && env.anthropicApiKey.startsWith("sk-ant");
             break;
           }
           default:
