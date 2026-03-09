@@ -41,6 +41,7 @@ import {
   projects,
   libraryDocuments,
   calendarEventsCache,
+  briefings,
 } from "../../drizzle/schema";
 import { logger } from "../utils/logger";
 import { recordMetricSnapshot, detectAnomalies } from "./anomalyDetection";
@@ -71,7 +72,53 @@ function scheduleMorningBriefing() {
             metadata: { automated: true, jobId: "morning-briefing" },
           });
 
-          // 2. Proactive push email
+          // 2. Generate and persist the AI briefing for the day
+          try {
+            const OpenAI = (await import("openai")).default;
+            const apiKey = process.env.OPENAI_API_KEY;
+            if (apiKey) {
+              const openai = new OpenAI({ apiKey });
+              const todayDate = new Date();
+              todayDate.setHours(0, 0, 0, 0);
+              const [pendingTasks, activeProjects] = await Promise.all([
+                db.select().from(tasks)
+                  .where(and(eq(tasks.userId, user.id), eq(tasks.status, "not_started")))
+                  .limit(8),
+                db.select().from(projects)
+                  .where(and(eq(projects.userId, user.id), eq(projects.status, "active")))
+                  .limit(5),
+              ]);
+              const dateStr = todayDate.toLocaleDateString("en-GB", {
+                weekday: "long", year: "numeric", month: "long", day: "numeric",
+              });
+              const prompt = `You are Victoria, AI Chief of Staff for CEPHO. Generate a professional daily briefing for ${user.name ?? "the executive"}.
+Date: ${dateStr}
+Active Projects (${activeProjects.length}): ${activeProjects.map((p: { name: string; status: string; progress?: number | null }) => `${p.name} [${p.status}, ${p.progress ?? 0}% complete]`).join("; ") || "None"}
+Pending Tasks (${pendingTasks.length}): ${pendingTasks.slice(0, 5).map((t: { title: string; priority?: string | null }) => `${t.title} [${t.priority ?? "medium"} priority]`).join("; ") || "None"}
+Generate a structured daily briefing with: 1. Executive Summary, 2. Priority Focus (top 3), 3. Key Metrics, 4. Strategic Recommendation. Keep it concise and professional.`;
+              const completion = await openai.chat.completions.create({
+                model: "gpt-4.1-mini",
+                messages: [{ role: "user", content: prompt }],
+                max_tokens: 700,
+                temperature: 0.6,
+              });
+              const briefingText = completion.choices[0]?.message?.content;
+              if (briefingText) {
+                await db.insert(briefings).values({
+                  userId: user.id,
+                  title: `Daily Briefing — ${todayDate.toLocaleDateString("en-GB")}`,
+                  content: { text: briefingText },
+                  date: todayDate,
+                  status: "completed",
+                });
+                log.info(`[Cron] Morning Briefing — AI brief persisted for user ${user.id}`);
+              }
+            }
+          } catch (aiErr) {
+            log.warn(`[Cron] Morning Briefing — AI generation failed for user ${user.id}:`, aiErr);
+          }
+
+          // 3. Proactive push email
           if (user.email) {
             try {
               const { emailService } = await import("./email.service");

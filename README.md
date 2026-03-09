@@ -371,3 +371,43 @@ All 57 tRPC routers are documented manually in `docs/specs/`. The next step is t
 | Gap 5 | Market Launch Automation (full orchestration UI) | High     | Large  | Future Sprint |
 | Gap 6 | Big Red Button (Kill Switch UI)                  | Medium   | Small  | Future Sprint |
 | Gap 7 | API Docs Auto-Generation (OpenAPI + Swagger)     | Medium   | Medium | Future Sprint |
+
+---
+
+## Walkthrough Fix Phase — March 2026
+
+This phase documents all fixes applied following a live walkthrough session identifying 7 functional issues across the platform.
+
+### Issues Identified & Fixes Applied
+
+| # | Issue | Root Cause | Fix Applied | Files Changed |
+| :- | :---- | :--------- | :---------- | :------------ |
+| 1 | **CEPHO Score 31/100 — no explanation of how to improve it** | Score was calculated live but no breakdown UI existed | Added `CephoScoreBreakdown` panel to Nexus Dashboard showing each of the 5 score components (task completion, project health, digital twin, mood, innovation) with progress bars and actionable tips | `NexusDashboard.tsx` |
+| 2 | **Documents/Library not easily accessible** | Document Library existed at `/documents` but was buried in sidebar with no quick access | Added Document Library to the Nexus Dashboard Quick Access grid and confirmed it is already in the mobile More sheet under Resources | `NexusDashboard.tsx` |
+| 3 | **Genesis project gates — stopped projects cannot be advanced** | Quality gate check items were display-only `div` elements with no `onClick` handler; `completedChecks` was always `[]` so the "Request Review" button never appeared | Made quality gate check items clickable tick boxes; added `toggleQualityCheck` tRPC procedure to persist checked state to `metadata` JSON column; added "Mark Complete" button for in-progress phases | `ValueChainProgress.tsx`, `ProjectGenesisPage.tsx`, `projectGenesis.router.ts` |
+| 4 | **Tasks cannot be moved forward** | No status advancement buttons existed on task cards in the Chief of Staff view | Added `Start`, `Mark Complete`, and `Block` buttons to each DB-backed task card; wired to `trpc.tasks.update` mutation | `ChiefOfStaff.tsx` |
+| 5 | **Integrations turn off across sessions** | `initializeAll` only inserted new rows — it never reconnected previously disconnected integrations when env vars were present | Updated `initializeAll` to also `UPDATE` existing "disconnected" rows back to "active" when the corresponding env var is configured | `integrations.router.ts` |
+| 6 | **Innovation Hub ideas cannot be converted to actions** | "Promote to Genesis" button required `status === "validated"` — no way to create a simple task from an idea | Added "Create Action" button (available for all ideas regardless of status) that calls `trpc.tasks.create` to create a task from the idea title and description | `InnovationHub.tsx` |
+| 7 | **Victoria's daily brief regenerates on every page load** | `getDailyBriefing` was a query that called OpenAI on every request with no caching; morning scheduler only sent email notifications without generating the brief | Added today's cache check to `getDailyBriefing` — returns persisted brief if one exists for today; added persistence step after generation; updated morning cron job (06:00 UTC) to generate and persist the AI brief for all users before they open the app | `victoriaBriefing.router.ts`, `scheduler.ts` |
+
+### Commits
+
+| SHA | Description |
+| :-- | :---------- |
+| `769dfcf` | `feat(mobile): comprehensive mobile-first redesign for iPhone portrait mode` |
+| `8e2a3f1` | `fix(mobile): hide EVERYTHING/governance controls on mobile in NexusDashboard` |
+| _(pending)_ | `fix(walkthrough): 7 functional fixes — CEPHO Score, Library, Genesis gates, Tasks, Integrations, Innovation Hub, Victoria brief` |
+
+### How to Improve the CEPHO Score
+
+The CEPHO Score is calculated from 5 components. To raise it from 31/100:
+
+| Component | Weight | How to Improve |
+| :-------- | :----- | :------------- |
+| Task Completion Rate | 25% | Complete tasks in the Chief of Staff → Tasks view |
+| Project Health | 25% | Keep Genesis projects active and advancing through phases |
+| Digital Twin Calibration | 20% | Complete the Digital Twin questionnaire in Settings |
+| Mood Trend | 15% | Log daily mood entries in the Victoria Tracker |
+| Innovation Activity | 15% | Capture and advance ideas in the Innovation Hub |
+
+---

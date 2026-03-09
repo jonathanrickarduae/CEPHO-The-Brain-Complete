@@ -243,6 +243,17 @@ export default function ChiefOfStaff() {
   const { data: tasksWithQA, isLoading: _tasksLoading } =
     trpc.qa.getTasksWithStatus.useQuery();
 
+  // Task status update mutation
+  const updateTaskMutation = trpc.tasks.update.useMutation({
+    onSuccess: () => {
+      utils.qa.getTasksWithStatus.invalidate();
+      toast.success("Task updated!");
+    },
+    onError: error => {
+      toast.error(`Failed to update task: ${error.message}`);
+    },
+  });
+
   // Fetch delegated tasks from Signal
   const { data: delegatedTasks, isLoading: _delegatedTasksLoading } =
     trpc.cosTasks.getTasks.useQuery({ status: "delegated" });
@@ -866,6 +877,58 @@ export default function ChiefOfStaff() {
                             </span>{" "}
                             {task.feedback}
                           </p>
+                        </div>
+                      )}
+                      {/* Status advancement buttons — only for real DB tasks */}
+                      {task.isFromDb && task.dbId && (
+                        <div
+                          className="mt-3 flex flex-wrap gap-2"
+                          onClick={e => e.stopPropagation()}
+                        >
+                          {task.status !== "active" && task.status !== "completed" && (
+                            <button
+                              onClick={() =>
+                                updateTaskMutation.mutate({
+                                  id: task.dbId!,
+                                  status: "in_progress",
+                                  progress: Math.max(task.progress, 10),
+                                })
+                              }
+                              disabled={updateTaskMutation.isPending}
+                              className="px-3 py-1 text-xs rounded-lg bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30 transition-colors"
+                            >
+                              Start
+                            </button>
+                          )}
+                          {task.status === "active" && (
+                            <button
+                              onClick={() =>
+                                updateTaskMutation.mutate({
+                                  id: task.dbId!,
+                                  status: "completed",
+                                  progress: 100,
+                                })
+                              }
+                              disabled={updateTaskMutation.isPending}
+                              className="px-3 py-1 text-xs rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors"
+                            >
+                              Mark Complete
+                            </button>
+                          )}
+                          {task.status !== "blocked" && task.status !== "completed" && (
+                            <button
+                              onClick={() =>
+                                updateTaskMutation.mutate({
+                                  id: task.dbId!,
+                                  status: "blocked",
+                                })
+                              }
+                              disabled={updateTaskMutation.isPending}
+                              className="px-3 py-1 text-xs rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors"
+                            >
+                              Block
+                            </button>
+                          )}
                         </div>
                       )}
                     </div>

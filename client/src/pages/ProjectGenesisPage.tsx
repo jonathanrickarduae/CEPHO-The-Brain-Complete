@@ -121,11 +121,32 @@ export default function ProjectGenesisPage() {
     onSuccess: () => {
       toast.success("Phase updated successfully!");
       refetchProjects();
+      refetchPhases();
     },
     onError: error => {
       toast.error(`Failed to update phase: ${error.message}`);
     },
   });
+
+  // Toggle quality gate check mutation
+  const toggleCheckMutation = trpc.projectGenesis.toggleQualityCheck.useMutation({
+    onSuccess: () => {
+      refetchPhases();
+    },
+    onError: error => {
+      toast.error(`Failed to update check: ${error.message}`);
+    },
+  });
+
+  // Selected project ID for phase detail query
+  const [selectedProjectId, setSelectedProjectId] = React.useState<number | null>(null);
+
+  // Fetch phases with completedChecks for the selected project
+  const { data: projectPhasesData, refetch: refetchPhases } =
+    trpc.projectGenesis.getProjectPhases.useQuery(
+      { projectId: selectedProjectId! },
+      { enabled: selectedProjectId !== null, refetchOnWindowFocus: false }
+    );
 
   // Transform API data to match existing interface
   const [savedProjects, setSavedProjects] = useState<SavedProject[]>([]);
@@ -489,6 +510,18 @@ export default function ProjectGenesisPage() {
           const qmsProject = savedProjects.find(
             p => String(p.id) === String(currentBlueprint.id)
           );
+          // Set selectedProjectId so getProjectPhases query runs
+          if (qmsProject && selectedProjectId !== Number(qmsProject.id)) {
+            setSelectedProjectId(Number(qmsProject.id));
+          }
+          // Merge completedChecks from live DB data into phaseProgress
+          const enrichedPhaseProgress = qmsProject?.phaseProgress.map(pp => {
+            const livePhase = projectPhasesData?.find(lp => lp.phaseNumber === pp.phaseId);
+            return {
+              ...pp,
+              completedChecks: livePhase?.completedChecks ?? pp.completedChecks,
+            };
+          }) ?? [];
           return (
             <div className="space-y-6 max-w-7xl mx-auto">
               {/* Back button */}
@@ -502,20 +535,28 @@ export default function ProjectGenesisPage() {
               {/* Phase Progression — wired to live updatePhase endpoint */}
               {qmsProject && (
                 <ValueChainProgress
-                  phaseProgress={qmsProject.phaseProgress}
+                  phaseProgress={enrichedPhaseProgress}
                   currentPhaseId={qmsProject.currentPhaseId}
+                  projectName={qmsProject.name}
                   onStartPhase={phaseId => {
                     updatePhaseMutation.mutate({
-                      projectId: qmsProject.id,
+                      projectId: Number(qmsProject.id),
                       phaseNumber: phaseId,
                       status: "in_progress",
                     });
                   }}
                   onRequestReview={phaseId => {
                     updatePhaseMutation.mutate({
-                      projectId: qmsProject.id,
+                      projectId: Number(qmsProject.id),
                       phaseNumber: phaseId,
                       status: "completed",
+                    });
+                  }}
+                  onToggleCheck={(phaseId, checkLabel) => {
+                    toggleCheckMutation.mutate({
+                      projectId: Number(qmsProject.id),
+                      phaseNumber: phaseId,
+                      checkLabel,
                     });
                   }}
                 />

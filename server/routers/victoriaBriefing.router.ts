@@ -11,7 +11,7 @@ import { desc, eq, and } from "drizzle-orm";
 import OpenAI from "openai";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
-import { tasks, projects } from "../../drizzle/schema";
+import { tasks, projects, briefings } from "../../drizzle/schema";
 import { synthesiaService } from "../services/synthesia.service";
 import { generateBriefPDF } from "../services/pdf-generation.service";
 import { readFile, unlink } from "fs/promises";
@@ -31,6 +31,40 @@ export const victoriaBriefingRouter = router({
     const userId = ctx.user.id;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today.getTime() + 86400000);
+
+    // ── Cache check: return today's briefing if it already exists ────────────
+    try {
+      const { gte, lt } = await import("drizzle-orm");
+      const [cached] = await db
+        .select()
+        .from(briefings)
+        .where(
+          and(
+            eq(briefings.userId, userId),
+            gte(briefings.createdAt, today),
+            lt(briefings.createdAt, tomorrow)
+          )
+        )
+        .orderBy(desc(briefings.createdAt))
+        .limit(1);
+      if (cached?.content) {
+        const cachedText =
+          typeof cached.content === "object" && cached.content !== null
+            ? (cached.content as { text?: string }).text ?? JSON.stringify(cached.content)
+            : String(cached.content);
+        return {
+          date: today.toISOString(),
+          greeting: `Good morning, ${ctx.user.name}`,
+          briefing: cachedText,
+          stats: { pendingTasks: 0, activeProjects: 0, highPriorityTasks: 0 },
+          generatedAt: cached.createdAt?.toISOString() ?? today.toISOString(),
+          fromCache: true,
+        };
+      }
+    } catch (_cacheErr) {
+      // briefings table may not exist yet — fall through to generate
+    }
 
     // Get pending tasks and active projects for context
     const [pendingTasks, activeProjects] = await Promise.all([
@@ -93,6 +127,19 @@ Keep it concise, professional, and actionable. Format with clear sections.`;
     const briefingText =
       completion.choices[0]?.message?.content ??
       `Good morning, ${ctx.user.name}. Your daily briefing is ready. You have ${pendingTasks.length} pending tasks and ${activeProjects.length} active projects.`;
+
+    // ── Persist to briefings table so subsequent page loads use the cache ──────
+    try {
+      await db.insert(briefings).values({
+        userId,
+        title: `Daily Briefing — ${today.toLocaleDateString("en-GB")}`,
+        content: { text: briefingText },
+        date: today,
+        status: "completed",
+      });
+    } catch (_persistErr) {
+      // briefings table may not exist yet — non-fatal
+    }
 
     return {
       date: today.toISOString(),

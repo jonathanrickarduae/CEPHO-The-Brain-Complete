@@ -406,4 +406,112 @@ Return ONLY valid JSON, no markdown.`;
 
       return { slides };
     }),
+
+  /**
+   * Toggle a single quality gate check on/off for a phase.
+   * Stores completedChecks in the phase's metadata JSON column.
+   */
+  toggleQualityCheck: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.number(),
+        phaseNumber: z.number().min(1).max(6),
+        checkLabel: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      // Verify project belongs to user
+      const projects = await db
+        .select()
+        .from(projectGenesis)
+        .where(
+          and(
+            eq(projectGenesis.id, input.projectId),
+            eq(projectGenesis.userId, ctx.user.id)
+          )
+        )
+        .limit(1);
+      if (projects.length === 0) throw new Error("Project not found");
+
+      // Get current phase row
+      const phases = await db
+        .select()
+        .from(projectGenesisPhases)
+        .where(
+          and(
+            eq(projectGenesisPhases.projectId, input.projectId),
+            eq(projectGenesisPhases.phaseNumber, input.phaseNumber)
+          )
+        )
+        .limit(1);
+      if (phases.length === 0) throw new Error("Phase not found");
+
+      const phase = phases[0];
+      const meta = (phase.metadata as Record<string, unknown>) ?? {};
+      const completedChecks: string[] = Array.isArray(meta.completedChecks)
+        ? (meta.completedChecks as string[])
+        : [];
+
+      // Toggle: add if not present, remove if present
+      const idx = completedChecks.indexOf(input.checkLabel);
+      if (idx === -1) {
+        completedChecks.push(input.checkLabel);
+      } else {
+        completedChecks.splice(idx, 1);
+      }
+
+      await db
+        .update(projectGenesisPhases)
+        .set({
+          metadata: { ...meta, completedChecks },
+          updatedAt: new Date(),
+        })
+        .where(
+          and(
+            eq(projectGenesisPhases.projectId, input.projectId),
+            eq(projectGenesisPhases.phaseNumber, input.phaseNumber)
+          )
+        );
+
+      return { completedChecks };
+    }),
+
+  /**
+   * Get all phases with completedChecks for a project (for the ValueChainProgress component).
+   */
+  getProjectPhases: protectedProcedure
+    .input(z.object({ projectId: z.number() }))
+    .query(async ({ input, ctx }) => {
+      // Verify project belongs to user
+      const projects = await db
+        .select()
+        .from(projectGenesis)
+        .where(
+          and(
+            eq(projectGenesis.id, input.projectId),
+            eq(projectGenesis.userId, ctx.user.id)
+          )
+        )
+        .limit(1);
+      if (projects.length === 0) throw new Error("Project not found");
+
+      const phases = await db
+        .select()
+        .from(projectGenesisPhases)
+        .where(eq(projectGenesisPhases.projectId, input.projectId))
+        .orderBy(projectGenesisPhases.phaseNumber);
+
+      return phases.map(ph => ({
+        phaseNumber: ph.phaseNumber,
+        status: ph.status,
+        completedChecks: Array.isArray(
+          (ph.metadata as Record<string, unknown> | null)?.completedChecks
+        )
+          ? ((ph.metadata as Record<string, unknown>)
+              .completedChecks as string[])
+          : [],
+        startedAt: ph.startedAt?.toISOString() ?? null,
+        completedAt: ph.completedAt?.toISOString() ?? null,
+      }));
+    }),
 });

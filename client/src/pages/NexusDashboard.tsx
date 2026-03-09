@@ -15,6 +15,12 @@ import {
   CheckCircle2,
   Lightbulb,
   Settings as SettingsIcon,
+  ChevronDown,
+  ChevronUp,
+  Target,
+  Zap,
+  Heart,
+  RefreshCw,
 } from "lucide-react";
 import { useGovernance } from "@/hooks/useGovernance";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
@@ -128,6 +134,180 @@ function ActivityItem({
       <span className="text-xs text-muted-foreground whitespace-nowrap">
         {time}
       </span>
+    </div>
+  );
+}
+
+// CEPHO Score Breakdown Panel
+function CephoScoreBreakdown({
+  data,
+}: {
+  data: {
+    total: number;
+    grade: string;
+    breakdown: {
+      taskCompletion: number;
+      projectHealth: number;
+      digitalTwinCalibration: number;
+      moodTrend: number;
+      innovationActivity: number;
+    };
+  };
+}) {
+  const [expanded, setExpanded] = React.useState(false);
+  const recalcMutation = trpc.cephoScore.recalculate.useMutation({
+    onSuccess: () => {
+      toast.success("CEPHO Score recalculated!");
+    },
+  });
+
+  const gradeColor =
+    data.total >= 80
+      ? "text-emerald-400"
+      : data.total >= 60
+        ? "text-amber-400"
+        : "text-red-400";
+
+  const items = [
+    {
+      label: "Task Completion",
+      value: data.breakdown.taskCompletion,
+      weight: 25,
+      icon: CheckCircle2,
+      tip: "Complete tasks in the Chief of Staff view",
+    },
+    {
+      label: "Project Health",
+      value: data.breakdown.projectHealth,
+      weight: 25,
+      icon: Rocket,
+      tip: "Advance Genesis project phases and remove blockers",
+    },
+    {
+      label: "Digital Twin",
+      value: data.breakdown.digitalTwinCalibration,
+      weight: 20,
+      icon: Target,
+      tip: "Complete the Digital Twin questionnaire in Twin Training",
+    },
+    {
+      label: "Mood & Energy",
+      value: data.breakdown.moodTrend,
+      weight: 15,
+      icon: Heart,
+      tip: "Log daily mood entries in the Digital Twin",
+    },
+    {
+      label: "Innovation Activity",
+      value: data.breakdown.innovationActivity,
+      weight: 15,
+      icon: Zap,
+      tip: "Add ideas in the Innovation Hub",
+    },
+  ];
+
+  return (
+    <div className="border-2 border-border rounded-xl bg-card overflow-hidden">
+      <button
+        className="w-full flex items-center justify-between p-4 hover:bg-card/80 transition-colors"
+        onClick={() => setExpanded(e => !e)}
+      >
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-primary/20">
+            <Brain className="w-5 h-5 text-primary" />
+          </div>
+          <div className="text-left">
+            <p className="text-xs text-muted-foreground">CEPHO SCORE</p>
+            <div className="flex items-baseline gap-2">
+              <span className={`text-2xl font-bold ${gradeColor}`}>
+                {data.total}/100
+              </span>
+              <span
+                className={`text-sm font-semibold px-2 py-0.5 rounded-full border ${
+                  data.total >= 80
+                    ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-400"
+                    : data.total >= 60
+                      ? "bg-amber-500/20 border-amber-500/30 text-amber-400"
+                      : "bg-red-500/20 border-red-500/30 text-red-400"
+                }`}
+              >
+                Grade {data.grade}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={e => {
+              e.stopPropagation();
+              recalcMutation.mutate();
+            }}
+            className="p-2 rounded-lg hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors"
+            title="Recalculate score"
+          >
+            <RefreshCw
+              className={`w-4 h-4 ${
+                recalcMutation.isPending ? "animate-spin" : ""
+              }`}
+            />
+          </button>
+          {expanded ? (
+            <ChevronUp className="w-4 h-4 text-muted-foreground" />
+          ) : (
+            <ChevronDown className="w-4 h-4 text-muted-foreground" />
+          )}
+        </div>
+      </button>
+
+      {expanded && (
+        <div className="px-4 pb-4 border-t border-border pt-4">
+          <p className="text-xs text-muted-foreground mb-4">
+            Your CEPHO Score is calculated from 5 live data sources. Click any
+            item to see how to improve it.
+          </p>
+          <div className="space-y-3">
+            {items.map(item => (
+              <div key={item.label} className="group">
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center gap-2">
+                    <item.icon className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">{item.label}</span>
+                    <span className="text-xs text-muted-foreground">
+                      ({item.weight}%)
+                    </span>
+                  </div>
+                  <span
+                    className={`text-sm font-bold ${
+                      item.value >= 70
+                        ? "text-emerald-400"
+                        : item.value >= 40
+                          ? "text-amber-400"
+                          : "text-red-400"
+                    }`}
+                  >
+                    {item.value}/100
+                  </span>
+                </div>
+                <div className="h-2 bg-muted rounded-full overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-500 ${
+                      item.value >= 70
+                        ? "bg-emerald-500"
+                        : item.value >= 40
+                          ? "bg-amber-500"
+                          : "bg-red-500"
+                    }`}
+                    style={{ width: `${item.value}%` }}
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground mt-1 hidden group-hover:block">
+                  💡 {item.tip}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -254,6 +434,13 @@ export default function NexusDashboard() {
       path: "/knowledge-base",
       gradient: "from-indigo-500/20 to-purple-500/20",
       border: "border-indigo-500/50 hover:border-indigo-400",
+    },
+    {
+      label: "Document Library",
+      icon: BookOpen,
+      path: "/documents",
+      gradient: "from-rose-500/20 to-pink-500/20",
+      border: "border-rose-500/50 hover:border-rose-400",
     },
   ];
 
@@ -391,6 +578,11 @@ export default function NexusDashboard() {
             </div>
           </div>
         </div>
+
+        {/* CEPHO Score Breakdown */}
+        {cephoScoreData && (
+          <CephoScoreBreakdown data={cephoScoreData} />
+        )}
 
         {/* OpenClaw AI Assistant - Moved to fixed bottom-right */}
 

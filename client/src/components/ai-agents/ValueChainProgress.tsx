@@ -27,6 +27,7 @@ interface ValueChainProgressProps {
   onPhaseClick?: (phase: ValueChainPhase) => void;
   onStartPhase?: (phaseId: number) => void;
   onRequestReview?: (phaseId: number) => void;
+  onToggleCheck?: (phaseId: number, checkLabel: string) => void;
 }
 
 export function ValueChainProgress({
@@ -36,6 +37,7 @@ export function ValueChainProgress({
   onPhaseClick,
   onStartPhase,
   onRequestReview,
+  onToggleCheck,
 }: ValueChainProgressProps) {
   const [expandedPhase, setExpandedPhase] = useState<number | null>(
     currentPhaseId
@@ -239,19 +241,20 @@ export function ValueChainProgress({
                           {phase.qualityGateChecks.map((check, i) => {
                             const isComplete = completedChecks.includes(check);
                             return (
-                              <div
+                              <button
                                 key={i}
-                                className={`flex items-center gap-2 p-2 rounded-lg ${
+                                onClick={() => onToggleCheck?.(phase.id, check)}
+                                className={`w-full flex items-center gap-2 p-2 rounded-lg text-left transition-all ${
                                   isComplete
-                                    ? "bg-emerald-500/10"
-                                    : "bg-white/5"
-                                }`}
+                                    ? "bg-emerald-500/10 hover:bg-emerald-500/20"
+                                    : "bg-white/5 hover:bg-white/10"
+                                } ${onToggleCheck ? "cursor-pointer" : "cursor-default"}`}
                               >
                                 <div
-                                  className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                                  className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all ${
                                     isComplete
                                       ? "bg-emerald-500"
-                                      : "border border-white/20"
+                                      : "border-2 border-white/30 hover:border-white/60"
                                   }`}
                                 >
                                   {isComplete && (
@@ -259,11 +262,15 @@ export function ValueChainProgress({
                                   )}
                                 </div>
                                 <span
-                                  className={`text-sm ${isComplete ? "text-emerald-400" : "text-foreground/70"}`}
+                                  className={`text-sm ${
+                                    isComplete
+                                      ? "text-emerald-400 line-through"
+                                      : "text-foreground/70"
+                                  }`}
                                 >
                                   {check}
                                 </span>
-                              </div>
+                              </button>
                             );
                           })}
                         </div>
@@ -294,7 +301,7 @@ export function ValueChainProgress({
                       </div>
 
                       {/* Actions */}
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap gap-2">
                         {status === "not_started" &&
                           phase.id === currentPhaseId && (
                             <Button
@@ -305,15 +312,23 @@ export function ValueChainProgress({
                               Start Phase
                             </Button>
                           )}
-                        {status === "in_progress" && checkProgress === 100 && (
-                          <Button
-                            size="sm"
-                            onClick={() => onRequestReview?.(phase.id)}
-                            className="bg-gradient-to-r from-amber-500 to-orange-500"
-                          >
-                            <Shield className="w-4 h-4 mr-2" />
-                            Request Review
-                          </Button>
+                        {status === "in_progress" && (
+                          <>
+                            {checkProgress === 100 ? (
+                              <Button
+                                size="sm"
+                                onClick={() => onRequestReview?.(phase.id)}
+                                className="bg-gradient-to-r from-amber-500 to-orange-500"
+                              >
+                                <Shield className="w-4 h-4 mr-2" />
+                                Complete Phase
+                              </Button>
+                            ) : (
+                              <p className="text-xs text-foreground/50 self-center">
+                                Tick all {phase.qualityGateChecks.length} checks above to complete this phase
+                              </p>
+                            )}
+                          </>
                         )}
                       </div>
                     </div>

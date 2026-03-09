@@ -335,12 +335,24 @@ export const integrationsRouter = router({
         .limit(1);
 
       if (existing.length === 0) {
+        // Insert new active integration
         await db.insert(integrations).values({
           userId: ctx.user.id,
           provider,
           status: "active",
           metadata: { autoConnected: true },
         });
+      } else if (existing[0].status !== "active") {
+        // Reconnect previously disconnected integration (env var is now present)
+        await db
+          .update(integrations)
+          .set({ status: "active", updatedAt: new Date() })
+          .where(
+            and(
+              eq(integrations.userId, ctx.user.id),
+              eq(integrations.provider, provider)
+            )
+          );
       }
     }
 

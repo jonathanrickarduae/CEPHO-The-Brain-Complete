@@ -200,6 +200,14 @@ export default function InnovationHub() {
     }
   );
 
+  // Create a task/action directly from an idea
+  const createTaskFromIdeaMutation = trpc.tasks.create.useMutation({
+    onSuccess: () => {
+      toast.success("Action created! View it in Chief of Staff → Tasks.");
+    },
+    onError: error => toast.error(`Failed to create action: ${error.message}`),
+  });
+
   // Flywheel stats and stage advancement
   const { data: _flywheelStats, refetch: refetchFlywheelStats } =
     trpc.innovation.getFlywheelStats.useQuery();
@@ -541,7 +549,24 @@ export default function InnovationHub() {
                           "No description provided"}
                       </CardDescription>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
+                      {/* Create Action — available for any idea */}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          createTaskFromIdeaMutation.mutate({
+                            title: selectedIdeaData.idea.title,
+                            description:
+                              selectedIdeaData.idea.description ||
+                              `Action from Innovation Hub idea: ${selectedIdeaData.idea.title}`,
+                          })
+                        }
+                        disabled={createTaskFromIdeaMutation.isPending}
+                      >
+                        <CheckCircle className="h-4 w-4 mr-1" />
+                        Create Action
+                      </Button>
                       {selectedIdeaData.idea.currentStage >= 4 &&
                         !selectedIdeaData.idea.briefDocument && (
                           <Button
