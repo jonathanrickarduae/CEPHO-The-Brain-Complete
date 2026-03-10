@@ -7,7 +7,7 @@
  *
  * Run against live: TEST_BASE_URL=https://cepho-the-brain-complete.onrender.com pnpm test
  */
-import { describe, it, expect, beforeAll } from "vitest";
+import { describe, it, expect } from "vitest";
 
 const BASE_URL = process.env.TEST_BASE_URL ?? "";
 const describeIf = BASE_URL ? describe : describe.skip;
@@ -147,7 +147,7 @@ describeIf("Protected Routers — Unauthenticated Access", () => {
 
 describeIf("Input Validation — Zod Schema Enforcement", () => {
   it("tasks.list rejects invalid limit (string instead of number)", async () => {
-    const { status, error } = await trpcQuery("tasks.list", {
+    const { status } = await trpcQuery("tasks.list", {
       limit: "not-a-number",
     });
     expect([400, 401]).toContain(status);

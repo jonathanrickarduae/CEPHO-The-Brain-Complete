@@ -80,7 +80,6 @@ import OpenClawChat from "@/components/ai-agents/OpenClawChat";
 import _NeonBrain from "@/components/ai-agents/NeonBrain";
 import AnimatedBrainLogo from "@/components/ai-agents/AnimatedBrainLogo";
 import { NotificationBell } from "@/components/communication/NotificationCenter";
-import { ThemeToggle } from "@/components/settings/ThemeToggle";
 import { LanguageSwitcher } from "@/components/settings/LanguageSwitcher";
 import { WorkspaceSwitcher } from "@/components/workspace/WorkspaceSwitcher";
 

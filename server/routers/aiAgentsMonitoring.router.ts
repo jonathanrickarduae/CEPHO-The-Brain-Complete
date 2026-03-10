@@ -498,7 +498,7 @@ function generateDailyReport(
 export const aiAgentsMonitoringRouter = router({
   getAllStatus: protectedProcedure.query(async ({ ctx }) => {
     // Try to get real performance data from DB (populated by daily scheduler)
-    let dbReportMap: Record<string, { performanceRating: number; tasksCompleted: number; lastActive: string }> = {};
+    const dbReportMap: Record<string, { performanceRating: number; tasksCompleted: number; lastActive: string }> = {};
     try {
       const recentReports = await db
         .select()
@@ -774,17 +774,21 @@ export const aiAgentsMonitoringRouter = router({
         .where(eq(agentRatings.userId, ctx.user.id))
         .groupBy(agentRatings.agentId);
 
-      let metrics: any[] = [];
-      let ratings: any[] = [];
+      type MetricRow = { agentId: string; agentName: string; avgOverallScore: string | null; avgLearningScore: string | null; totalTasks: number };
+      type RatingRow = { agentId: string; avgRating: string | null; totalRatings: number };
+      let metrics: MetricRow[] = [];
+      let ratings: RatingRow[] = [];
       try {
-        [metrics, ratings] = await Promise.all([metricsQuery, ratingsQuery]);
+        const [rawMetrics, rawRatings] = await Promise.all([metricsQuery, ratingsQuery]);
+        metrics = rawMetrics as MetricRow[];
+        ratings = rawRatings as RatingRow[];
       } catch (_e) {
         // Tables may not exist yet — return generated fallback below
       }
 
-      const ratingsMap = new Map(ratings.map((r: any) => [r.agentId, r]));
+      const ratingsMap = new Map(ratings.map(r => [r.agentId, r]));
 
-      const combined = metrics.map((m: any) => ({
+      const combined = metrics.map(m => ({
         agentId: m.agentId,
         agentName: m.agentName,
         overallScore: Number(m.avgOverallScore ?? 0).toFixed(1),

@@ -10,7 +10,7 @@
  *  - sanitize: input sanitisation utility
  *  - modelRouter: model selection logic
  */
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 // ─── Logger Tests ─────────────────────────────────────────────────────────────
 describe("Logger", () => {

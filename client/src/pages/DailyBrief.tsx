@@ -350,7 +350,7 @@ export default function DailyBrief() {
   const [pendingVideoId, setPendingVideoId] = useState<string | null>(null);
 
   // Live data for Intelligence and Strategy tabs
-  const { data: emailStats } = trpc.emailIntelligence.getSummaryStats.useQuery();
+  const { data: _emailStats } = trpc.emailIntelligence.getSummaryStats.useQuery();
   const { data: emailList } = trpc.emailIntelligence.list.useQuery({ limit: 5, priority: "high" });
   const { data: kpiList } = trpc.kpiOkr.list.useQuery();
   const { data: genesisProjects } = trpc.projectGenesis.listProjects.useQuery();
@@ -477,7 +477,7 @@ export default function DailyBrief() {
     }
   };
 
-  const getSentimentColor = (sentiment: string) => {
+  const _getSentimentColor = (sentiment: string) => {
     switch (sentiment) {
       case "positive":
         return "text-green-400 bg-green-500/10 border-green-500/30";
