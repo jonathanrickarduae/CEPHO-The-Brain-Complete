@@ -75,7 +75,7 @@ self.addEventListener("fetch", event => {
   // Cache-first for hashed JS/CSS assets (immutable — hash changes on update)
   if (
     event.request.url.includes("/assets/") &&
-    (event.request.url.match(/\.[a-f0-9]{8,}\.(js|css)$/))
+    event.request.url.match(/\.[a-f0-9]{8,}\.(js|css)$/)
   ) {
     event.respondWith(
       caches.open(CACHE_NAME).then(async cache => {

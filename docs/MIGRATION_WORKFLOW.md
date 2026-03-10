@@ -69,23 +69,23 @@ The CI pipeline runs migrations automatically on every push to `main`:
 
 ## Current Migration History
 
-| # | File | Description |
-|---|---|---|
-| 004 | `004-innovation-hub-workflow.sql` | Innovation Hub + Workflow tables |
-| 005 | `005-digital-twin-training.sql` | Digital Twin Training tables |
-| 006 | `006-chief-of-staff-training.sql` | Chief of Staff Training tables |
-| 007 | `007-database-optimizations.sql` | Indexes and performance improvements |
-| 008 | `008-rls-policies.sql` | Row Level Security policies |
-| 020 | `020-email-accounts-and-emails.sql` | Email accounts and email storage |
-| 021 | `021-agent-memory-embeddings.sql` | pgvector memory bank |
-| 022 | `022-ai-usage-logs.sql` | AI token usage tracking |
-| 023 | `023-autonomous-agents-and-sme-triggers.sql` | Autonomous agent framework |
-| 024 | `024-victoria-skills-and-qc.sql` | Victoria skills and QC tables |
-| 025 | `025-venture-execution-framework.sql` | Venture execution tables |
-| 026 | `026-persephone-board-knowledge-corpus.sql` | Persephone board tables |
-| 027 | `027-report-schedules-and-prompt-versions.sql` | Report scheduling |
-| 028 | `028-additional-fk-constraints.sql` | Additional FK constraints (Phase 10 DB-3) |
-| 029 | `029-consolidate-user-profile.sql` | User profile view (Phase 10 DB-4) |
+| #   | File                                           | Description                               |
+| --- | ---------------------------------------------- | ----------------------------------------- |
+| 004 | `004-innovation-hub-workflow.sql`              | Innovation Hub + Workflow tables          |
+| 005 | `005-digital-twin-training.sql`                | Digital Twin Training tables              |
+| 006 | `006-chief-of-staff-training.sql`              | Chief of Staff Training tables            |
+| 007 | `007-database-optimizations.sql`               | Indexes and performance improvements      |
+| 008 | `008-rls-policies.sql`                         | Row Level Security policies               |
+| 020 | `020-email-accounts-and-emails.sql`            | Email accounts and email storage          |
+| 021 | `021-agent-memory-embeddings.sql`              | pgvector memory bank                      |
+| 022 | `022-ai-usage-logs.sql`                        | AI token usage tracking                   |
+| 023 | `023-autonomous-agents-and-sme-triggers.sql`   | Autonomous agent framework                |
+| 024 | `024-victoria-skills-and-qc.sql`               | Victoria skills and QC tables             |
+| 025 | `025-venture-execution-framework.sql`          | Venture execution tables                  |
+| 026 | `026-persephone-board-knowledge-corpus.sql`    | Persephone board tables                   |
+| 027 | `027-report-schedules-and-prompt-versions.sql` | Report scheduling                         |
+| 028 | `028-additional-fk-constraints.sql`            | Additional FK constraints (Phase 10 DB-3) |
+| 029 | `029-consolidate-user-profile.sql`             | User profile view (Phase 10 DB-4)         |
 
 ---
 

@@ -4193,7 +4193,6 @@ export const integrationLogs = pgTable("integration_logs", {
   timestamp: timestamp("timestamp").defaultNow().notNull(),
 });
 
-
 // ===== Digital Twin System =====
 
 export const digitalTwinGoals = pgTable("digital_twin_goals", {
