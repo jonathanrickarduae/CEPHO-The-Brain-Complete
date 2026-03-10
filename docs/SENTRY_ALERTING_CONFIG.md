@@ -9,13 +9,13 @@ Configure these rules in the [Sentry dashboard](https://sentry.io) under **Alert
 
 **Trigger:** Any new unhandled exception in production.
 
-| Setting | Value |
-|---|---|
-| Environment | `production` |
-| Condition | `An event is seen` |
-| Filter | `level: error` |
-| Action | Email + Slack `#cepho-alerts` |
-| Frequency | `Notify once per issue` |
+| Setting     | Value                         |
+| ----------- | ----------------------------- |
+| Environment | `production`                  |
+| Condition   | `An event is seen`            |
+| Filter      | `level: error`                |
+| Action      | Email + Slack `#cepho-alerts` |
+| Frequency   | `Notify once per issue`       |
 
 ---
 
@@ -23,13 +23,13 @@ Configure these rules in the [Sentry dashboard](https://sentry.io) under **Alert
 
 **Trigger:** Error rate exceeds 10 events per minute (sustained spike).
 
-| Setting | Value |
-|---|---|
-| Environment | `production` |
-| Metric | `Number of errors` |
-| Threshold | `> 10 per minute` |
-| Time window | `5 minutes` |
-| Action | Email + Slack `#cepho-alerts` |
+| Setting     | Value                         |
+| ----------- | ----------------------------- |
+| Environment | `production`                  |
+| Metric      | `Number of errors`            |
+| Threshold   | `> 10 per minute`             |
+| Time window | `5 minutes`                   |
+| Action      | Email + Slack `#cepho-alerts` |
 
 ---
 
@@ -37,13 +37,13 @@ Configure these rules in the [Sentry dashboard](https://sentry.io) under **Alert
 
 **Trigger:** p95 transaction duration exceeds 3 seconds.
 
-| Setting | Value |
-|---|---|
-| Environment | `production` |
-| Metric | `p95(transaction.duration)` |
-| Threshold | `> 3000ms` |
-| Time window | `10 minutes` |
-| Action | Email |
+| Setting     | Value                       |
+| ----------- | --------------------------- |
+| Environment | `production`                |
+| Metric      | `p95(transaction.duration)` |
+| Threshold   | `> 3000ms`                  |
+| Time window | `10 minutes`                |
+| Action      | Email                       |
 
 ---
 
@@ -51,13 +51,13 @@ Configure these rules in the [Sentry dashboard](https://sentry.io) under **Alert
 
 **Trigger:** Apdex score drops below 0.8 (user satisfaction degradation).
 
-| Setting | Value |
-|---|---|
-| Environment | `production` |
-| Metric | `apdex(300)` |
-| Threshold | `< 0.8` |
-| Time window | `15 minutes` |
-| Action | Email + Slack `#cepho-alerts` |
+| Setting     | Value                         |
+| ----------- | ----------------------------- |
+| Environment | `production`                  |
+| Metric      | `apdex(300)`                  |
+| Threshold   | `< 0.8`                       |
+| Time window | `15 minutes`                  |
+| Action      | Email + Slack `#cepho-alerts` |
 
 ---
 
@@ -65,12 +65,12 @@ Configure these rules in the [Sentry dashboard](https://sentry.io) under **Alert
 
 **Trigger:** A new issue type is seen for the first time.
 
-| Setting | Value |
-|---|---|
-| Environment | `production` |
-| Condition | `A new issue is created` |
-| Action | Email |
-| Frequency | `Notify once per issue` |
+| Setting     | Value                    |
+| ----------- | ------------------------ |
+| Environment | `production`             |
+| Condition   | `A new issue is created` |
+| Action      | Email                    |
+| Frequency   | `Notify once per issue`  |
 
 ---
 
@@ -78,11 +78,11 @@ Configure these rules in the [Sentry dashboard](https://sentry.io) under **Alert
 
 **Trigger:** A previously resolved issue reappears.
 
-| Setting | Value |
-|---|---|
-| Environment | `production` |
-| Condition | `The issue changes state from resolved to unresolved` |
-| Action | Email + Slack `#cepho-alerts` |
+| Setting     | Value                                                 |
+| ----------- | ----------------------------------------------------- |
+| Environment | `production`                                          |
+| Condition   | `The issue changes state from resolved to unresolved` |
+| Action      | Email + Slack `#cepho-alerts`                         |
 
 ---
 
@@ -101,6 +101,7 @@ Configure these rules in the [Sentry dashboard](https://sentry.io) under **Alert
 The Sentry SDK is configured in `server/services/monitoring/error-tracker.service.ts`.
 
 Key settings:
+
 - `tracesSampleRate: 0.1` in production (10% of transactions sampled for performance monitoring)
 - `ignoreErrors`: filters out non-actionable browser errors
 - `beforeSend`: strips cookies and auth headers from error reports

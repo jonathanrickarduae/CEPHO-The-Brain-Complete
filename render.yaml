@@ -19,14 +19,14 @@ services:
       # Create a project at https://sentry.io and paste the DSN below.
       # Without this, all production errors are invisible.
       - key: SENTRY_DSN
-        sync: false  # Set manually in Render dashboard — never commit the real DSN
+        sync: false # Set manually in Render dashboard — never commit the real DSN
       - key: VITE_SENTRY_DSN
-        sync: false  # Same DSN value — used by the frontend Sentry SDK
+        sync: false # Same DSN value — used by the frontend Sentry SDK
       # OR-2 FIX: BetterStack (Logtail) centralised log shipping — REQUIRED for production observability.
       # Create a source at https://betterstack.com/logs and paste the token below.
       # Without this, logs are only visible in Render's ephemeral log stream.
       - key: LOGTAIL_SOURCE_TOKEN
-        sync: false  # Set manually in Render dashboard — never commit the real token
+        sync: false # Set manually in Render dashboard — never commit the real token
     # All other secrets (DATABASE_URL, JWT_SECRET, API keys, etc.)
     # are managed via Render's Environment Groups in the dashboard.
 
