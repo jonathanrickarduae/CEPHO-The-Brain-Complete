@@ -363,9 +363,10 @@ export default function NeonBrain({
           fill={color}
           filter="url(#glow-intense)"
           animate={{
-            r: [8, 12, 8],
+            scale: [1, 1.5, 1],
             opacity: [0.8, 1, 0.8],
           }}
+          style={{ transformOrigin: "100px 100px" }}
           transition={{
             duration: pulseSpeed * 0.8,
             repeat: Infinity,
@@ -379,9 +380,10 @@ export default function NeonBrain({
           fill="white"
           filter="url(#glow-soft)"
           animate={{
-            r: [4, 6, 4],
+            scale: [1, 1.5, 1],
             opacity: [0.9, 1, 0.9],
           }}
+          style={{ transformOrigin: "100px 100px" }}
           transition={{
             duration: pulseSpeed * 0.8,
             repeat: Infinity,

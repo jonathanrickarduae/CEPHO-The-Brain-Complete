@@ -188,7 +188,7 @@ export const featureFlagsRouter = router({
   /**
    * Get all enabled flags for the current user (bulk check)
    */
-  getAll: publicProcedure.query(async ({ ctx }) => {
+  getAll: protectedProcedure.query(async ({ ctx }) => {
     const flags = await db.select().from(featureFlags);
 
     const result: Record<string, boolean> = {};
