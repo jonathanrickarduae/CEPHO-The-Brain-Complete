@@ -227,7 +227,14 @@ describe("AnomalyDetection — buildDescription", () => {
   }
 
   it("builds correct description for above-baseline anomaly", () => {
-    const desc = buildDescription("victoria", "task_completion_rate", 95, 70, 35.7, "medium");
+    const desc = buildDescription(
+      "victoria",
+      "task_completion_rate",
+      95,
+      70,
+      35.7,
+      "medium"
+    );
     expect(desc).toContain("[MEDIUM]");
     expect(desc).toContain("victoria");
     expect(desc).toContain("task_completion_rate");
@@ -236,7 +243,14 @@ describe("AnomalyDetection — buildDescription", () => {
   });
 
   it("builds correct description for below-baseline anomaly", () => {
-    const desc = buildDescription("atlas", "response_time_ms", 200, 500, -60, "high");
+    const desc = buildDescription(
+      "atlas",
+      "response_time_ms",
+      200,
+      500,
+      -60,
+      "high"
+    );
     expect(desc).toContain("[HIGH]");
     expect(desc).toContain("atlas");
     expect(desc).toContain("below");
@@ -244,13 +258,27 @@ describe("AnomalyDetection — buildDescription", () => {
   });
 
   it("includes current and baseline values", () => {
-    const desc = buildDescription("agent1", "metric1", 42.5, 30.0, 41.7, "medium");
+    const desc = buildDescription(
+      "agent1",
+      "metric1",
+      42.5,
+      30.0,
+      41.7,
+      "medium"
+    );
     expect(desc).toContain("42.50");
     expect(desc).toContain("30.00");
   });
 
   it("uppercases severity in description", () => {
-    const desc = buildDescription("agent1", "metric1", 100, 50, 100, "critical");
+    const desc = buildDescription(
+      "agent1",
+      "metric1",
+      100,
+      50,
+      100,
+      "critical"
+    );
     expect(desc).toContain("[CRITICAL]");
     expect(desc).not.toContain("[critical]");
   });
@@ -281,7 +309,7 @@ describe("Rate limiter edge cases", () => {
     const maxRequests = 100;
     const now = Date.now();
     const windowStart = now - windowMs;
-    const recentRequests = requests.filter((t) => t > windowStart);
+    const recentRequests = requests.filter(t => t > windowStart);
     expect(recentRequests.length).toBe(0);
     expect(recentRequests.length < maxRequests).toBe(true);
   });
@@ -296,7 +324,7 @@ describe("Rate limiter edge cases", () => {
       now - 10000, // inside window
     ];
     const windowStart = now - windowMs;
-    const recentRequests = requests.filter((t) => t > windowStart);
+    const recentRequests = requests.filter(t => t > windowStart);
     expect(recentRequests.length).toBe(3);
   });
 });

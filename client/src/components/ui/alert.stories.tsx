@@ -20,7 +20,9 @@ export const Default: Story = {
   render: () => (
     <Alert>
       <AlertTitle>Information</AlertTitle>
-      <AlertDescription>This is an informational alert message.</AlertDescription>
+      <AlertDescription>
+        This is an informational alert message.
+      </AlertDescription>
     </Alert>
   ),
 };
@@ -29,7 +31,9 @@ export const Destructive: Story = {
   render: () => (
     <Alert variant="destructive">
       <AlertTitle>Error</AlertTitle>
-      <AlertDescription>Something went wrong. Please try again.</AlertDescription>
+      <AlertDescription>
+        Something went wrong. Please try again.
+      </AlertDescription>
     </Alert>
   ),
 };
@@ -45,7 +49,9 @@ export const TitleOnly: Story = {
 export const DescriptionOnly: Story = {
   render: () => (
     <Alert>
-      <AlertDescription>Your session will expire in 5 minutes.</AlertDescription>
+      <AlertDescription>
+        Your session will expire in 5 minutes.
+      </AlertDescription>
     </Alert>
   ),
 };

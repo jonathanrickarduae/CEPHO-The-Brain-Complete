@@ -807,7 +807,9 @@ export default function ChiefOfStaff() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-semibold text-foreground/70 uppercase tracking-wider">
-                    {taskStatusFilter ? `${taskStatusFilter.replace("_", " ")} Tasks` : "All Tasks"}
+                    {taskStatusFilter
+                      ? `${taskStatusFilter.replace("_", " ")} Tasks`
+                      : "All Tasks"}
                   </h3>
                   {taskStatusFilter && (
                     <button
@@ -821,150 +823,153 @@ export default function ChiefOfStaff() {
                 {tasks
                   .filter(task => {
                     if (!taskStatusFilter) return true;
-                    if (taskStatusFilter === "verified") return task.qaStatus === "verified";
+                    if (taskStatusFilter === "verified")
+                      return task.qaStatus === "verified";
                     return task.status === taskStatusFilter;
                   })
                   .map(task => {
-                  const qaConfig = QA_STATUS_CONFIG[task.qaStatus];
-                  const QAIcon = qaConfig.icon;
-                  return (
-                    <div
-                      key={task.id}
-                      onClick={() => {
-                        setSelectedTask(task);
-                        setShowTaskDetail(true);
-                      }}
-                      className="p-4 bg-white/5 border-2 border-white/10 rounded-2xl hover:border-fuchsia-500/50 transition-all cursor-pointer group"
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <h4 className="font-medium">{task.title}</h4>
-                            <Badge variant="outline" className="text-xs">
-                              {task.project}
-                            </Badge>
+                    const qaConfig = QA_STATUS_CONFIG[task.qaStatus];
+                    const QAIcon = qaConfig.icon;
+                    return (
+                      <div
+                        key={task.id}
+                        onClick={() => {
+                          setSelectedTask(task);
+                          setShowTaskDetail(true);
+                        }}
+                        className="p-4 bg-white/5 border-2 border-white/10 rounded-2xl hover:border-fuchsia-500/50 transition-all cursor-pointer group"
+                      >
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <h4 className="font-medium">{task.title}</h4>
+                              <Badge variant="outline" className="text-xs">
+                                {task.project}
+                              </Badge>
+                            </div>
+                            <p className="text-sm text-muted-foreground">
+                              {task.description}
+                            </p>
                           </div>
-                          <p className="text-sm text-muted-foreground">
-                            {task.description}
-                          </p>
+                          <div
+                            className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium ${qaConfig.color}`}
+                          >
+                            <QAIcon className="w-3 h-3" />
+                            {qaConfig.label}
+                          </div>
                         </div>
-                        <div
-                          className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium ${qaConfig.color}`}
-                        >
-                          <QAIcon className="w-3 h-3" />
-                          {qaConfig.label}
-                        </div>
-                      </div>
 
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className="flex items-center gap-2">
-                            <Progress
-                              value={task.progress}
-                              className="w-24 h-1.5"
-                            />
-                            <span className="text-xs text-muted-foreground">
-                              {task.progress}%
-                            </span>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2">
+                              <Progress
+                                value={task.progress}
+                                className="w-24 h-1.5"
+                              />
+                              <span className="text-xs text-muted-foreground">
+                                {task.progress}%
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Users className="w-3 h-3 text-muted-foreground" />
+                              <span className="text-xs text-muted-foreground">
+                                {task.assignedExperts.length} experts
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex items-center gap-1">
-                            <Users className="w-3 h-3 text-muted-foreground" />
-                            <span className="text-xs text-muted-foreground">
-                              {task.assignedExperts.length} experts
-                            </span>
-                          </div>
+                          {task.cosScore && (
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs text-muted-foreground">
+                                CoS Score:
+                              </span>
+                              <span
+                                className={`text-sm font-bold ${task.cosScore >= 9 ? "text-emerald-400" : task.cosScore >= 7 ? "text-amber-400" : "text-red-400"}`}
+                              >
+                                {task.cosScore}/10
+                              </span>
+                              {task.secondaryAIScore && (
+                                <>
+                                  <span className="text-xs text-muted-foreground">
+                                    | 2nd AI:
+                                  </span>
+                                  <span
+                                    className={`text-sm font-bold ${task.secondaryAIScore >= 9 ? "text-emerald-400" : "text-amber-400"}`}
+                                  >
+                                    {task.secondaryAIScore}/10
+                                  </span>
+                                </>
+                              )}
+                            </div>
+                          )}
                         </div>
-                        {task.cosScore && (
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs text-muted-foreground">
-                              CoS Score:
-                            </span>
-                            <span
-                              className={`text-sm font-bold ${task.cosScore >= 9 ? "text-emerald-400" : task.cosScore >= 7 ? "text-amber-400" : "text-red-400"}`}
-                            >
-                              {task.cosScore}/10
-                            </span>
-                            {task.secondaryAIScore && (
-                              <>
-                                <span className="text-xs text-muted-foreground">
-                                  | 2nd AI:
-                                </span>
-                                <span
-                                  className={`text-sm font-bold ${task.secondaryAIScore >= 9 ? "text-emerald-400" : "text-amber-400"}`}
-                                >
-                                  {task.secondaryAIScore}/10
-                                </span>
-                              </>
+
+                        {task.feedback && (
+                          <div className="mt-3 p-2 bg-white/5 rounded-lg border border-white/10">
+                            <p className="text-xs text-muted-foreground">
+                              <span className="font-medium text-foreground">
+                                QA Feedback:
+                              </span>{" "}
+                              {task.feedback}
+                            </p>
+                          </div>
+                        )}
+                        {/* Status advancement buttons — only for real DB tasks */}
+                        {task.isFromDb && task.dbId && (
+                          <div
+                            className="mt-3 flex flex-wrap gap-2"
+                            onClick={e => e.stopPropagation()}
+                          >
+                            {(task.status === "not_started" ||
+                              task.status === "blocked") && (
+                              <button
+                                onClick={() =>
+                                  updateTaskMutation.mutate({
+                                    id: task.dbId!,
+                                    status: "in_progress",
+                                    progress: Math.max(task.progress, 10),
+                                  })
+                                }
+                                disabled={updateTaskMutation.isPending}
+                                className="px-3 py-1 text-xs rounded-lg bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30 transition-colors"
+                              >
+                                Start
+                              </button>
                             )}
+                            {task.status === "active" && (
+                              <button
+                                onClick={() =>
+                                  updateTaskMutation.mutate({
+                                    id: task.dbId!,
+                                    status: "completed",
+                                    progress: 100,
+                                  })
+                                }
+                                disabled={updateTaskMutation.isPending}
+                                className="px-3 py-1 text-xs rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors"
+                              >
+                                Mark Complete
+                              </button>
+                            )}
+                            {task.status !== "blocked" &&
+                              task.status !== "completed" && (
+                                <button
+                                  onClick={() =>
+                                    updateTaskMutation.mutate({
+                                      id: task.dbId!,
+                                      status: "blocked",
+                                    })
+                                  }
+                                  disabled={updateTaskMutation.isPending}
+                                  className="px-3 py-1 text-xs rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors"
+                                >
+                                  Block
+                                </button>
+                              )}
                           </div>
                         )}
                       </div>
-
-                      {task.feedback && (
-                        <div className="mt-3 p-2 bg-white/5 rounded-lg border border-white/10">
-                          <p className="text-xs text-muted-foreground">
-                            <span className="font-medium text-foreground">
-                              QA Feedback:
-                            </span>{" "}
-                            {task.feedback}
-                          </p>
-                        </div>
-                      )}
-                      {/* Status advancement buttons — only for real DB tasks */}
-                      {task.isFromDb && task.dbId && (
-                        <div
-                          className="mt-3 flex flex-wrap gap-2"
-                          onClick={e => e.stopPropagation()}
-                        >
-                          {(task.status === "not_started" || task.status === "blocked") && (
-                            <button
-                              onClick={() =>
-                                updateTaskMutation.mutate({
-                                  id: task.dbId!,
-                                  status: "in_progress",
-                                  progress: Math.max(task.progress, 10),
-                                })
-                              }
-                              disabled={updateTaskMutation.isPending}
-                              className="px-3 py-1 text-xs rounded-lg bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30 transition-colors"
-                            >
-                              Start
-                            </button>
-                          )}
-                          {task.status === "active" && (
-                            <button
-                              onClick={() =>
-                                updateTaskMutation.mutate({
-                                  id: task.dbId!,
-                                  status: "completed",
-                                  progress: 100,
-                                })
-                              }
-                              disabled={updateTaskMutation.isPending}
-                              className="px-3 py-1 text-xs rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors"
-                            >
-                              Mark Complete
-                            </button>
-                          )}
-                          {task.status !== "blocked" && task.status !== "completed" && (
-                            <button
-                              onClick={() =>
-                                updateTaskMutation.mutate({
-                                  id: task.dbId!,
-                                  status: "blocked",
-                                })
-                              }
-                              disabled={updateTaskMutation.isPending}
-                              className="px-3 py-1 text-xs rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors"
-                            >
-                              Block
-                            </button>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                    );
+                  })}
               </div>
             </div>
           </div>

@@ -460,7 +460,8 @@ export const integrationsRouter = router({
           }
           case "anthropic": {
             // Verify key format — no cheap status endpoint available
-            ok = !!env.anthropicApiKey && env.anthropicApiKey.startsWith("sk-ant");
+            ok =
+              !!env.anthropicApiKey && env.anthropicApiKey.startsWith("sk-ant");
             break;
           }
           default:

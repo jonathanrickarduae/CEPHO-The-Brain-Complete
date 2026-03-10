@@ -46,9 +46,7 @@ export const LastPage: Story = {
 };
 
 export const SinglePage: Story = {
-  render: () => (
-    <PaginationBar pagination={makePagination(1, 1)} total={5} />
-  ),
+  render: () => <PaginationBar pagination={makePagination(1, 1)} total={5} />,
 };
 
 export const ManyPages: Story = {

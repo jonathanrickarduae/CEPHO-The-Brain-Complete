@@ -331,9 +331,12 @@ export default function NexusDashboard() {
   const { data: projectsData } = trpc.projects.list.useQuery({});
   const { data: flywheelStats } = trpc.innovation.getFlywheelStats.useQuery();
   // Live Recent Activity feed — refreshes every 30s
-  const { data: activityData } = trpc.admin.getRecentActivity.useQuery(undefined, {
-    refetchInterval: 30_000,
-  });
+  const { data: activityData } = trpc.admin.getRecentActivity.useQuery(
+    undefined,
+    {
+      refetchInterval: 30_000,
+    }
+  );
 
   const completedTasks = (tasksData?.tasks ?? []).filter(
     t => t.status === "completed"
@@ -575,9 +578,7 @@ export default function NexusDashboard() {
         </div>
 
         {/* CEPHO Score Breakdown */}
-        {cephoScoreData && (
-          <CephoScoreBreakdown data={cephoScoreData} />
-        )}
+        {cephoScoreData && <CephoScoreBreakdown data={cephoScoreData} />}
 
         {/* OpenClaw AI Assistant - Moved to fixed bottom-right */}
 
@@ -593,14 +594,27 @@ export default function NexusDashboard() {
                   key={item.id}
                   icon={Brain}
                   title={item.actorName ?? item.actorType}
-                  subtitle={item.description ?? `${item.action} ${item.targetType ?? ""}`.trim()}
-                  time={new Date(item.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                  status={item.action === "completed" ? "complete" : item.action === "created" ? "active" : "pending"}
+                  subtitle={
+                    item.description ??
+                    `${item.action} ${item.targetType ?? ""}`.trim()
+                  }
+                  time={new Date(item.createdAt).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                  status={
+                    item.action === "completed"
+                      ? "complete"
+                      : item.action === "created"
+                        ? "active"
+                        : "pending"
+                  }
                 />
               ))
             ) : (
               <p className="text-sm text-muted-foreground text-center py-4">
-                No recent activity yet — agents will log activity here as they work.
+                No recent activity yet — agents will log activity here as they
+                work.
               </p>
             )}
           </div>

@@ -276,10 +276,14 @@ function VaultPanel() {
   const integrations = integrationsData ?? [];
   const contractRenewals = renewalSummary?.upcoming ?? [];
   const securityEvents = auditData?.logs ?? [];
-   
+
   type IntegrationItem = { status: string; [key: string]: unknown };
   type SecurityEvent = { action: string; [key: string]: unknown };
-  type ContractRenewal = { status: string; daysUntilRenewal: number; [key: string]: unknown };
+  type ContractRenewal = {
+    status: string;
+    daysUntilRenewal: number;
+    [key: string]: unknown;
+  };
   const healthyCount = (integrations as IntegrationItem[]).filter(
     i => i.status === "active"
   ).length;
@@ -292,9 +296,9 @@ function VaultPanel() {
   const blockedThreats = (securityEvents as SecurityEvent[]).filter(
     e => e.action === "blocked"
   ).length;
-  const urgentContracts = (contractRenewals as unknown as ContractRenewal[]).filter(
-    c => c.status === "urgent"
-  ).length;
+  const urgentContracts = (
+    contractRenewals as unknown as ContractRenewal[]
+  ).filter(c => c.status === "urgent").length;
 
   return (
     <div className="space-y-6">
@@ -668,7 +672,9 @@ export default function Settings() {
                   .filter(
                     tab =>
                       searchQuery === "" ||
-                      tab.label.toLowerCase().includes(searchQuery.toLowerCase())
+                      tab.label
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase())
                   )
                   .map(tab => (
                     <button

@@ -154,98 +154,97 @@ export const autonomousExecutionRouter = router({
     .mutation(async ({ input, ctx }) => {
       const userId = ctx.user.id;
       try {
+        // 1. Get Digital Twin profile for personalisation
+        const [twinProfile] = await db
+          .select()
+          .from(digitalTwinProfile)
+          .where(eq(digitalTwinProfile.userId, userId))
+          .limit(1);
 
-      // 1. Get Digital Twin profile for personalisation
-      const [twinProfile] = await db
-        .select()
-        .from(digitalTwinProfile)
-        .where(eq(digitalTwinProfile.userId, userId))
-        .limit(1);
+        // 2. Decompose the goal using OpenAI
+        const plan = await decomposeGoal(input.goal, twinProfile ?? null);
 
-      // 2. Decompose the goal using OpenAI
-      const plan = await decomposeGoal(input.goal, twinProfile ?? null);
+        // 3. Create the project
+        const [project] = await db
+          .insert(projects)
+          .values({
+            userId,
+            name: plan.projectName,
+            description: plan.projectDescription,
+            status: "active",
+            priority: "high",
+            progress: 0,
+            metadata: {
+              originalGoal: input.goal,
+              estimatedDuration: plan.estimatedDuration,
+              risks: plan.risks,
+              successMetrics: plan.successMetrics,
+              createdByAutonomousEngine: true,
+              phases: plan.phases.map(p => p.name),
+            },
+          })
+          .returning();
 
-      // 3. Create the project
-      const [project] = await db
-        .insert(projects)
-        .values({
+        // 4. Create all tasks from the plan
+        const createdTasks = [];
+        for (const phase of plan.phases) {
+          for (const task of phase.tasks) {
+            const [created] = await db
+              .insert(tasks)
+              .values({
+                userId,
+                projectId: project.id,
+                title: task.title,
+                description: task.description,
+                status: "not_started",
+                priority: task.priority as "high" | "medium" | "low",
+                progress: 0,
+                metadata: {
+                  phase: phase.name,
+                  assignedAgent: phase.agent,
+                  estimatedHours: task.estimatedHours,
+                  createdByAutonomousEngine: true,
+                },
+              })
+              .returning();
+            createdTasks.push(created);
+          }
+        }
+
+        // 5. Log to activity feed
+        await db.insert(activityFeed).values({
           userId,
-          name: plan.projectName,
-          description: plan.projectDescription,
-          status: "active",
-          priority: "high",
-          progress: 0,
+          actorType: "ai",
+          action: "created",
+          targetType: "project",
+          targetId: project.id,
+          targetName: plan.projectName,
           metadata: {
             originalGoal: input.goal,
+            tasksCreated: createdTasks.length,
+            phasesCreated: plan.phases.length,
+          },
+        });
+
+        return {
+          success: true,
+          project,
+          tasksCreated: createdTasks.length,
+          phasesCreated: plan.phases.length,
+          plan: {
             estimatedDuration: plan.estimatedDuration,
             risks: plan.risks,
             successMetrics: plan.successMetrics,
-            createdByAutonomousEngine: true,
-            phases: plan.phases.map(p => p.name),
+            phases: plan.phases.map(p => ({
+              name: p.name,
+              agent: SME_AGENTS.find(a => a.id === p.agent)?.name ?? p.agent,
+              taskCount: p.tasks.length,
+            })),
           },
-        })
-        .returning();
-
-      // 4. Create all tasks from the plan
-      const createdTasks = [];
-      for (const phase of plan.phases) {
-        for (const task of phase.tasks) {
-          const [created] = await db
-            .insert(tasks)
-            .values({
-              userId,
-              projectId: project.id,
-              title: task.title,
-              description: task.description,
-              status: "not_started",
-              priority: task.priority as "high" | "medium" | "low",
-              progress: 0,
-              metadata: {
-                phase: phase.name,
-                assignedAgent: phase.agent,
-                estimatedHours: task.estimatedHours,
-                createdByAutonomousEngine: true,
-              },
-            })
-            .returning();
-          createdTasks.push(created);
-        }
-      }
-
-      // 5. Log to activity feed
-      await db.insert(activityFeed).values({
-        userId,
-        actorType: "ai",
-        action: "created",
-        targetType: "project",
-        targetId: project.id,
-        targetName: plan.projectName,
-        metadata: {
-          originalGoal: input.goal,
-          tasksCreated: createdTasks.length,
-          phasesCreated: plan.phases.length,
-        },
-      });
-
-      return {
-        success: true,
-        project,
-        tasksCreated: createdTasks.length,
-        phasesCreated: plan.phases.length,
-        plan: {
-          estimatedDuration: plan.estimatedDuration,
-          risks: plan.risks,
-          successMetrics: plan.successMetrics,
-          phases: plan.phases.map(p => ({
-            name: p.name,
-            agent: SME_AGENTS.find(a => a.id === p.agent)?.name ?? p.agent,
-            taskCount: p.tasks.length,
-          })),
-        },
-      };
+        };
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
-        console.error('[War Room execute error]', msg);
+        console.error("[War Room execute error]", msg);
         throw new Error(`War Room execution failed: ${msg}`);
       }
     }),

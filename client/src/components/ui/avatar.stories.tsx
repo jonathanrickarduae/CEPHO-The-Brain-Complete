@@ -30,7 +30,10 @@ export const FallbackInitials: Story = {
 export const FallbackBrokenImage: Story = {
   render: () => (
     <Avatar>
-      <AvatarImage src="https://broken-image-url.invalid/photo.jpg" alt="User" />
+      <AvatarImage
+        src="https://broken-image-url.invalid/photo.jpg"
+        alt="User"
+      />
       <AvatarFallback>US</AvatarFallback>
     </Avatar>
   ),

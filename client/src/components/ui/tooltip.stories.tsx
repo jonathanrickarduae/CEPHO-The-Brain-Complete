@@ -12,7 +12,7 @@ const meta: Meta<typeof Tooltip> = {
   component: Tooltip,
   tags: ["autodocs"],
   decorators: [
-    (Story) => (
+    Story => (
       <TooltipProvider>
         <Story />
       </TooltipProvider>
@@ -40,7 +40,9 @@ export const OnIcon: Story = {
   render: () => (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button variant="ghost" size="icon">?</Button>
+        <Button variant="ghost" size="icon">
+          ?
+        </Button>
       </TooltipTrigger>
       <TooltipContent>
         <p>Click for help</p>
@@ -56,7 +58,10 @@ export const LongContent: Story = {
         <Button variant="outline">Info</Button>
       </TooltipTrigger>
       <TooltipContent className="max-w-xs">
-        <p>This is a longer tooltip that provides more detailed information about this feature or action.</p>
+        <p>
+          This is a longer tooltip that provides more detailed information about
+          this feature or action.
+        </p>
       </TooltipContent>
     </Tooltip>
   ),

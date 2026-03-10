@@ -12,10 +12,26 @@ export default meta;
 type Story = StoryObj<typeof ScrollArea>;
 
 const tags = [
-  "React", "TypeScript", "Tailwind", "Vite", "tRPC", "Drizzle",
-  "Supabase", "PostgreSQL", "OpenAI", "Sentry", "Storybook", "Vitest",
-  "Playwright", "ESLint", "Prettier", "Husky", "GitHub Actions", "Render",
-  "Winston", "pgvector",
+  "React",
+  "TypeScript",
+  "Tailwind",
+  "Vite",
+  "tRPC",
+  "Drizzle",
+  "Supabase",
+  "PostgreSQL",
+  "OpenAI",
+  "Sentry",
+  "Storybook",
+  "Vitest",
+  "Playwright",
+  "ESLint",
+  "Prettier",
+  "Husky",
+  "GitHub Actions",
+  "Render",
+  "Winston",
+  "pgvector",
 ];
 
 export const Default: Story = {
@@ -23,7 +39,7 @@ export const Default: Story = {
     <ScrollArea className="h-72 w-48 rounded-md border">
       <div className="p-4">
         <h4 className="mb-4 text-sm font-medium leading-none">Tags</h4>
-        {tags.map((tag) => (
+        {tags.map(tag => (
           <div key={tag}>
             <div className="text-sm">{tag}</div>
             <Separator className="my-2" />

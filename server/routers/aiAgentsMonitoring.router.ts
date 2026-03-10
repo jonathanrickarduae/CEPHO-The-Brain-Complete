@@ -498,7 +498,10 @@ function generateDailyReport(
 export const aiAgentsMonitoringRouter = router({
   getAllStatus: protectedProcedure.query(async ({ ctx }) => {
     // Try to get real performance data from DB (populated by daily scheduler)
-    const dbReportMap: Record<string, { performanceRating: number; tasksCompleted: number; lastActive: string }> = {};
+    const dbReportMap: Record<
+      string,
+      { performanceRating: number; tasksCompleted: number; lastActive: string }
+    > = {};
     try {
       const recentReports = await db
         .select()
@@ -508,12 +511,20 @@ export const aiAgentsMonitoringRouter = router({
         .limit(200);
       for (const r of recentReports) {
         if (!dbReportMap[r.agentId]) {
-          const tasks = Array.isArray(r.tasksCompleted) ? r.tasksCompleted.length : 0;
-          const rating = typeof (r as Record<string, unknown>).performanceRating === 'number' ? (r as Record<string, unknown>).performanceRating as number : 4.2;
+          const tasks = Array.isArray(r.tasksCompleted)
+            ? r.tasksCompleted.length
+            : 0;
+          const rating =
+            typeof (r as Record<string, unknown>).performanceRating === "number"
+              ? ((r as Record<string, unknown>).performanceRating as number)
+              : 4.2;
           dbReportMap[r.agentId] = {
             performanceRating: rating * 20, // convert 0-5 to 0-100 scale
             tasksCompleted: tasks * 30, // extrapolate to monthly estimate
-            lastActive: r.date instanceof Date ? r.date.toISOString() : new Date().toISOString(),
+            lastActive:
+              r.date instanceof Date
+                ? r.date.toISOString()
+                : new Date().toISOString(),
           };
         }
       }
@@ -527,16 +538,18 @@ export const aiAgentsMonitoringRouter = router({
         ...agent,
         ...seedMetrics,
         // Override with real DB data if available
-        ...(dbData ? {
-          performance: {
-            rating: dbData.performanceRating,
-            tasksCompleted: dbData.tasksCompleted,
-            successRate: 90,
-            averageResponseTime: 1.2,
-          },
-          status: 'active' as const,
-          lastActive: dbData.lastActive,
-        } : {}),
+        ...(dbData
+          ? {
+              performance: {
+                rating: dbData.performanceRating,
+                tasksCompleted: dbData.tasksCompleted,
+                successRate: 90,
+                averageResponseTime: 1.2,
+              },
+              status: "active" as const,
+              lastActive: dbData.lastActive,
+            }
+          : {}),
       };
     });
 
@@ -575,7 +588,7 @@ export const aiAgentsMonitoringRouter = router({
     )
     .query(async ({ input, ctx }) => {
       // Try real DB reports first (populated by daily scheduler at 06:30)
-      let dbReports: typeof agentDailyReports.$inferSelect[] = [];
+      let dbReports: (typeof agentDailyReports.$inferSelect)[] = [];
       try {
         const conditions = [eq(agentDailyReports.userId, ctx.user.id)];
         if (input.agentId)
@@ -705,7 +718,7 @@ export const aiAgentsMonitoringRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      let items: typeof activityFeed.$inferSelect[] = [];
+      let items: (typeof activityFeed.$inferSelect)[] = [];
       try {
         const conditions: Parameters<typeof and>[0][] = [
           eq(activityFeed.userId, ctx.user.id),
@@ -774,12 +787,25 @@ export const aiAgentsMonitoringRouter = router({
         .where(eq(agentRatings.userId, ctx.user.id))
         .groupBy(agentRatings.agentId);
 
-      type MetricRow = { agentId: string; agentName: string; avgOverallScore: string | null; avgLearningScore: string | null; totalTasks: number };
-      type RatingRow = { agentId: string; avgRating: string | null; totalRatings: number };
+      type MetricRow = {
+        agentId: string;
+        agentName: string;
+        avgOverallScore: string | null;
+        avgLearningScore: string | null;
+        totalTasks: number;
+      };
+      type RatingRow = {
+        agentId: string;
+        avgRating: string | null;
+        totalRatings: number;
+      };
       let metrics: MetricRow[] = [];
       let ratings: RatingRow[] = [];
       try {
-        const [rawMetrics, rawRatings] = await Promise.all([metricsQuery, ratingsQuery]);
+        const [rawMetrics, rawRatings] = await Promise.all([
+          metricsQuery,
+          ratingsQuery,
+        ]);
         metrics = rawMetrics as MetricRow[];
         ratings = rawRatings as RatingRow[];
       } catch (_e) {

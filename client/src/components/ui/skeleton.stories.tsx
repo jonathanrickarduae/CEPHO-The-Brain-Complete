@@ -34,7 +34,7 @@ export const CardSkeleton: Story = {
 export const TableRowSkeleton: Story = {
   render: () => (
     <div className="flex flex-col gap-2 w-full">
-      {[1, 2, 3, 4, 5].map((i) => (
+      {[1, 2, 3, 4, 5].map(i => (
         <div key={i} className="flex gap-4 items-center">
           <Skeleton className="h-4 w-4 rounded-full" />
           <Skeleton className="h-4 flex-1" />

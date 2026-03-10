@@ -228,8 +228,11 @@ function BrainLayoutContent({
   const isCollapsed = state === "collapsed";
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const activeMenuItem = menuItems.find(item => item.path === location)
-    ?? menuItems.flatMap(item => item.children ?? []).find(child => child.path === location);
+  const activeMenuItem =
+    menuItems.find(item => item.path === location) ??
+    menuItems
+      .flatMap(item => item.children ?? [])
+      .find(child => child.path === location);
   const isMobile = useIsMobile();
 
   // Accessibility settings state
@@ -488,7 +491,10 @@ function BrainLayoutContent({
         {isMobile && (
           <div
             className="flex border-b border-border items-center justify-between bg-card/98 backdrop-blur-xl supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40"
-            style={{ height: "56px", paddingTop: "env(safe-area-inset-top, 0px)" }}
+            style={{
+              height: "56px",
+              paddingTop: "env(safe-area-inset-top, 0px)",
+            }}
           >
             <div className="flex items-center gap-2 px-3">
               <SidebarTrigger className="h-9 w-9 rounded-lg bg-white/5 text-white shrink-0" />
@@ -570,7 +576,9 @@ function BrainLayoutContent({
       />
 
       {/* Global ClawBot floating button — accessible from every page */}
-      <div className={`fixed z-50 ${isMobile ? "bottom-24 right-4" : "bottom-6 right-20"}`}>
+      <div
+        className={`fixed z-50 ${isMobile ? "bottom-24 right-4" : "bottom-6 right-20"}`}
+      >
         {clawOpen && (
           <div className="mb-3">
             <OpenClawChat />

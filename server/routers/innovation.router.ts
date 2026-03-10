@@ -690,17 +690,74 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
     .input(z.object({ country: z.string().optional() }).optional())
     .query(async ({ input }) => {
       const allPrograms = [
-        { programId: "innovate_uk", id: "innovate_uk", name: "Innovate UK Smart Grant", maxAmount: "£500,000", deadline: "Rolling", category: "R&D", country: "UK" },
-        { programId: "seis", id: "seis", name: "SEIS Investment", maxAmount: "£250,000", deadline: "Ongoing", category: "Seed Investment", country: "UK" },
-        { programId: "eis", id: "eis", name: "EIS Investment", maxAmount: "£5,000,000", deadline: "Ongoing", category: "Growth Investment", country: "UK" },
-        { programId: "horizon_europe", id: "horizon_europe", name: "Horizon Europe", maxAmount: "€2,500,000", deadline: "Various", category: "Research", country: "UK" },
-        { programId: "uae_sme", id: "uae_sme", name: "UAE SME Fund", maxAmount: "AED 2,000,000", deadline: "Rolling", category: "SME Growth", country: "UAE" },
-        { programId: "adgm_fintech", id: "adgm_fintech", name: "ADGM FinTech Grant", maxAmount: "AED 500,000", deadline: "Quarterly", category: "FinTech", country: "UAE" },
-        { programId: "hub71", id: "hub71", name: "Hub71 Startup Support", maxAmount: "AED 1,000,000", deadline: "Rolling", category: "Startup", country: "UAE" },
+        {
+          programId: "innovate_uk",
+          id: "innovate_uk",
+          name: "Innovate UK Smart Grant",
+          maxAmount: "£500,000",
+          deadline: "Rolling",
+          category: "R&D",
+          country: "UK",
+        },
+        {
+          programId: "seis",
+          id: "seis",
+          name: "SEIS Investment",
+          maxAmount: "£250,000",
+          deadline: "Ongoing",
+          category: "Seed Investment",
+          country: "UK",
+        },
+        {
+          programId: "eis",
+          id: "eis",
+          name: "EIS Investment",
+          maxAmount: "£5,000,000",
+          deadline: "Ongoing",
+          category: "Growth Investment",
+          country: "UK",
+        },
+        {
+          programId: "horizon_europe",
+          id: "horizon_europe",
+          name: "Horizon Europe",
+          maxAmount: "€2,500,000",
+          deadline: "Various",
+          category: "Research",
+          country: "UK",
+        },
+        {
+          programId: "uae_sme",
+          id: "uae_sme",
+          name: "UAE SME Fund",
+          maxAmount: "AED 2,000,000",
+          deadline: "Rolling",
+          category: "SME Growth",
+          country: "UAE",
+        },
+        {
+          programId: "adgm_fintech",
+          id: "adgm_fintech",
+          name: "ADGM FinTech Grant",
+          maxAmount: "AED 500,000",
+          deadline: "Quarterly",
+          category: "FinTech",
+          country: "UAE",
+        },
+        {
+          programId: "hub71",
+          id: "hub71",
+          name: "Hub71 Startup Support",
+          maxAmount: "AED 1,000,000",
+          deadline: "Rolling",
+          category: "Startup",
+          country: "UAE",
+        },
       ];
-      const filtered = input?.country && input.country !== "all"
-        ? allPrograms.filter(p => p.country === input.country)
-        : allPrograms;
+      const filtered =
+        input?.country && input.country !== "all"
+          ? allPrograms.filter(p => p.country === input.country)
+          : allPrograms;
       return filtered;
     }),
 
@@ -886,14 +943,46 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
   backfillAgentIdeas: protectedProcedure.mutation(async ({ ctx }) => {
     const openai = getOpenAIClient();
     const agentSamples = [
-      { id: "market_intelligence", name: "Market Intelligence Agent", role: "Market Analysis" },
-      { id: "financial_analysis", name: "Financial Analysis Agent", role: "Financial Strategy" },
-      { id: "product_innovation", name: "Product Innovation Agent", role: "Product Development" },
-      { id: "operations_optimizer", name: "Operations Optimizer Agent", role: "Operations" },
-      { id: "talent_acquisition", name: "Talent Acquisition Agent", role: "HR & Talent" },
-      { id: "customer_experience", name: "Customer Experience Agent", role: "Customer Success" },
-      { id: "technology_scout", name: "Technology Scout Agent", role: "Technology" },
-      { id: "regulatory_compliance", name: "Regulatory Compliance Agent", role: "Compliance" },
+      {
+        id: "market_intelligence",
+        name: "Market Intelligence Agent",
+        role: "Market Analysis",
+      },
+      {
+        id: "financial_analysis",
+        name: "Financial Analysis Agent",
+        role: "Financial Strategy",
+      },
+      {
+        id: "product_innovation",
+        name: "Product Innovation Agent",
+        role: "Product Development",
+      },
+      {
+        id: "operations_optimizer",
+        name: "Operations Optimizer Agent",
+        role: "Operations",
+      },
+      {
+        id: "talent_acquisition",
+        name: "Talent Acquisition Agent",
+        role: "HR & Talent",
+      },
+      {
+        id: "customer_experience",
+        name: "Customer Experience Agent",
+        role: "Customer Success",
+      },
+      {
+        id: "technology_scout",
+        name: "Technology Scout Agent",
+        role: "Technology",
+      },
+      {
+        id: "regulatory_compliance",
+        name: "Regulatory Compliance Agent",
+        role: "Compliance",
+      },
       { id: "brand_strategy", name: "Brand Strategy Agent", role: "Marketing" },
       { id: "supply_chain", name: "Supply Chain Agent", role: "Supply Chain" },
     ];
@@ -907,21 +996,37 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
               role: "system",
               content: `You are ${agent.name}, a ${agent.role} AI agent at CEPHO. Generate 2 actionable innovation ideas relevant to your domain. Return JSON: { "ideas": [{ "title": string, "description": string, "category": string, "priority": "high"|"medium"|"low" }] }`,
             },
-            { role: "user", content: "Generate your top 2 innovation ideas for today." },
+            {
+              role: "user",
+              content: "Generate your top 2 innovation ideas for today.",
+            },
           ],
           response_format: { type: "json_object" },
           max_tokens: 400,
         });
-        void logAiUsage(ctx.user.id, "innovation.backfillAgentIdeas", completion.model, completion.usage ?? null);
-        const raw = JSON.parse(completion.choices[0]?.message?.content ?? "{}") as {
-          ideas?: Array<{ title: string; description: string; category: string; priority: string }>;
+        void logAiUsage(
+          ctx.user.id,
+          "innovation.backfillAgentIdeas",
+          completion.model,
+          completion.usage ?? null
+        );
+        const raw = JSON.parse(
+          completion.choices[0]?.message?.content ?? "{}"
+        ) as {
+          ideas?: Array<{
+            title: string;
+            description: string;
+            category: string;
+            priority: string;
+          }>;
         };
         const ideas = raw.ideas ?? [];
         for (const idea of ideas.slice(0, 2)) {
           await db.insert(innovationIdeas).values({
             userId: ctx.user.id,
             title: idea.title ?? `Idea from ${agent.name}`,
-            description: idea.description ?? `Innovation suggestion from ${agent.name}`,
+            description:
+              idea.description ?? `Innovation suggestion from ${agent.name}`,
             source: `agent:${agent.id}`,
             status: "submitted",
             priority: (idea.priority as "high" | "medium" | "low") ?? "medium",

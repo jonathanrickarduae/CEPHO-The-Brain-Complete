@@ -9,10 +9,7 @@ import { z } from "zod";
 import { eq } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
-import {
-  cosTrainingModules,
-  cosTrainingProgress,
-} from "../../drizzle/schema";
+import { cosTrainingModules, cosTrainingProgress } from "../../drizzle/schema";
 
 // Default training modules (seeded on first call)
 const DEFAULT_MODULES = [
@@ -110,11 +107,18 @@ export const cosTrainingRouter = router({
       if (!progress) {
         [progress] = await db
           .insert(cosTrainingProgress)
-          .values({ userId: ctx.user.id, currentLevel: 1, trainingPercentage: 0, completedModules: [] })
+          .values({
+            userId: ctx.user.id,
+            currentLevel: 1,
+            trainingPercentage: 0,
+            completedModules: [],
+          })
           .returning();
       }
 
-      const completedModuleIds: number[] = Array.isArray(progress.completedModules)
+      const completedModuleIds: number[] = Array.isArray(
+        progress.completedModules
+      )
         ? (progress.completedModules as number[])
         : [];
 
@@ -179,7 +183,11 @@ export const cosTrainingRouter = router({
           if (progress) {
             await db
               .update(cosTrainingProgress)
-              .set({ completedModules: updated, trainingPercentage: pct, lastTrainingActivity: new Date() })
+              .set({
+                completedModules: updated,
+                trainingPercentage: pct,
+                lastTrainingActivity: new Date(),
+              })
               .where(eq(cosTrainingProgress.userId, ctx.user.id));
           } else {
             await db.insert(cosTrainingProgress).values({

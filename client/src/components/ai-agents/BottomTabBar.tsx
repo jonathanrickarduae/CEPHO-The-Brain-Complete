@@ -54,25 +54,100 @@ const PRIMARY_TABS: TabItem[] = [
 // All remaining navigation items shown in the More sheet
 const MORE_ITEMS: MoreItem[] = [
   // Odyssey Engine
-  { label: "Innovation Hub", icon: TrendingUp, path: "/innovation-hub", group: "Odyssey Engine" },
-  { label: "Workflows", icon: Workflow, path: "/workflows", group: "Odyssey Engine" },
-  { label: "War Room", icon: AlertTriangle, path: "/war-room", group: "Odyssey Engine" },
-  { label: "Persephone", icon: Users, path: "/persephone", group: "Odyssey Engine" },
+  {
+    label: "Innovation Hub",
+    icon: TrendingUp,
+    path: "/innovation-hub",
+    group: "Odyssey Engine",
+  },
+  {
+    label: "Workflows",
+    icon: Workflow,
+    path: "/workflows",
+    group: "Odyssey Engine",
+  },
+  {
+    label: "War Room",
+    icon: AlertTriangle,
+    path: "/war-room",
+    group: "Odyssey Engine",
+  },
+  {
+    label: "Persephone",
+    icon: Users,
+    path: "/persephone",
+    group: "Odyssey Engine",
+  },
   // Chief of Staff
-  { label: "AI Agents", icon: Bot, path: "/ai-agents", group: "Chief of Staff" },
-  { label: "Agent Monitor", icon: Activity, path: "/ai-agents-monitoring", group: "Chief of Staff" },
-  { label: "Victoria", icon: ClipboardList, path: "/victoria-tracker", group: "Chief of Staff" },
-  { label: "AI-SMEs", icon: Users, path: "/ai-experts", group: "Chief of Staff" },
-  { label: "Analytics", icon: BarChart3, path: "/analytics", group: "Chief of Staff" },
-  { label: "KPIs & OKRs", icon: Target, path: "/kpis", group: "Chief of Staff" },
+  {
+    label: "AI Agents",
+    icon: Bot,
+    path: "/ai-agents",
+    group: "Chief of Staff",
+  },
+  {
+    label: "Agent Monitor",
+    icon: Activity,
+    path: "/ai-agents-monitoring",
+    group: "Chief of Staff",
+  },
+  {
+    label: "Victoria",
+    icon: ClipboardList,
+    path: "/victoria-tracker",
+    group: "Chief of Staff",
+  },
+  {
+    label: "AI-SMEs",
+    icon: Users,
+    path: "/ai-experts",
+    group: "Chief of Staff",
+  },
+  {
+    label: "Analytics",
+    icon: BarChart3,
+    path: "/analytics",
+    group: "Chief of Staff",
+  },
+  {
+    label: "KPIs & OKRs",
+    icon: Target,
+    path: "/kpis",
+    group: "Chief of Staff",
+  },
   // Intelligence
-  { label: "Email Intel", icon: Mail, path: "/email-intelligence", group: "Intelligence" },
-  { label: "Meetings", icon: Video, path: "/meeting-intelligence", group: "Intelligence" },
-  { label: "Evening Review", icon: Moon, path: "/evening-review", group: "Intelligence" },
+  {
+    label: "Email Intel",
+    icon: Mail,
+    path: "/email-intelligence",
+    group: "Intelligence",
+  },
+  {
+    label: "Meetings",
+    icon: Video,
+    path: "/meeting-intelligence",
+    group: "Intelligence",
+  },
+  {
+    label: "Evening Review",
+    icon: Moon,
+    path: "/evening-review",
+    group: "Intelligence",
+  },
   // Resources
-  { label: "Knowledge Base", icon: Database, path: "/knowledge-base", group: "Resources" },
+  {
+    label: "Knowledge Base",
+    icon: Database,
+    path: "/knowledge-base",
+    group: "Resources",
+  },
   { label: "Documents", icon: Library, path: "/documents", group: "Resources" },
-  { label: "Integrations", icon: Zap, path: "/integrations", group: "Resources" },
+  {
+    label: "Integrations",
+    icon: Zap,
+    path: "/integrations",
+    group: "Resources",
+  },
   // System
   { label: "Vault", icon: Lock, path: "/settings?tab=vault", group: "System" },
   { label: "Settings", icon: Settings, path: "/settings", group: "System" },
@@ -134,7 +209,9 @@ export function BottomTabBar({ className }: BottomTabBarProps) {
         >
           {/* Header */}
           <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-white/5">
-            <span className="text-sm font-semibold text-foreground">All Sections</span>
+            <span className="text-sm font-semibold text-foreground">
+              All Sections
+            </span>
             <button
               onClick={() => setShowMore(false)}
               className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-muted-foreground hover:text-foreground transition-colors"
@@ -145,7 +222,12 @@ export function BottomTabBar({ className }: BottomTabBarProps) {
           </div>
 
           {/* Navigation groups */}
-          <div className="px-4 py-3 space-y-4" style={{ paddingBottom: "calc(1rem + env(safe-area-inset-bottom, 0px))" }}>
+          <div
+            className="px-4 py-3 space-y-4"
+            style={{
+              paddingBottom: "calc(1rem + env(safe-area-inset-bottom, 0px))",
+            }}
+          >
             {Object.entries(groups).map(([groupName, items]) => (
               <div key={groupName}>
                 <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-2 px-1">
@@ -170,7 +252,8 @@ export function BottomTabBar({ className }: BottomTabBarProps) {
                         <Icon
                           className={cn(
                             "w-5 h-5 shrink-0",
-                            active && "drop-shadow-[0_0_6px_var(--color-primary)]"
+                            active &&
+                              "drop-shadow-[0_0_6px_var(--color-primary)]"
                           )}
                         />
                         <span className="text-[10px] font-medium text-center leading-tight">
@@ -202,9 +285,7 @@ export function BottomTabBar({ className }: BottomTabBarProps) {
         <div className="flex items-stretch h-14">
           {PRIMARY_TABS.map(tab => {
             const active =
-              tab.id === "more"
-                ? showMore || isMoreActive
-                : isActive(tab.path);
+              tab.id === "more" ? showMore || isMoreActive : isActive(tab.path);
             const Icon = tab.icon;
 
             return (

@@ -100,7 +100,9 @@ const STATUS_COLORS: Record<string, string> = {
 export default function InnovationHub() {
   const [, setLocation] = useLocation();
   const [_activeTab, _setActiveTab] = useState("ideas");
-  const [sourceFilter, setSourceFilter] = useState<"all" | "manual" | "agent" | "sme">("all");
+  const [sourceFilter, setSourceFilter] = useState<
+    "all" | "manual" | "agent" | "sme"
+  >("all");
   const [showNewIdeaDialog, setShowNewIdeaDialog] = useState(false);
   const [showArticleDialog, setShowArticleDialog] = useState(false);
   const [selectedIdea, setSelectedIdea] = useState<number | null>(null);
@@ -464,32 +466,32 @@ export default function InnovationHub() {
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto -mx-4 px-4">
-            <div className="flex items-center justify-between min-w-[480px] px-4 md:px-8 py-4">
-              {FLYWHEEL_STAGES.map((stage, index) => (
-                <div key={stage.id} className="flex items-center">
-                  <div className="flex flex-col items-center">
-                    <div
-                      className={`p-4 rounded-full bg-card border-2 border-border ${stage.color}`}
-                    >
-                      <stage.icon className="h-6 w-6" />
+              <div className="flex items-center justify-between min-w-[480px] px-4 md:px-8 py-4">
+                {FLYWHEEL_STAGES.map((stage, index) => (
+                  <div key={stage.id} className="flex items-center">
+                    <div className="flex flex-col items-center">
+                      <div
+                        className={`p-4 rounded-full bg-card border-2 border-border ${stage.color}`}
+                      >
+                        <stage.icon className="h-6 w-6" />
+                      </div>
+                      <p className="mt-2 font-medium text-foreground">
+                        {stage.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground text-center max-w-[100px]">
+                        {stage.description}
+                      </p>
+                      <Badge variant="outline" className="mt-2">
+                        {ideas?.filter(i => i.currentStage === stage.id)
+                          .length || 0}
+                      </Badge>
                     </div>
-                    <p className="mt-2 font-medium text-foreground">
-                      {stage.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground text-center max-w-[100px]">
-                      {stage.description}
-                    </p>
-                    <Badge variant="outline" className="mt-2">
-                      {ideas?.filter(i => i.currentStage === stage.id).length ||
-                        0}
-                    </Badge>
+                    {index < FLYWHEEL_STAGES.length - 1 && (
+                      <ArrowRight className="h-6 w-6 text-muted-foreground mx-4" />
+                    )}
                   </div>
-                  {index < FLYWHEEL_STAGES.length - 1 && (
-                    <ArrowRight className="h-6 w-6 text-muted-foreground mx-4" />
-                  )}
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -513,7 +515,13 @@ export default function InnovationHub() {
                             : "bg-muted text-muted-foreground hover:bg-muted/80"
                         }`}
                       >
-                        {f === "all" ? `All (${ideas?.length ?? 0})` : f === "manual" ? "Manual" : f === "agent" ? "Agents" : "SMEs"}
+                        {f === "all"
+                          ? `All (${ideas?.length ?? 0})`
+                          : f === "manual"
+                            ? "Manual"
+                            : f === "agent"
+                              ? "Agents"
+                              : "SMEs"}
                       </button>
                     ))}
                   </div>
@@ -522,69 +530,79 @@ export default function InnovationHub() {
               <CardContent className="space-y-3 max-h-[500px] overflow-y-auto">
                 {(() => {
                   const filtered = (ideas ?? []).filter(i =>
-                    sourceFilter === "all" ? true :
-                    sourceFilter === "manual" ? (!i.source || i.source === "manual" || i.source === "ai_generated") :
-                    sourceFilter === "agent" ? (i.source ?? "").startsWith("agent:") :
-                    (i.source ?? "").startsWith("sme:")
+                    sourceFilter === "all"
+                      ? true
+                      : sourceFilter === "manual"
+                        ? !i.source ||
+                          i.source === "manual" ||
+                          i.source === "ai_generated"
+                        : sourceFilter === "agent"
+                          ? (i.source ?? "").startsWith("agent:")
+                          : (i.source ?? "").startsWith("sme:")
                   );
                   return filtered.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <Lightbulb className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                    <p>No ideas yet</p>
-                    <p className="text-sm">
-                      Capture your first idea to get started
-                    </p>
-                  </div>
-                ) : (
-                  filtered.map(idea => (
-                    <div
-                      key={idea.id}
-                      onClick={() => setSelectedIdea(idea.id)}
-                      className={`p-3 rounded-lg border cursor-pointer transition-all ${
-                        selectedIdea === idea.id
-                          ? "border-[var(--brain-cyan)] bg-[var(--brain-cyan)]/10"
-                          : "border-border hover:border-border/80 hover:bg-card"
-                      }`}
-                    >
-                      <div className="flex items-start justify-between">
-                        <h4 className="font-medium text-foreground line-clamp-1">
-                          {idea.title}
-                        </h4>
-                        <Badge
-                          className={
-                            STATUS_COLORS[idea.status] || "bg-gray-500/20"
-                          }
-                        >
-                          {idea.status.replace(/_/g, " ")}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
-                        <span>Stage {idea.currentStage}/5</span>
-                        {idea.confidenceScore && (
-                          <>
-                            <span>•</span>
-                            <span>
-                              {idea.confidenceScore.toFixed(0)}% confidence
-                            </span>
-                          </>
-                        )}
-                        {idea.source && idea.source !== "manual" && (
-                          <>
-                            <span>•</span>
-                            <span className="capitalize text-cyan-400">
-                              {idea.source.startsWith("agent:") ? `🤖 ${idea.source.replace("agent:", "").replace(/_/g, " ")}` : idea.source.startsWith("sme:") ? `👥 SME` : idea.source}
-                            </span>
-                          </>
-                        )}
-                      </div>
-                      <Progress
-                        value={(idea.currentStage / 5) * 100}
-                        className="h-1 mt-2"
-                      />
+                    <div className="text-center py-8 text-muted-foreground">
+                      <Lightbulb className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                      <p>No ideas yet</p>
+                      <p className="text-sm">
+                        Capture your first idea to get started
+                      </p>
                     </div>
-                  ))
-                );
-                })()}              </CardContent>
+                  ) : (
+                    filtered.map(idea => (
+                      <div
+                        key={idea.id}
+                        onClick={() => setSelectedIdea(idea.id)}
+                        className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                          selectedIdea === idea.id
+                            ? "border-[var(--brain-cyan)] bg-[var(--brain-cyan)]/10"
+                            : "border-border hover:border-border/80 hover:bg-card"
+                        }`}
+                      >
+                        <div className="flex items-start justify-between">
+                          <h4 className="font-medium text-foreground line-clamp-1">
+                            {idea.title}
+                          </h4>
+                          <Badge
+                            className={
+                              STATUS_COLORS[idea.status] || "bg-gray-500/20"
+                            }
+                          >
+                            {idea.status.replace(/_/g, " ")}
+                          </Badge>
+                        </div>
+                        <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                          <span>Stage {idea.currentStage}/5</span>
+                          {idea.confidenceScore && (
+                            <>
+                              <span>•</span>
+                              <span>
+                                {idea.confidenceScore.toFixed(0)}% confidence
+                              </span>
+                            </>
+                          )}
+                          {idea.source && idea.source !== "manual" && (
+                            <>
+                              <span>•</span>
+                              <span className="capitalize text-cyan-400">
+                                {idea.source.startsWith("agent:")
+                                  ? `🤖 ${idea.source.replace("agent:", "").replace(/_/g, " ")}`
+                                  : idea.source.startsWith("sme:")
+                                    ? `👥 SME`
+                                    : idea.source}
+                              </span>
+                            </>
+                          )}
+                        </div>
+                        <Progress
+                          value={(idea.currentStage / 5) * 100}
+                          className="h-1 mt-2"
+                        />
+                      </div>
+                    ))
+                  );
+                })()}{" "}
+              </CardContent>
             </Card>
           </div>
 

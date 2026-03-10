@@ -81,20 +81,45 @@ function scheduleMorningBriefing() {
               const todayDate = new Date();
               todayDate.setHours(0, 0, 0, 0);
               const [pendingTasks, activeProjects] = await Promise.all([
-                db.select().from(tasks)
-                  .where(and(eq(tasks.userId, user.id), eq(tasks.status, "not_started")))
+                db
+                  .select()
+                  .from(tasks)
+                  .where(
+                    and(
+                      eq(tasks.userId, user.id),
+                      eq(tasks.status, "not_started")
+                    )
+                  )
                   .limit(8),
-                db.select().from(projects)
-                  .where(and(eq(projects.userId, user.id), eq(projects.status, "active")))
+                db
+                  .select()
+                  .from(projects)
+                  .where(
+                    and(
+                      eq(projects.userId, user.id),
+                      eq(projects.status, "active")
+                    )
+                  )
                   .limit(5),
               ]);
               const dateStr = todayDate.toLocaleDateString("en-GB", {
-                weekday: "long", year: "numeric", month: "long", day: "numeric",
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
               });
               const prompt = `You are Victoria, AI Chief of Staff for CEPHO. Generate a professional daily briefing for ${user.name ?? "the executive"}.
 Date: ${dateStr}
 Active Projects (${activeProjects.length}): ${activeProjects.map((p: { name: string; status: string; progress?: number | null }) => `${p.name} [${p.status}, ${p.progress ?? 0}% complete]`).join("; ") || "None"}
-Pending Tasks (${pendingTasks.length}): ${pendingTasks.slice(0, 5).map((t: { title: string; priority?: string | null }) => `${t.title} [${t.priority ?? "medium"} priority]`).join("; ") || "None"}
+Pending Tasks (${pendingTasks.length}): ${
+                pendingTasks
+                  .slice(0, 5)
+                  .map(
+                    (t: { title: string; priority?: string | null }) =>
+                      `${t.title} [${t.priority ?? "medium"} priority]`
+                  )
+                  .join("; ") || "None"
+              }
 Generate a structured daily briefing with: 1. Executive Summary, 2. Priority Focus (top 3), 3. Key Metrics, 4. Strategic Recommendation. Keep it concise and professional.`;
               const completion = await openai.chat.completions.create({
                 model: "gpt-4.1-mini",
@@ -111,11 +136,16 @@ Generate a structured daily briefing with: 1. Executive Summary, 2. Priority Foc
                   date: todayDate,
                   status: "completed",
                 });
-                log.info(`[Cron] Morning Briefing — AI brief persisted for user ${user.id}`);
+                log.info(
+                  `[Cron] Morning Briefing — AI brief persisted for user ${user.id}`
+                );
               }
             }
           } catch (aiErr) {
-            log.warn(`[Cron] Morning Briefing — AI generation failed for user ${user.id}:`, aiErr);
+            log.warn(
+              `[Cron] Morning Briefing — AI generation failed for user ${user.id}:`,
+              aiErr
+            );
           }
 
           // 3. Proactive push email
@@ -1233,7 +1263,9 @@ function scheduleSmeReviewProcessor() {
               .where(eq(smeReviewTriggers.id, trigger.id));
 
             // ── Insert SME key opportunities as Innovation Hub ideas ────────
-            const opportunities = review.keyOpportunities as string[] | undefined;
+            const opportunities = review.keyOpportunities as
+              | string[]
+              | undefined;
             if (opportunities && opportunities.length > 0) {
               for (const opp of opportunities.slice(0, 2)) {
                 if (opp && opp.length > 10) {
@@ -1247,7 +1279,11 @@ function scheduleSmeReviewProcessor() {
                       priority: "high",
                       currentStage: 1,
                       category: "sme-generated",
-                      sourceMetadata: { experts: expertNames, sourceTitle: trigger.sourceTitle, triggerType: trigger.triggerType },
+                      sourceMetadata: {
+                        experts: expertNames,
+                        sourceTitle: trigger.sourceTitle,
+                        triggerType: trigger.triggerType,
+                      },
                     });
                   } catch (_ideaErr) {
                     // non-fatal

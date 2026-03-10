@@ -47,7 +47,10 @@ export default function AIAgentsMonitoringPage() {
   } = trpc.aiAgentsMonitoring.getAllStatus.useQuery(undefined, { retry: 2 });
 
   const { data: reportsData } =
-    trpc.aiAgentsMonitoring.getDailyReports.useQuery({}, { retry: false, throwOnError: false });
+    trpc.aiAgentsMonitoring.getDailyReports.useQuery(
+      {},
+      { retry: false, throwOnError: false }
+    );
   const { data: victoriaLog } = trpc.victoria.getActionLog.useQuery(
     { limit: 10 },
     { retry: false, throwOnError: false }
@@ -566,7 +569,8 @@ export default function AIAgentsMonitoringPage() {
                       </span>
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      {m.totalRatings} ratings &middot; {m.totalTasks ?? 0} tasks
+                      {m.totalRatings} ratings &middot; {m.totalTasks ?? 0}{" "}
+                      tasks
                     </div>
                   </div>
                 ))}
@@ -575,38 +579,44 @@ export default function AIAgentsMonitoringPage() {
           )}
 
           {/* Live Activity Feed */}
-          {activityFeedData && (activityFeedData.activities ?? activityFeedData.items ?? []).length > 0 && (
-            <div className="bg-card rounded-xl p-4 border border-border">
-              <div className="flex items-center gap-2 mb-3">
-                <Zap className="w-4 h-4 text-amber-400" />
-                <h3 className="text-sm font-semibold">Live Activity Feed</h3>
-                <span className="text-xs text-muted-foreground ml-auto">
-                  Auto-refreshes every 30s
-                </span>
-                <button
-                  onClick={() => refetchFeed()}
-                  className="text-xs text-muted-foreground hover:text-foreground transition-colors ml-1"
-                >
-                  <RefreshCw className="w-3 h-3" />
-                </button>
+          {activityFeedData &&
+            (activityFeedData.activities ?? activityFeedData.items ?? [])
+              .length > 0 && (
+              <div className="bg-card rounded-xl p-4 border border-border">
+                <div className="flex items-center gap-2 mb-3">
+                  <Zap className="w-4 h-4 text-amber-400" />
+                  <h3 className="text-sm font-semibold">Live Activity Feed</h3>
+                  <span className="text-xs text-muted-foreground ml-auto">
+                    Auto-refreshes every 30s
+                  </span>
+                  <button
+                    onClick={() => refetchFeed()}
+                    className="text-xs text-muted-foreground hover:text-foreground transition-colors ml-1"
+                  >
+                    <RefreshCw className="w-3 h-3" />
+                  </button>
+                </div>
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {(
+                    activityFeedData.activities ??
+                    activityFeedData.items ??
+                    []
+                  ).map((item, i) => (
+                    <div key={i} className="flex items-start gap-3 text-sm">
+                      <span className="text-xs text-muted-foreground mt-0.5 shrink-0 w-16">
+                        {formatTimestamp(item.createdAt)}
+                      </span>
+                      <span className="shrink-0 text-xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
+                        {item.targetType}
+                      </span>
+                      <span className="text-foreground/80 flex-1">
+                        {item.description ?? item.action}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="space-y-2 max-h-64 overflow-y-auto">
-                {(activityFeedData.activities ?? activityFeedData.items ?? []).map((item, i) => (
-                  <div key={i} className="flex items-start gap-3 text-sm">
-                    <span className="text-xs text-muted-foreground mt-0.5 shrink-0 w-16">
-                      {formatTimestamp(item.createdAt)}
-                    </span>
-                    <span className="shrink-0 text-xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
-                      {item.targetType}
-                    </span>
-                    <span className="text-foreground/80 flex-1">
-                      {item.description ?? item.action}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+            )}
 
           {/* Victoria Action Log */}
           {victoriaLog &&

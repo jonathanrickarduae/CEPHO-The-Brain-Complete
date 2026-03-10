@@ -62,12 +62,15 @@ export default function WarRoom() {
   const executeMutation = trpc.autonomousExecution.execute.useMutation({
     onSuccess: data => {
       // data.plan is an object — format it as a readable string
-      const planObj = data.plan as {
-        estimatedDuration?: string;
-        risks?: string[];
-        successMetrics?: string[];
-        phases?: { name: string; agent: string; taskCount: number }[];
-      } | null | undefined;
+      const planObj = data.plan as
+        | {
+            estimatedDuration?: string;
+            risks?: string[];
+            successMetrics?: string[];
+            phases?: { name: string; agent: string; taskCount: number }[];
+          }
+        | null
+        | undefined;
       if (planObj && typeof planObj === "object") {
         const lines: string[] = [];
         if (planObj.estimatedDuration)
@@ -75,7 +78,9 @@ export default function WarRoom() {
         if (planObj.phases?.length) {
           lines.push(`\nPhases (${planObj.phases.length} total):`);
           planObj.phases.forEach((p, i) =>
-            lines.push(`  ${i + 1}. ${p.name} — ${p.agent} (${p.taskCount} tasks)`)
+            lines.push(
+              `  ${i + 1}. ${p.name} — ${p.agent} (${p.taskCount} tasks)`
+            )
           );
         }
         if (planObj.risks?.length) {
@@ -86,7 +91,9 @@ export default function WarRoom() {
           lines.push(`\nSuccess Metrics:`);
           planObj.successMetrics.forEach(m => lines.push(`  • ${m}`));
         }
-        lines.push(`\n${data.tasksCreated} tasks created across ${data.phasesCreated} phases. Project is now live in your dashboard.`);
+        lines.push(
+          `\n${data.tasksCreated} tasks created across ${data.phasesCreated} phases. Project is now live in your dashboard.`
+        );
         setResponsePlan(lines.join("\n"));
       } else {
         setResponsePlan("Response plan generated. Agents have been deployed.");
@@ -132,7 +139,9 @@ export default function WarRoom() {
             <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6 text-red-500" />
           </div>
           <div className="min-w-0">
-            <h1 className="text-xl sm:text-2xl font-bold text-foreground">War Room</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-foreground">
+              War Room
+            </h1>
             <p className="text-muted-foreground text-xs sm:text-sm">
               Crisis management — activate your full AI team for rapid response
             </p>

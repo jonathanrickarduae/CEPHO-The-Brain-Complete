@@ -308,15 +308,16 @@ export function ValueChainProgress({
                       {/* Actions */}
                       <div className="flex flex-wrap gap-2 items-center">
                         {/* Start Phase — for not_started phases at or before currentPhaseId */}
-                        {status === "not_started" && phase.id <= currentPhaseId + 1 && (
-                          <Button
-                            size="sm"
-                            onClick={() => onStartPhase?.(phase.id)}
-                            className="bg-gradient-to-r from-cyan-500 to-fuchsia-500"
-                          >
-                            Start Phase
-                          </Button>
-                        )}
+                        {status === "not_started" &&
+                          phase.id <= currentPhaseId + 1 && (
+                            <Button
+                              size="sm"
+                              onClick={() => onStartPhase?.(phase.id)}
+                              className="bg-gradient-to-r from-cyan-500 to-fuchsia-500"
+                            >
+                              Start Phase
+                            </Button>
+                          )}
                         {/* Complete Phase — always shown when in_progress */}
                         {status === "in_progress" && (
                           <>
@@ -326,7 +327,9 @@ export function ValueChainProgress({
                               className="bg-gradient-to-r from-amber-500 to-orange-500"
                             >
                               <Shield className="w-4 h-4 mr-2" />
-                              {checkProgress === 100 ? "Complete Phase" : `Complete Phase (${completedChecks.length}/${phase.qualityGateChecks.length} checks)`}
+                              {checkProgress === 100
+                                ? "Complete Phase"
+                                : `Complete Phase (${completedChecks.length}/${phase.qualityGateChecks.length} checks)`}
                             </Button>
                             {checkProgress < 100 && (
                               <p className="text-xs text-foreground/40">

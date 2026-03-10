@@ -153,9 +153,7 @@ export default function AdminHealthPage() {
       name: "API Server",
       status: health ? "ok" : error ? "error" : "unknown",
       latencyMs: undefined,
-      detail: health
-        ? `v${health.version} · ${health.environment}`
-        : undefined,
+      detail: health ? `v${health.version} · ${health.environment}` : undefined,
       icon: Server,
     },
     {
@@ -204,8 +202,8 @@ export default function AdminHealthPage() {
     },
   ];
 
-  const allHealthy = serviceChecks.every((c) => c.status === "ok");
-  const hasErrors = serviceChecks.some((c) => c.status === "error");
+  const allHealthy = serviceChecks.every(c => c.status === "ok");
+  const hasErrors = serviceChecks.some(c => c.status === "error");
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
@@ -274,7 +272,7 @@ export default function AdminHealthPage() {
           Service Status
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {serviceChecks.map((check) => (
+          {serviceChecks.map(check => (
             <ServiceCard key={check.name} check={check} />
           ))}
         </div>

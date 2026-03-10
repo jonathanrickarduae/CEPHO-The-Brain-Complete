@@ -118,10 +118,7 @@ export async function generateBriefPDF(briefData: BriefData): Promise<string> {
           .font("Helvetica")
           .text(item.title);
         if (item.location) {
-          doc
-            .fillColor(MUTED)
-            .fontSize(9)
-            .text(`  Location: ${item.location}`);
+          doc.fillColor(MUTED).fontSize(9).text(`  Location: ${item.location}`);
         }
         if (item.attendees && item.attendees.length > 0) {
           doc
@@ -202,9 +199,7 @@ export async function generateBriefPDF(briefData: BriefData): Promise<string> {
 
     // ── Footer ─────────────────────────────────────────────────────────────────
     const footerY = doc.page.height - 40;
-    doc
-      .rect(0, footerY, doc.page.width, 40)
-      .fill(LIGHT_BG);
+    doc.rect(0, footerY, doc.page.width, 40).fill(LIGHT_BG);
     doc
       .fillColor(MUTED)
       .fontSize(8)

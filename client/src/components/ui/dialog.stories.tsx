@@ -29,7 +29,8 @@ export const Default: Story = {
         <DialogHeader>
           <DialogTitle>Are you sure?</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your account.
+            This action cannot be undone. This will permanently delete your
+            account.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -56,7 +57,11 @@ export const WithForm: Story = {
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <input className="border rounded px-3 py-2" placeholder="Name" />
-          <input className="border rounded px-3 py-2" placeholder="Email" type="email" />
+          <input
+            className="border rounded px-3 py-2"
+            placeholder="Email"
+            type="email"
+          />
         </div>
         <DialogFooter>
           <Button type="submit">Save changes</Button>

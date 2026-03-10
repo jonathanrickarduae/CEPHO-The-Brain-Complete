@@ -128,27 +128,29 @@ const trpcClient = trpc.createClient({
         };
       },
       fetch(input, init) {
-        return globalThis.fetch(input, {
-          ...(init ?? {}),
-          credentials: "include",
-        }).then(async resp => {
-          // On 403 CSRF error, clear cache and retry once with fresh token
-          if (resp.status === 403) {
-            cachedCsrfToken = null;
-            csrfTokenExpiry = 0;
-            const freshToken = await getCsrfToken(true);
-            const newInit = {
-              ...(init ?? {}),
-              credentials: "include" as RequestCredentials,
-              headers: {
-                ...(init?.headers ?? {}),
-                "x-csrf-token": freshToken,
-              },
-            };
-            return globalThis.fetch(input, newInit);
-          }
-          return resp;
-        });
+        return globalThis
+          .fetch(input, {
+            ...(init ?? {}),
+            credentials: "include",
+          })
+          .then(async resp => {
+            // On 403 CSRF error, clear cache and retry once with fresh token
+            if (resp.status === 403) {
+              cachedCsrfToken = null;
+              csrfTokenExpiry = 0;
+              const freshToken = await getCsrfToken(true);
+              const newInit = {
+                ...(init ?? {}),
+                credentials: "include" as RequestCredentials,
+                headers: {
+                  ...(init?.headers ?? {}),
+                  "x-csrf-token": freshToken,
+                },
+              };
+              return globalThis.fetch(input, newInit);
+            }
+            return resp;
+          });
       },
     }),
   ],

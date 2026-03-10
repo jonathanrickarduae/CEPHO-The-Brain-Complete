@@ -51,7 +51,8 @@ export const victoriaBriefingRouter = router({
       if (cached?.content) {
         const cachedText =
           typeof cached.content === "object" && cached.content !== null
-            ? (cached.content as { text?: string }).text ?? JSON.stringify(cached.content)
+            ? ((cached.content as { text?: string }).text ??
+              JSON.stringify(cached.content))
             : String(cached.content);
         return {
           date: today.toISOString(),

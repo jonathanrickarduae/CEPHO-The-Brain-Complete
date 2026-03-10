@@ -350,8 +350,12 @@ export default function DailyBrief() {
   const [pendingVideoId, setPendingVideoId] = useState<string | null>(null);
 
   // Live data for Intelligence and Strategy tabs
-  const { data: _emailStats } = trpc.emailIntelligence.getSummaryStats.useQuery();
-  const { data: emailList } = trpc.emailIntelligence.list.useQuery({ limit: 5, priority: "high" });
+  const { data: _emailStats } =
+    trpc.emailIntelligence.getSummaryStats.useQuery();
+  const { data: emailList } = trpc.emailIntelligence.list.useQuery({
+    limit: 5,
+    priority: "high",
+  });
   const { data: kpiList } = trpc.kpiOkr.list.useQuery();
   const { data: genesisProjects } = trpc.projectGenesis.listProjects.useQuery();
 
@@ -441,12 +445,16 @@ export default function DailyBrief() {
         });
         if (result.status === "processing" && result.videoId) {
           setPendingVideoId(result.videoId);
-          toast.info("Video is being generated. You'll be notified when ready.");
+          toast.info(
+            "Video is being generated. You'll be notified when ready."
+          );
         } else if (result.videoUrl) {
           triggerDownload(result.videoUrl, `victoria-brief-${dateSlug}.mp4`);
           toast.success("Video downloaded!");
         } else {
-          toast.info(result.message || "Video generation requires Synthesia API key.");
+          toast.info(
+            result.message || "Video generation requires Synthesia API key."
+          );
         }
       } else if (format === "audio") {
         toast.info("Creating podcast version with Victoria's voice...");
@@ -458,7 +466,10 @@ export default function DailyBrief() {
           triggerDownload(result.audioUrl, `victoria-brief-${dateSlug}.mp3`);
           toast.success("Audio downloaded!");
         } else {
-          toast.error(result.message || "Audio generation requires ElevenLabs API key. Check Integrations.");
+          toast.error(
+            result.message ||
+              "Audio generation requires ElevenLabs API key. Check Integrations."
+          );
         }
       }
     } catch {
@@ -1098,7 +1109,15 @@ export default function DailyBrief() {
                             <Badge variant="outline" className="text-xs">
                               {item.fromName ?? item.fromEmail ?? "Email"}
                             </Badge>
-                            <Badge variant={item.aiPriority === "urgent" ? "destructive" : item.aiPriority === "high" ? "default" : "secondary"}>
+                            <Badge
+                              variant={
+                                item.aiPriority === "urgent"
+                                  ? "destructive"
+                                  : item.aiPriority === "high"
+                                    ? "default"
+                                    : "secondary"
+                              }
+                            >
                               {item.aiPriority}
                             </Badge>
                           </div>
@@ -1122,8 +1141,13 @@ export default function DailyBrief() {
                 ) : (
                   <div className="text-center py-8 text-muted-foreground">
                     <TrendingUp className="w-10 h-10 mx-auto mb-3 opacity-30" />
-                    <p className="font-medium">No high-priority intelligence yet</p>
-                    <p className="text-sm mt-1">Connect your email in Integrations to see live intelligence</p>
+                    <p className="font-medium">
+                      No high-priority intelligence yet
+                    </p>
+                    <p className="text-sm mt-1">
+                      Connect your email in Integrations to see live
+                      intelligence
+                    </p>
                   </div>
                 )}
               </CardContent>
@@ -1145,14 +1169,22 @@ export default function DailyBrief() {
               <CardContent>
                 {kpiList && kpiList.length > 0 ? (
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {kpiList.slice(0, 8).map((kpi) => (
-                      <div key={kpi.id} className="bg-background/50 rounded-lg p-4">
-                        <div className="text-sm text-muted-foreground mb-1">{kpi.name}</div>
+                    {kpiList.slice(0, 8).map(kpi => (
+                      <div
+                        key={kpi.id}
+                        className="bg-background/50 rounded-lg p-4"
+                      >
+                        <div className="text-sm text-muted-foreground mb-1">
+                          {kpi.name}
+                        </div>
                         <div className="text-xl font-bold text-foreground">
-                          {kpi.currentValue !== null ? `${kpi.currentValue}${kpi.unit ?? ""}` : "—"}
+                          {kpi.currentValue !== null
+                            ? `${kpi.currentValue}${kpi.unit ?? ""}`
+                            : "—"}
                         </div>
                         <div className="text-sm text-muted-foreground">
-                          Target: {kpi.targetValue}{kpi.unit ?? ""}
+                          Target: {kpi.targetValue}
+                          {kpi.unit ?? ""}
                         </div>
                       </div>
                     ))}
@@ -1160,7 +1192,9 @@ export default function DailyBrief() {
                 ) : (
                   <div className="text-center py-6 text-muted-foreground">
                     <p className="font-medium">No KPIs configured yet</p>
-                    <p className="text-sm mt-1">Add KPIs in the KPI & OKR section</p>
+                    <p className="text-sm mt-1">
+                      Add KPIs in the KPI & OKR section
+                    </p>
                   </div>
                 )}
               </CardContent>
@@ -1177,21 +1211,43 @@ export default function DailyBrief() {
               <CardContent>
                 {genesisProjects && genesisProjects.length > 0 ? (
                   <div className="space-y-4">
-                    {genesisProjects.slice(0, 6).map((project) => {
-                      const progress = project.currentPhase ? Math.round((project.currentPhase / 7) * 100) : 0;
-                      const statusColor = project.status === "active" ? "bg-primary" : project.status === "completed" ? "bg-green-500" : "bg-orange-500";
+                    {genesisProjects.slice(0, 6).map(project => {
+                      const progress = project.currentPhase
+                        ? Math.round((project.currentPhase / 7) * 100)
+                        : 0;
+                      const statusColor =
+                        project.status === "active"
+                          ? "bg-primary"
+                          : project.status === "completed"
+                            ? "bg-green-500"
+                            : "bg-orange-500";
                       return (
                         <div key={project.id} className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <span className="font-medium text-foreground">{project.name}</span>
-                            <Badge variant={project.status === "active" ? "default" : project.status === "completed" ? "secondary" : "destructive"}>
+                            <span className="font-medium text-foreground">
+                              {project.name}
+                            </span>
+                            <Badge
+                              variant={
+                                project.status === "active"
+                                  ? "default"
+                                  : project.status === "completed"
+                                    ? "secondary"
+                                    : "destructive"
+                              }
+                            >
                               {project.status}
                             </Badge>
                           </div>
                           <div className="h-2 bg-background rounded-full overflow-hidden">
-                            <div className={`h-full rounded-full ${statusColor}`} style={{ width: `${progress}%` }} />
+                            <div
+                              className={`h-full rounded-full ${statusColor}`}
+                              style={{ width: `${progress}%` }}
+                            />
                           </div>
-                          <div className="text-sm text-muted-foreground text-right">Phase {project.currentPhase ?? 0} of 7</div>
+                          <div className="text-sm text-muted-foreground text-right">
+                            Phase {project.currentPhase ?? 0} of 7
+                          </div>
                         </div>
                       );
                     })}
@@ -1199,7 +1255,9 @@ export default function DailyBrief() {
                 ) : (
                   <div className="text-center py-6 text-muted-foreground">
                     <p className="font-medium">No active projects</p>
-                    <p className="text-sm mt-1">Create a project in Genesis to see it here</p>
+                    <p className="text-sm mt-1">
+                      Create a project in Genesis to see it here
+                    </p>
                   </div>
                 )}
               </CardContent>
