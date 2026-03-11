@@ -273,10 +273,11 @@ export default function AnimatedBrainLogo({
             r={neuron.size}
             fill={color}
             filter="url(#neuron-glow)"
+            style={{ transformOrigin: `${neuron.x}px ${neuron.y}px` }}
             initial={{ opacity: 0.2 }}
             animate={{
               opacity: settings.neuronOpacity,
-              r: [neuron.size, neuron.size * 1.3, neuron.size],
+              scale: [1, 1.3, 1],
             }}
             transition={{
               duration: neuron.duration,
@@ -294,9 +295,10 @@ export default function AnimatedBrainLogo({
           r="3"
           fill={color}
           filter="url(#neuron-glow)"
+          style={{ transformOrigin: "50px 50px" }}
           animate={{
             opacity: [0.4, 0.7, 0.4],
-            r: [3, 4, 3],
+            scale: [1, 1.33, 1],
           }}
           transition={{
             duration: 5,

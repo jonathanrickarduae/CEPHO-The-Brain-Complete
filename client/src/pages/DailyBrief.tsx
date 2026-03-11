@@ -348,6 +348,8 @@ export default function DailyBrief() {
 
   const [showVideoBriefing, setShowVideoBriefing] = useState(false);
   const [pendingVideoId, setPendingVideoId] = useState<string | null>(null);
+  const [activeAudioUrl, setActiveAudioUrl] = useState<string | null>(null);
+  const [showAudioPlayer, setShowAudioPlayer] = useState(false);
 
   // Live data for Intelligence and Strategy tabs
   const { data: _emailStats } =
@@ -441,7 +443,8 @@ export default function DailyBrief() {
         toast.info("Creating video brief with Victoria...");
         const result = await generateVideoMutation.mutateAsync({
           script: briefText,
-          avatarId: "victoria",
+          // Talia — valid Synthesia EXPRESS-1 stock avatar
+          avatarId: "b3d74452-7011-4e8e-b3bf-12f7406f8f22",
         });
         if (result.status === "processing" && result.videoId) {
           setPendingVideoId(result.videoId);
@@ -463,8 +466,9 @@ export default function DailyBrief() {
           voiceId: "victoria",
         });
         if (result.audioUrl) {
-          triggerDownload(result.audioUrl, `victoria-brief-${dateSlug}.mp3`);
-          toast.success("Audio downloaded!");
+          setActiveAudioUrl(result.audioUrl);
+          setShowAudioPlayer(true);
+          toast.success("Victoria's podcast briefing is ready — playing now!");
         } else {
           toast.error(
             result.message ||
@@ -663,6 +667,54 @@ export default function DailyBrief() {
               <p className="text-muted-foreground text-sm text-center">
                 Victoria delivers your personalized daily briefing with key
                 priorities, market intelligence, and strategic recommendations.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Victoria Audio Briefing Player */}
+      {showAudioPlayer && activeAudioUrl && (
+        <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
+          <div className="relative w-full max-w-lg bg-card rounded-2xl overflow-hidden shadow-2xl border border-border">
+            <div className="absolute top-4 right-4 z-10">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setShowAudioPlayer(false);
+                  setActiveAudioUrl(null);
+                }}
+                className="text-foreground hover:bg-muted"
+              >
+                ✕ Close
+              </Button>
+            </div>
+            <div className="p-6">
+              <div className="flex items-center gap-4 mb-5">
+                <img
+                  src="/avatars/victoria-stirling.jpg"
+                  alt="Victoria Stirling"
+                  className="w-14 h-14 rounded-full border-2 border-primary"
+                />
+                <div>
+                  <p className="text-foreground font-semibold text-lg">
+                    Victoria Stirling
+                  </p>
+                  <p className="text-muted-foreground text-sm">
+                    Daily Podcast Briefing
+                  </p>
+                </div>
+              </div>
+              {/* Audio element — captions not applicable for AI voice briefings */}
+              <audio
+                src={activeAudioUrl}
+                autoPlay
+                controls
+                className="w-full rounded-lg"
+              />
+              <p className="text-muted-foreground text-xs text-center mt-3">
+                Victoria's AI-generated voice briefing — powered by ElevenLabs
               </p>
             </div>
           </div>
