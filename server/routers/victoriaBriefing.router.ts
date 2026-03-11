@@ -333,7 +333,9 @@ export const victoriasBriefRouter = router({
           test: true, // Use test mode to avoid billing during development
           input: [
             {
-              avatarId: input.avatarId ?? "anna_costume1_cameraA",
+              // Talia (EXPRESS-1) — valid Synthesia stock avatar ID
+              avatarId:
+                input.avatarId ?? "b3d74452-7011-4e8e-b3bf-12f7406f8f22",
               script: script.slice(0, 1500), // Synthesia limit
               backgroundColor: "#0f172a",
             },
