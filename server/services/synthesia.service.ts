@@ -28,25 +28,26 @@ export interface SynthesiaVideo {
   updatedAt: string;
 }
 
+/**
+ * Synthesia v2 API — correct field names:
+ *   input[].avatar       (not avatarId)
+ *   input[].scriptText   (not script)
+ *   input[].background   (not backgroundColor / backgroundId)
+ */
 export interface CreateVideoOptions {
   title: string;
   description?: string;
   visibility?: "public" | "private";
   test?: boolean;
   input: Array<{
-    avatarId?: string;
-    avatarSettings?: {
-      horizontalAlign?: "left" | "center" | "right";
-      scale?: number;
-      style?: "rectangular" | "circle" | "square";
-      seamless?: boolean;
-    };
-    backgroundId?: string;
-    backgroundColor?: string;
+    /** Synthesia avatar ID, e.g. "anna_costume1_cameraA" */
+    avatar: string;
+    /** The spoken text for this slide */
+    scriptText: string;
+    /** Background ID or colour string, e.g. "off_white" or "#0f172a" */
+    background?: string;
     voiceId?: string;
     voiceStyle?: string;
-    script: string;
-    scriptType?: "text" | "ssml";
   }>;
 }
 

@@ -476,11 +476,10 @@ export const synthesiaRouter = router({
         test: z.boolean().default(true),
         input: z.array(
           z.object({
-            avatarId: z.string().optional(),
-            script: z.string().min(1),
+            avatar: z.string(),
+            scriptText: z.string().min(1),
             voiceId: z.string().optional(),
-            backgroundId: z.string().optional(),
-            backgroundColor: z.string().optional(),
+            background: z.string().optional(),
           })
         ),
       })
@@ -489,7 +488,18 @@ export const synthesiaRouter = router({
       const { synthesiaService } = await import(
         "../services/synthesia.service"
       );
-      return synthesiaService.createVideo(input);
+      // This is a generic passthrough; we must remap the input fields
+      // to match the new Synthesia v2 schema.
+      const remappedInput = {
+        ...input,
+        input: input.input.map((i) => ({
+          avatar: i.avatarId ?? "anna_costume1_cameraA",
+          scriptText: i.script,
+          background: i.backgroundColor ?? i.backgroundId ?? "off_white",
+          voiceId: i.voiceId,
+        })),
+      };
+      return synthesiaService.createVideo(remappedInput);
     }),
 });
 

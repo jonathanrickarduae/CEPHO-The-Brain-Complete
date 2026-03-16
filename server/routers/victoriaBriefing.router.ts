@@ -333,11 +333,10 @@ export const victoriasBriefRouter = router({
           test: true, // Use test mode to avoid billing during development
           input: [
             {
-              // Talia (EXPRESS-1) — valid Synthesia stock avatar ID
-              avatarId:
-                input.avatarId ?? "b3d74452-7011-4e8e-b3bf-12f7406f8f22",
-              script: script.slice(0, 1500), // Synthesia limit
-              backgroundColor: "#0f172a",
+              // anna_costume1_cameraA — confirmed working Synthesia stock avatar
+              avatar: input.avatarId ?? "anna_costume1_cameraA",
+              scriptText: script.slice(0, 1500), // Synthesia v2: scriptText not script
+              background: "off_white", // Synthesia v2: background not backgroundColor
             },
           ],
         });
@@ -429,6 +428,40 @@ export const victoriasBriefRouter = router({
         }
 
         const buffer = await response.arrayBuffer();
+
+        // Upload to Supabase Storage so mobile browsers can play a real HTTPS URL
+        // (iOS Safari cannot play data: URIs in <audio> elements)
+        const supabaseUrl = process.env.SUPABASE_URL;
+        const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+        if (supabaseUrl && supabaseKey) {
+          try {
+            const fileName = `audio/victoria-briefing-${Date.now()}.mp3`;
+            const uploadRes = await fetch(
+              `${supabaseUrl}/storage/v1/object/documents/${fileName}`,
+              {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${supabaseKey}`,
+                  apikey: supabaseKey,
+                  "Content-Type": "audio/mpeg",
+                },
+                body: buffer,
+              }
+            );
+            if (uploadRes.ok) {
+              const publicUrl = `${supabaseUrl}/storage/v1/object/public/documents/${fileName}`;
+              return {
+                success: true,
+                audioUrl: publicUrl,
+                message: "Audio generated",
+              };
+            }
+          } catch {
+            // Fall through to base64 fallback
+          }
+        }
+
+        // Fallback: base64 data URI (works on desktop, may fail on iOS)
         const base64 = Buffer.from(buffer).toString("base64");
         return {
           success: true,
