@@ -488,18 +488,8 @@ export const synthesiaRouter = router({
       const { synthesiaService } = await import(
         "../services/synthesia.service"
       );
-      // This is a generic passthrough; we must remap the input fields
-      // to match the new Synthesia v2 schema.
-      const remappedInput = {
-        ...input,
-        input: input.input.map((i) => ({
-          avatar: i.avatarId ?? "anna_costume1_cameraA",
-          scriptText: i.script,
-          background: i.backgroundColor ?? i.backgroundId ?? "off_white",
-          voiceId: i.voiceId,
-        })),
-      };
-      return synthesiaService.createVideo(remappedInput);
+      // Fields already match the v2 schema — pass through directly.
+      return synthesiaService.createVideo(input);
     }),
 });
 
