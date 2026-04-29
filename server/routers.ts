@@ -77,6 +77,7 @@ import { persephoneRagRouter } from "./routers/persephoneRag.router";
 import { scheduledReportsRouter } from "./routers/scheduledReports.router";
 import { promptVersionsRouter } from "./routers/promptVersions.router";
 import { agent1Router } from "./routers/agent1.router";
+import { smeIntelligenceRouter } from "./routers/smeIntelligence.router";
 import {
   businessPlanReviewRouter as businessPlanReviewRealRouter,
   collaborativeReviewRouter as collaborativeReviewRealRouter,
@@ -279,6 +280,8 @@ export const appRouter = router({
   promptVersions: promptVersionsRouter,
   // ─── Agent1 Personal AI System ─────────────────────────────────────────────
   agent1: agent1Router,
+  // ─── SME Intelligence Layer ─────────────────────────────────────────────────
+  smeIntelligence: smeIntelligenceRouter,
 });
 
 export type AppRouter = typeof appRouter;

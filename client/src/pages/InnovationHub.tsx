@@ -45,6 +45,11 @@ import {
   Sparkles,
   Brain,
   Users,
+  Zap,
+  AlertCircle,
+  CheckCircle2,
+  Eye,
+  Loader2,
 } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 
@@ -217,6 +222,21 @@ export default function InnovationHub() {
       toast.success("Action created! View it in Chief of Staff → Tasks.");
     },
     onError: error => toast.error(`Failed to create action: ${error.message}`),
+  });
+
+  // SME Intelligence Feed
+  const [smeActiveTab, setSmeActiveTab] = useState<"pending" | "assessed" | "approved">("pending");
+  const { data: smeSubmissionsData, refetch: refetchSmeSubmissions } =
+    trpc.smeIntelligence.list.useQuery({ status: smeActiveTab, limit: 20 });
+  const { data: smeStats, refetch: refetchSmeStats } =
+    trpc.smeIntelligence.getStats.useQuery();
+  const assessSmeMutation = trpc.smeIntelligence.assess.useMutation({
+    onSuccess: () => {
+      toast.success("Agent1 assessed the SME idea!");
+      refetchSmeSubmissions();
+      refetchSmeStats();
+    },
+    onError: (error) => toast.error(error.message),
   });
 
   // Flywheel stats and stage advancement
@@ -958,6 +978,157 @@ export default function InnovationHub() {
             )}
           </div>
         </div>
+
+        {/* SME Intelligence Feed */}
+        <Card className="bg-card/50 border-border/50">
+          <CardHeader>
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-purple-400" />
+                  SME Intelligence Feed
+                </CardTitle>
+                <CardDescription>
+                  Ideas surfaced by AI SME agents — {smeStats?.total ?? 0} total submissions
+                </CardDescription>
+              </div>
+              <div className="flex gap-3 text-sm">
+                <span className="flex items-center gap-1 text-yellow-400">
+                  <AlertCircle className="h-4 w-4" />
+                  {smeStats?.pending ?? 0} pending
+                </span>
+                <span className="flex items-center gap-1 text-primary">
+                  <Eye className="h-4 w-4" />
+                  {smeStats?.assessed ?? 0} assessed
+                </span>
+                <span className="flex items-center gap-1 text-green-400">
+                  <CheckCircle2 className="h-4 w-4" />
+                  {smeStats?.verdicts?.integrate_now ?? 0} integrate now
+                </span>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="flex gap-1 mb-4">
+              {(["pending", "assessed", "approved"] as const).map(tab => (
+                <button
+                  key={tab}
+                  onClick={() => setSmeActiveTab(tab)}
+                  className={`px-3 py-1 rounded-full text-xs font-medium capitalize transition-colors ${
+                    smeActiveTab === tab
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+            {!smeSubmissionsData?.submissions?.length ? (
+              <div className="text-center py-8">
+                <Users className="h-12 w-12 mx-auto mb-3 text-muted-foreground opacity-40" />
+                <p className="text-muted-foreground text-sm">
+                  No SME submissions yet. Go to the AI SMEs page and run an Intelligence Scan to populate this feed.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {smeSubmissionsData.submissions.map(sub => (
+                  <div
+                    key={sub.id}
+                    className="border border-border/50 rounded-lg p-4 bg-background/30 hover:bg-background/50 transition-colors"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                          <span className="text-xs font-medium text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded-full">
+                            {sub.expertName}
+                          </span>
+                          {sub.cephoArea && (
+                            <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
+                              {sub.cephoArea}
+                            </span>
+                          )}
+                          {sub.agent1Verdict && (
+                            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                              sub.agent1Verdict === "integrate_now"
+                                ? "bg-green-500/20 text-green-400"
+                                : sub.agent1Verdict === "explore_further"
+                                ? "bg-yellow-500/20 text-yellow-400"
+                                : sub.agent1Verdict === "archive"
+                                ? "bg-gray-500/20 text-muted-foreground"
+                                : "bg-blue-500/20 text-blue-400"
+                            }`}>
+                              {sub.agent1Verdict?.replace(/_/g, " ")}
+                            </span>
+                          )}
+                        </div>
+                        <p className="font-medium text-sm text-foreground">{sub.title}</p>
+                        <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{sub.description}</p>
+                        {sub.toolName && (
+                          <p className="text-xs text-primary mt-1">
+                            Tool: {sub.toolName}
+                            {sub.toolUrl && (
+                              <a href={sub.toolUrl} target="_blank" rel="noopener noreferrer" className="ml-1 underline">
+                                (link)
+                              </a>
+                            )}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-1 shrink-0">
+                        {sub.status === "pending" && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="text-xs h-7"
+                            onClick={() => assessSmeMutation.mutate({ submissionId: sub.id })}
+                            disabled={assessSmeMutation.isPending && assessSmeMutation.variables?.submissionId === sub.id}
+                          >
+                            {assessSmeMutation.isPending && assessSmeMutation.variables?.submissionId === sub.id ? (
+                              <Loader2 className="h-3 w-3 animate-spin" />
+                            ) : (
+                              <><Brain className="h-3 w-3 mr-1" />Assess</>
+                            )}
+                          </Button>
+                        )}
+                        {sub.agent1Verdict === "integrate_now" && (
+                          <Button
+                            size="sm"
+                            className="text-xs h-7 bg-green-600 hover:bg-green-700 text-white"
+                            onClick={() =>
+                              captureIdeaMutation.mutate({
+                                title: sub.title,
+                                description: sub.description,
+                                source: "sme",
+                                category: sub.cephoArea?.toLowerCase() ?? "technology",
+                              })
+                            }
+                            disabled={captureIdeaMutation.isPending}
+                          >
+                            <Zap className="h-3 w-3 mr-1" />Promote
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                    {sub.agent1Assessment && (() => {
+                      let parsed: Record<string, unknown> | null = null;
+                      try { parsed = JSON.parse(sub.agent1Assessment as string); } catch {}
+                      return parsed?.verdictReason ? (
+                        <div className="mt-2 pt-2 border-t border-border/30">
+                          <p className="text-xs text-muted-foreground">
+                            <span className="font-medium text-foreground">Agent1:</span>{" "}
+                            {parsed.verdictReason as string}
+                          </p>
+                        </div>
+                      ) : null;
+                    })()}
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </PageShell>
   );

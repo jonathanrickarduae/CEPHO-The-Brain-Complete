@@ -5416,3 +5416,60 @@ export const agent1Settings = pgTable("agent1_settings", {
 });
 export type Agent1Settings = typeof agent1Settings.$inferSelect;
 export type InsertAgent1Settings = typeof agent1Settings.$inferInsert;
+
+// ─── SME Intelligence Layer ──────────────────────────────────────────────────
+
+/**
+ * SME Idea Submissions
+ * Tracks enhancement ideas submitted by AI SME agents for CEPHO improvement.
+ * Each record links a specific SME expert (by expertId from ai-experts.data.ts)
+ * to an innovation idea, with Agent1's assessment stored inline.
+ */
+export const smeIdeaSubmissions = pgTable("sme_idea_submissions", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId").notNull(),
+  expertId: varchar("expertId", { length: 50 }).notNull(),
+  expertName: varchar("expertName", { length: 200 }).notNull(),
+  expertCategory: varchar("expertCategory", { length: 100 }).notNull(),
+  title: varchar("title", { length: 300 }).notNull(),
+  description: text("description").notNull(),
+  sourceUrl: text("sourceUrl"),
+  sourceTitle: varchar("sourceTitle", { length: 300 }),
+  cephoArea: varchar("cephoArea", { length: 100 }),
+  toolName: varchar("toolName", { length: 200 }),
+  toolUrl: text("toolUrl"),
+  confidenceScore: real("confidenceScore"),
+  status: text("status").default("pending").notNull(),
+  agent1Assessment: text("agent1Assessment"),
+  agent1Verdict: text("agent1Verdict"),
+  agent1AssessedAt: timestamp("agent1AssessedAt"),
+  promotedToIdeaId: integer("promotedToIdeaId"),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+export type SmeIdeaSubmission = typeof smeIdeaSubmissions.$inferSelect;
+export type InsertSmeIdeaSubmission = typeof smeIdeaSubmissions.$inferInsert;
+
+/**
+ * SME Activity Log
+ * Tracks when each SME agent last ran an intelligence scan and their contribution stats.
+ */
+export const smeActivityLog = pgTable("sme_activity_log", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId").notNull(),
+  expertId: varchar("expertId", { length: 50 }).notNull(),
+  expertName: varchar("expertName", { length: 200 }).notNull(),
+  activityType: text("activityType").notNull(),
+  summary: text("summary"),
+  ideasSubmitted: integer("ideasSubmitted").default(0).notNull(),
+  ideasApproved: integer("ideasApproved").default(0).notNull(),
+  searchQueries: json("searchQueries"),
+  sourcesScanned: json("sourcesScanned"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type SmeActivityLog = typeof smeActivityLog.$inferSelect;
+export type InsertSmeActivityLog = typeof smeActivityLog.$inferInsert;
