@@ -690,6 +690,137 @@ const ideasRouter = router({
     }),
 });
 
+// ─── Orchestrate Router (Agent1 delegates to specialist agents) ───────────────
+const orchestrateRouter = router({
+  /**
+   * Agent1 analyses the user's request, picks the best specialist agent,
+   * runs the task, and returns a synthesised response.
+   */
+  delegate: aiProcedure
+    .input(
+      z.object({
+        task: z.string().min(1).max(4000),
+        context: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const userId = ctx.user.id;
+      const identity = await getIdentityProfile(userId);
+
+      // Step 1 — Agent1 picks the best agent for this task
+      const routingPrompt = `You are Agent1, the Chief of Staff for CEPHO. You have access to 51 specialist agents.
+Given the user's task, choose the SINGLE best agent to handle it.
+Respond with a JSON object: { "agentId": "<agent_key>", "agentName": "<name>", "reason": "<one sentence>" }
+
+Available agents (key → name):
+email_composer → Email Composer
+meeting_summariser → Meeting Summariser
+stakeholder_comms → Stakeholder Communications
+proposal_writer → Proposal Writer
+market_analyst → Market Analyst
+financial_analyst → Financial Analyst
+competitive_intelligence → Competitive Intelligence
+data_interpreter → Data Interpreter
+risk_assessor → Risk Assessor
+trend_spotter → Trend Spotter
+research_synthesiser → Research Synthesiser
+kpi_tracker → KPI Tracker
+calendar_manager → Calendar Manager
+task_manager → Task Manager
+inbox_manager → Inbox Manager
+document_organiser → Document Organiser
+expense_tracker → Expense Tracker
+travel_coordinator → Travel Coordinator
+feedback_collector → Feedback Collector
+performance_tracker → Performance Tracker
+meeting_preparer → Meeting Preparer
+daily_summariser → Daily Summariser
+goal_strategist → Goal Strategist
+decision_analyst → Decision Analyst
+scenario_planner → Scenario Planner
+resource_allocator → Resource Allocator
+innovation_scout → Innovation Scout
+strategic_advisor → Strategic Advisor
+knowledge_manager → Knowledge Manager
+workflow_automator → Workflow Automator
+process_documenter → Process Documenter
+qa_specialist → QA Specialist
+workflow_orchestrator → Workflow Orchestrator
+integration_specialist → Integration Specialist
+process_optimiser → Process Optimiser
+continuous_learner → Continuous Learner
+best_practice_researcher → Best Practice Researcher
+morning_briefing_specialist → Morning Briefing Specialist
+blog_writer → Blog Writer
+social_media_manager → Social Media Manager
+video_scriptwriter → Video Scriptwriter
+case_study_writer → Case Study Writer
+seo_specialist → SEO Specialist
+brand_voice_guardian → Brand Voice Guardian
+newsletter_editor → Newsletter Editor
+linkedin_manager → LinkedIn Manager
+press_release_writer → Press Release Writer
+crisis_comms → Crisis Communications
+report_writer → Report Writer
+
+User identity context: ${identity?.identityMd?.slice(0, 200) ?? "Not set"}
+User task: ${input.task}`;
+
+      const routingResult = await invokeLLM({
+        messages: [
+          { role: "system", content: routingPrompt },
+          { role: "user", content: input.task },
+        ],
+        response_format: { type: "json_object" },
+      });
+      const routing = JSON.parse(
+        String(routingResult.choices[0]?.message?.content ?? "{}")
+      ) as { agentId: string; agentName: string; reason: string };
+
+      // Step 2 — Run the task with the chosen agent via invokeLLM
+      const agentSystemPrompts: Record<string, string> = {
+        email_composer: "You are an expert Email Composer. Write clear, professional, and effective emails.",
+        meeting_summariser: "You are a Meeting Summariser. Extract key decisions, action items, and insights from meeting content.",
+        market_analyst: "You are a Market Analyst. Provide data-driven market insights, trends, and competitive analysis.",
+        financial_analyst: "You are a Financial Analyst. Analyse financial data, identify trends, and provide investment insights.",
+        decision_analyst: "You are a Decision Analyst. Break down complex decisions using structured frameworks.",
+        strategic_advisor: "You are a Strategic Advisor. Provide high-level strategic guidance aligned with long-term goals.",
+        goal_strategist: "You are a Goal Strategist. Help set, prioritise, and achieve meaningful goals.",
+        risk_assessor: "You are a Risk Assessor. Identify, quantify, and mitigate risks in plans and decisions.",
+        research_synthesiser: "You are a Research Synthesiser. Gather, analyse, and synthesise information into clear insights.",
+        task_manager: "You are a Task Manager. Organise, prioritise, and track tasks for maximum productivity.",
+      };
+      const agentPrompt =
+        agentSystemPrompts[routing.agentId] ??
+        `You are ${routing.agentName}, a specialist AI agent. Complete the user's task with expertise and precision.`;
+
+      const taskResult = await invokeLLM({
+        messages: [
+          { role: "system", content: agentPrompt },
+          {
+            role: "user",
+            content: input.context
+              ? `Context: ${input.context}\n\nTask: ${input.task}`
+              : input.task,
+          },
+        ],
+      });
+      const agentResponse = String(
+        taskResult.choices[0]?.message?.content ?? "No response generated."
+      );
+
+      // Step 3 — Agent1 synthesises and returns
+      return {
+        delegatedTo: {
+          agentId: routing.agentId,
+          agentName: routing.agentName,
+          reason: routing.reason,
+        },
+        response: agentResponse,
+      };
+    }),
+});
+
 // ─── Combined Agent1 Router ───────────────────────────────────────────────────
 export const agent1Router = router({
   chat: chatRouter,
@@ -699,4 +830,5 @@ export const agent1Router = router({
   reflections: reflectionRouter,
   settings: settingsRouter,
   ideas: ideasRouter,
+  orchestrate: orchestrateRouter,
 });

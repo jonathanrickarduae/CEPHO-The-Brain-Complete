@@ -11,6 +11,7 @@ import {
   Trash2,
   Copy,
   Check,
+  Zap,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -138,6 +139,39 @@ export default function Agent1ChatPage() {
     },
   });
 
+  const delegateMutation = trpc.agent1.orchestrate.delegate.useMutation({
+    onSuccess: data => {
+      setLocalMessages(prev => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          role: "assistant",
+          content: `**Delegated to ${data.delegatedTo.agentName}** \u2014 *${data.delegatedTo.reason}*\n\n${data.response}`,
+          operatingMode: operatingMode,
+          responseLevel: responseLevel,
+          createdAt: new Date().toISOString(),
+        },
+      ]);
+      toast.success(`Delegated to ${data.delegatedTo.agentName}`);
+    },
+    onError: err => toast.error(err.message ?? "Delegation failed"),
+  });
+
+  const handleDelegate = () => {
+    if (!message.trim() || delegateMutation.isPending) return;
+    const userMsg: Message = {
+      id: Date.now(),
+      role: "user",
+      content: `[Delegate to specialist] ${message.trim()}`,
+      operatingMode,
+      responseLevel,
+      createdAt: new Date().toISOString(),
+    };
+    setLocalMessages(prev => [...prev, userMsg]);
+    delegateMutation.mutate({ task: message.trim() });
+    setMessage("");
+  };
+
   const clearMutation = trpc.agent1.chat.clear.useMutation({
     onSuccess: () => {
       setLocalMessages([]);
@@ -259,6 +293,19 @@ export default function Agent1ChatPage() {
           >
             <Users className="h-3 w-3" />
             Council {surfaceCouncil ? "On" : "Off"}
+          </Button>
+
+          {/* Delegate to Specialist Agent */}
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-1.5 text-xs bg-amber-500/10 text-amber-400 border-amber-500/20 hover:bg-amber-500/20"
+            onClick={handleDelegate}
+            disabled={!message.trim() || delegateMutation.isPending}
+            title="Let Agent1 pick the best specialist agent for this task"
+          >
+            <Zap className="h-3 w-3" />
+            {delegateMutation.isPending ? "Delegating..." : "Delegate"}
           </Button>
 
           <div className="flex-1" />
