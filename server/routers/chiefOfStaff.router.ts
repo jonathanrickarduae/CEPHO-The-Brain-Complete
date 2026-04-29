@@ -371,4 +371,125 @@ Score this task on a scale of 1-10 for quality and completeness. Respond with JS
         .where(and(eq(tasks.id, input.taskId), eq(tasks.userId, ctx.user.id)));
       return result;
     }),
+
+  /**
+   * Generate morning task allocation items.
+   * Returns a prioritised list of items from tasks and projects
+   * for the user to quickly assign (I'll do it / Chief of Staff / Defer).
+   */
+  generateMorningAllocation: aiProcedure.query(async ({ ctx }) => {
+    const userId = ctx.user.id;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const [pendingTasks, inProgressTasks, activeProjects] = await Promise.all([
+      db
+        .select()
+        .from(tasks)
+        .where(and(eq(tasks.userId, userId), eq(tasks.status, "not_started")))
+        .orderBy(desc(tasks.createdAt))
+        .limit(15),
+      db
+        .select()
+        .from(tasks)
+        .where(and(eq(tasks.userId, userId), eq(tasks.status, "in_progress")))
+        .orderBy(desc(tasks.updatedAt))
+        .limit(5),
+      db
+        .select()
+        .from(projects)
+        .where(and(eq(projects.userId, userId), eq(projects.status, "active")))
+        .limit(5),
+    ]);
+
+    const allItems = [
+      ...inProgressTasks.map(t => ({
+        id: `task-${t.id}`,
+        type: "in_progress" as const,
+        title: t.title,
+        description: t.description ?? "",
+        priority: (t.priority ?? "medium") as "low" | "medium" | "high" | "urgent",
+        source: "task" as const,
+        dueDate: t.dueDate?.toISOString() ?? null,
+      })),
+      ...pendingTasks.map(t => ({
+        id: `task-${t.id}`,
+        type: "pending" as const,
+        title: t.title,
+        description: t.description ?? "",
+        priority: (t.priority ?? "medium") as "low" | "medium" | "high" | "urgent",
+        source: "task" as const,
+        dueDate: t.dueDate?.toISOString() ?? null,
+      })),
+      ...activeProjects.map(p => ({
+        id: `project-${p.id}`,
+        type: "project" as const,
+        title: `Review: ${p.name}`,
+        description: p.description ?? "",
+        priority: "medium" as const,
+        source: "project" as const,
+        dueDate: null,
+      })),
+    ];
+
+    const openai = getOpenAIClient();
+    const itemSummary = allItems
+      .slice(0, 12)
+      .map((item, i) => `${i + 1}. [${item.priority.toUpperCase()}] ${item.title} (id: ${item.id})`)
+      .join("\n");
+
+    const completion = await openai.chat.completions.create({
+      model: getModelForTask("score"),
+      messages: [
+        {
+          role: "system",
+          content: `You are Agent1, the Chief of Staff. Analyse these tasks and return a JSON object with key "items" containing an array. For each item return: { "id": "...", "recommendation": "user" | "cos" | "defer", "reason": "one short sentence" }. Prioritise urgent/high items for the user. Routine/administrative items should go to Chief of Staff (cos). Low priority items should be deferred.`,
+        },
+        {
+          role: "user",
+          content: `Today is ${today.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" })}. Items:\n${itemSummary}\n\nReturn JSON only.`,
+        },
+      ],
+      max_tokens: 800,
+      temperature: 0.3,
+      response_format: { type: "json_object" },
+    });
+
+    void logAiUsage(
+      userId,
+      "chiefOfStaff.generateMorningAllocation",
+      completion.model,
+      completion.usage ?? null
+    );
+
+    let recommendations: Array<{ id: string; recommendation: string; reason: string }> = [];
+    try {
+      const parsed = JSON.parse(completion.choices[0]?.message?.content ?? "{}");
+      recommendations = Array.isArray(parsed)
+        ? parsed
+        : Array.isArray(parsed.items)
+          ? parsed.items
+          : Array.isArray(parsed.recommendations)
+            ? parsed.recommendations
+            : [];
+    } catch {
+      // Fall back to no recommendations
+    }
+
+    const enrichedItems = allItems.slice(0, 12).map(item => {
+      const rec = recommendations.find(r => r.id === item.id);
+      return {
+        ...item,
+        recommendation: ((rec?.recommendation ?? "user") as "user" | "cos" | "defer"),
+        reason: rec?.reason ?? "",
+      };
+    });
+
+    return {
+      date: today.toISOString(),
+      items: enrichedItems,
+      totalPending: pendingTasks.length,
+      totalInProgress: inProgressTasks.length,
+    };
+  }),
 });
