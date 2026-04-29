@@ -108,7 +108,7 @@ const chatRouter = router({
         .orderBy(desc(agent1Messages.createdAt))
         .limit(20);
 
-      const historyMessages = history.reverse().map((m) => ({
+      const historyMessages = history.reverse().map(m => ({
         role: m.role as "user" | "assistant",
         content: m.content,
       }));
@@ -120,7 +120,10 @@ const chatRouter = router({
           const councilContext = identity
             ? `User identity: ${identity.identityMd?.slice(0, 200) ?? "not set"}`
             : "No identity profile loaded.";
-          const councilPrompt = buildCouncilPrompt(input.message, councilContext);
+          const councilPrompt = buildCouncilPrompt(
+            input.message,
+            councilContext
+          );
           const councilResult = await invokeLLM({
             messages: [
               { role: "system", content: councilPrompt },
@@ -128,7 +131,9 @@ const chatRouter = router({
             ],
             response_format: { type: "json_object" },
           });
-          const raw = String(councilResult.choices[0]?.message?.content ?? "{}");
+          const raw = String(
+            councilResult.choices[0]?.message?.content ?? "{}"
+          );
           councilData = JSON.parse(raw) as CouncilData;
         } catch {
           // Council failure is non-fatal
@@ -154,8 +159,10 @@ const chatRouter = router({
         ],
       });
 
-      const assistantContent =
-        String(completion.choices[0]?.message?.content ?? "I was unable to generate a response.");
+      const assistantContent = String(
+        completion.choices[0]?.message?.content ??
+          "I was unable to generate a response."
+      );
 
       // Save assistant message
       await db.insert(agent1Messages).values({
@@ -406,7 +413,7 @@ const reflectionRouter = router({
 
     const summary = messages
       .reverse()
-      .map((m) => `[${m.role.toUpperCase()}]: ${m.content.slice(0, 300)}`)
+      .map(m => `[${m.role.toUpperCase()}]: ${m.content.slice(0, 300)}`)
       .join("\n");
 
     const reflectionPrompt = buildReflectionPrompt(summary);

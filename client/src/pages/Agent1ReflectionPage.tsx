@@ -41,8 +41,7 @@ export default function Agent1ReflectionPage() {
   const [generating, setGenerating] = useState(false);
   const [userNotes, setUserNotes] = useState("");
 
-  const { data: reflections, refetch } =
-    trpc.agent1.reflection.list.useQuery();
+  const { data: reflections, refetch } = trpc.agent1.reflection.list.useQuery();
 
   const generateMutation = trpc.agent1.reflection.generate.useMutation({
     onMutate: () => setGenerating(true),
@@ -51,7 +50,7 @@ export default function Agent1ReflectionPage() {
       setGenerating(false);
       refetch();
     },
-    onError: (err) => {
+    onError: err => {
       toast.error(err.message);
       setGenerating(false);
     },
@@ -62,7 +61,7 @@ export default function Agent1ReflectionPage() {
       toast.success("Patch approved and applied to your system prompt");
       refetch();
     },
-    onError: (err) => toast.error(err.message),
+    onError: err => toast.error(err.message),
   });
 
   const rejectMutation = trpc.agent1.reflection.reject.useMutation({
@@ -70,7 +69,7 @@ export default function Agent1ReflectionPage() {
       toast.success("Patch rejected");
       refetch();
     },
-    onError: (err) => toast.error(err.message),
+    onError: err => toast.error(err.message),
   });
 
   const handleGenerate = () => {
@@ -88,7 +87,9 @@ export default function Agent1ReflectionPage() {
         <div className="bg-card border border-border rounded-2xl p-4 flex flex-col gap-3">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-sm font-semibold">Generate Weekly Reflection</p>
+              <p className="text-sm font-semibold">
+                Generate Weekly Reflection
+              </p>
               <p className="text-xs text-muted-foreground mt-0.5">
                 Agent1 will analyse your recent conversations, decisions, and
                 training progress, then propose a system-prompt patch. You must
@@ -111,7 +112,7 @@ export default function Agent1ReflectionPage() {
           </div>
           <Textarea
             value={userNotes}
-            onChange={(e) => setUserNotes(e.target.value)}
+            onChange={e => setUserNotes(e.target.value)}
             placeholder="Optional: Add context for this week's reflection — what went well, what was hard, what you want to focus on..."
             rows={3}
             className="text-sm resize-none"
@@ -184,7 +185,7 @@ export default function Agent1ReflectionPage() {
                           variant="outline"
                           size="sm"
                           className="gap-1 text-xs text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10"
-                          onClick={(e) => {
+                          onClick={e => {
                             e.stopPropagation();
                             approveMutation.mutate({ id: r.id });
                           }}
@@ -197,7 +198,7 @@ export default function Agent1ReflectionPage() {
                           variant="outline"
                           size="sm"
                           className="gap-1 text-xs text-red-400 border-red-500/30 hover:bg-red-500/10"
-                          onClick={(e) => {
+                          onClick={e => {
                             e.stopPropagation();
                             rejectMutation.mutate({ id: r.id });
                           }}

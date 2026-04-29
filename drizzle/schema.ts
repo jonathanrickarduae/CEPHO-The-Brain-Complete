@@ -5350,7 +5350,8 @@ export const agent1IdentityProfiles = pgTable("agent1_identity_profiles", {
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 export type Agent1IdentityProfile = typeof agent1IdentityProfiles.$inferSelect;
-export type InsertAgent1IdentityProfile = typeof agent1IdentityProfiles.$inferInsert;
+export type InsertAgent1IdentityProfile =
+  typeof agent1IdentityProfiles.$inferInsert;
 
 export const agent1DecisionLog = pgTable("agent1_decision_log", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
@@ -5366,7 +5367,8 @@ export const agent1DecisionLog = pgTable("agent1_decision_log", {
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 export type Agent1DecisionLogEntry = typeof agent1DecisionLog.$inferSelect;
-export type InsertAgent1DecisionLogEntry = typeof agent1DecisionLog.$inferInsert;
+export type InsertAgent1DecisionLogEntry =
+  typeof agent1DecisionLog.$inferInsert;
 
 export const agent1TrainingProgress = pgTable("agent1_training_progress", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
@@ -5379,7 +5381,8 @@ export const agent1TrainingProgress = pgTable("agent1_training_progress", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 export type Agent1TrainingProgress = typeof agent1TrainingProgress.$inferSelect;
-export type InsertAgent1TrainingProgress = typeof agent1TrainingProgress.$inferInsert;
+export type InsertAgent1TrainingProgress =
+  typeof agent1TrainingProgress.$inferInsert;
 
 export const agent1Reflections = pgTable("agent1_reflections", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
@@ -5398,10 +5401,16 @@ export type InsertAgent1Reflection = typeof agent1Reflections.$inferInsert;
 export const agent1Settings = pgTable("agent1_settings", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull().unique(),
-  defaultResponseLevel: text("defaultResponseLevel").default("Practical").notNull(),
-  defaultOperatingMode: text("defaultOperatingMode").default("Life Optimiser").notNull(),
+  defaultResponseLevel: text("defaultResponseLevel")
+    .default("Practical")
+    .notNull(),
+  defaultOperatingMode: text("defaultOperatingMode")
+    .default("Life Optimiser")
+    .notNull(),
   systemPromptPatch: text("systemPromptPatch"),
-  showCouncilByDefault: boolean("showCouncilByDefault").default(false).notNull(),
+  showCouncilByDefault: boolean("showCouncilByDefault")
+    .default(false)
+    .notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });

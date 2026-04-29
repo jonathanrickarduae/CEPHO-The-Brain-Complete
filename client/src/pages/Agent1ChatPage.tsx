@@ -45,10 +45,19 @@ const MODE_COLORS: Record<string, string> = {
   "Research Analyst": "bg-amber-500/10 text-amber-400 border-amber-500/20",
   "Emotional Translator": "bg-pink-500/10 text-pink-400 border-pink-500/20",
   Simplifier: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
-  "Accountability Partner": "bg-orange-500/10 text-orange-400 border-orange-500/20",
+  "Accountability Partner":
+    "bg-orange-500/10 text-orange-400 border-orange-500/20",
 };
 
-const COUNCIL_AGENTS = ["ARIA", "ABEL", "LEX", "SAFI", "LUNA", "INDI", "ODIN"] as const;
+const COUNCIL_AGENTS = [
+  "ARIA",
+  "ABEL",
+  "LEX",
+  "SAFI",
+  "LUNA",
+  "INDI",
+  "ODIN",
+] as const;
 const COUNCIL_DESCRIPTIONS: Record<string, string> = {
   ARIA: "Research & Analysis",
   ABEL: "Protection & Risk",
@@ -108,8 +117,8 @@ export default function Agent1ChatPage() {
   }, [localMessages, scrollToBottom]);
 
   const sendMutation = trpc.agent1.chat.send.useMutation({
-    onSuccess: (data) => {
-      setLocalMessages((prev) => [
+    onSuccess: data => {
+      setLocalMessages(prev => [
         ...prev,
         {
           id: Date.now() + 1,
@@ -123,9 +132,9 @@ export default function Agent1ChatPage() {
       ]);
       refetchHistory();
     },
-    onError: (err) => {
+    onError: err => {
       toast.error(err.message ?? "Failed to send message");
-      setLocalMessages((prev) => prev.slice(0, -1));
+      setLocalMessages(prev => prev.slice(0, -1));
     },
   });
 
@@ -148,7 +157,7 @@ export default function Agent1ChatPage() {
       createdAt: new Date().toISOString(),
     };
 
-    setLocalMessages((prev) => [...prev, userMsg]);
+    setLocalMessages(prev => [...prev, userMsg]);
     setMessage("");
 
     sendMutation.mutate({
@@ -198,7 +207,7 @@ export default function Agent1ChatPage() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-52">
-              {OPERATING_MODES.map((mode) => (
+              {OPERATING_MODES.map(mode => (
                 <DropdownMenuItem
                   key={mode}
                   onClick={() => setOperatingMode(mode)}
@@ -222,7 +231,7 @@ export default function Agent1ChatPage() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
-              {RESPONSE_LEVELS.map((level) => (
+              {RESPONSE_LEVELS.map(level => (
                 <DropdownMenuItem
                   key={level}
                   onClick={() => setResponseLevel(level)}
@@ -381,7 +390,7 @@ export default function Agent1ChatPage() {
 
                     {expandedCouncil === (msg.id ?? idx) && (
                       <div className="mt-2 grid grid-cols-1 gap-2">
-                        {COUNCIL_AGENTS.map((agent) => (
+                        {COUNCIL_AGENTS.map(agent => (
                           <div
                             key={agent}
                             className="bg-violet-500/5 border border-violet-500/15 rounded-xl px-3 py-2"
@@ -433,7 +442,7 @@ export default function Agent1ChatPage() {
           <Textarea
             ref={textareaRef}
             value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            onChange={e => setMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={`Message Agent1 in ${operatingMode} mode...`}
             className="flex-1 min-h-[52px] max-h-[200px] resize-none border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 text-sm p-0 placeholder:text-muted-foreground/50"

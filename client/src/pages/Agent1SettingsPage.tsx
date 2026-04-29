@@ -64,11 +64,31 @@ const CONSTITUTIONAL_ARTICLES = [
 
 const COCPIS_FIELDS = [
   { key: "context", label: "Context", placeholder: "What is the situation?" },
-  { key: "objective", label: "Objective", placeholder: "What do you want to achieve?" },
-  { key: "constraints", label: "Constraints", placeholder: "What limits or boundaries apply?" },
-  { key: "preferences", label: "Preferences", placeholder: "How do you prefer this to be handled?" },
-  { key: "importance", label: "Importance", placeholder: "Why does this matter?" },
-  { key: "successCriteria", label: "Success criteria", placeholder: "How will you know this worked?" },
+  {
+    key: "objective",
+    label: "Objective",
+    placeholder: "What do you want to achieve?",
+  },
+  {
+    key: "constraints",
+    label: "Constraints",
+    placeholder: "What limits or boundaries apply?",
+  },
+  {
+    key: "preferences",
+    label: "Preferences",
+    placeholder: "How do you prefer this to be handled?",
+  },
+  {
+    key: "importance",
+    label: "Importance",
+    placeholder: "Why does this matter?",
+  },
+  {
+    key: "successCriteria",
+    label: "Success criteria",
+    placeholder: "How will you know this worked?",
+  },
 ] as const;
 
 export default function Agent1SettingsPage() {
@@ -96,7 +116,7 @@ export default function Agent1SettingsPage() {
       setIsDirty(false);
       refetch();
     },
-    onError: (err) => toast.error(err.message),
+    onError: err => toast.error(err.message),
   });
 
   const handleSave = () => {
@@ -122,7 +142,7 @@ export default function Agent1SettingsPage() {
                 Default Operating Mode
               </label>
               <div className="flex flex-wrap gap-2">
-                {OPERATING_MODES.map((mode) => (
+                {OPERATING_MODES.map(mode => (
                   <button
                     key={mode}
                     onClick={() => {
@@ -147,7 +167,7 @@ export default function Agent1SettingsPage() {
                 Default Response Level
               </label>
               <div className="flex gap-2">
-                {RESPONSE_LEVELS.map((level) => (
+                {RESPONSE_LEVELS.map(level => (
                   <button
                     key={level}
                     onClick={() => {
@@ -176,7 +196,7 @@ export default function Agent1SettingsPage() {
               </div>
               <Switch
                 checked={showCouncil}
-                onCheckedChange={(v) => {
+                onCheckedChange={v => {
                   setShowCouncil(v);
                   setIsDirty(true);
                 }}
@@ -210,8 +230,8 @@ export default function Agent1SettingsPage() {
                 </label>
                 <Textarea
                   value={cocpisValues[key] ?? ""}
-                  onChange={(e) =>
-                    setCocpisValues((prev) => ({
+                  onChange={e =>
+                    setCocpisValues(prev => ({
                       ...prev,
                       [key]: e.target.value,
                     }))
@@ -228,8 +248,8 @@ export default function Agent1SettingsPage() {
             size="sm"
             className="mt-3 gap-1.5 text-xs"
             onClick={() => {
-              const text = COCPIS_FIELDS.filter(
-                ({ key }) => cocpisValues[key]?.trim()
+              const text = COCPIS_FIELDS.filter(({ key }) =>
+                cocpisValues[key]?.trim()
               )
                 .map(({ label, key }) => `**${label}:** ${cocpisValues[key]}`)
                 .join("\n");
@@ -248,7 +268,7 @@ export default function Agent1SettingsPage() {
             cannot be overridden by any conversation or instruction.
           </p>
           <div className="flex flex-col gap-3">
-            {CONSTITUTIONAL_ARTICLES.map((article) => {
+            {CONSTITUTIONAL_ARTICLES.map(article => {
               const Icon = article.icon;
               return (
                 <div

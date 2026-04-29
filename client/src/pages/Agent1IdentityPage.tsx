@@ -141,11 +141,11 @@ export default function Agent1IdentityPage() {
       setIsDirty(false);
       refetch();
     },
-    onError: (err) => toast.error(err.message),
+    onError: err => toast.error(err.message),
   });
 
   const handleChange = (value: string) => {
-    setDrafts((prev) => ({ ...prev, [activeTab]: value }));
+    setDrafts(prev => ({ ...prev, [activeTab]: value }));
     setIsDirty(true);
   };
 
@@ -160,7 +160,7 @@ export default function Agent1IdentityPage() {
   };
 
   const completedCount = PROFILE_TABS.filter(
-    (t) => drafts[t.id]?.trim().length > 0
+    t => drafts[t.id]?.trim().length > 0
   ).length;
 
   return (
@@ -184,7 +184,7 @@ export default function Agent1IdentityPage() {
               )}
             </div>
             <div className="flex gap-1">
-              {PROFILE_TABS.map((t) => (
+              {PROFILE_TABS.map(t => (
                 <div
                   key={t.id}
                   className={cn(
@@ -217,7 +217,7 @@ export default function Agent1IdentityPage() {
         <div className="grid grid-cols-[200px_1fr] gap-4">
           {/* Tab List */}
           <div className="flex flex-col gap-1">
-            {PROFILE_TABS.map((tab) => {
+            {PROFILE_TABS.map(tab => {
               const Icon = tab.icon;
               const hasContent = drafts[tab.id]?.trim().length > 0;
               return (
@@ -249,7 +249,7 @@ export default function Agent1IdentityPage() {
 
           {/* Editor */}
           <div className="bg-card border border-border rounded-2xl overflow-hidden flex flex-col">
-            {PROFILE_TABS.filter((t) => t.id === activeTab).map((tab) => {
+            {PROFILE_TABS.filter(t => t.id === activeTab).map(tab => {
               const Icon = tab.icon;
               return (
                 <div key={tab.id} className="flex flex-col h-full">
@@ -270,7 +270,7 @@ export default function Agent1IdentityPage() {
                   </p>
                   <Textarea
                     value={drafts[tab.id]}
-                    onChange={(e) => handleChange(e.target.value)}
+                    onChange={e => handleChange(e.target.value)}
                     placeholder={tab.placeholder}
                     className="flex-1 resize-none border-0 rounded-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 font-mono text-sm min-h-[400px] p-4"
                   />

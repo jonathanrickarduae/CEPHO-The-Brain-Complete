@@ -240,7 +240,7 @@ const REMAINING_WEEKS = [
   { week: 10, theme: "Communication Mastery", icon: Zap },
   { week: 11, theme: "Leadership & Influence", icon: Target },
   { week: 12, theme: "Integration & Evolution", icon: BookOpen },
-].map((w) => ({
+].map(w => ({
   ...w,
   color: "text-muted-foreground",
   bg: "bg-muted/30",
@@ -267,12 +267,12 @@ export default function Agent1TrainingPage() {
 
   const toggleMutation = trpc.agent1.training.toggle.useMutation({
     onSuccess: () => refetch(),
-    onError: (err) => toast.error(err.message),
+    onError: err => toast.error(err.message),
   });
 
   const saveNotesMutation = trpc.agent1.training.saveNotes.useMutation({
     onSuccess: () => toast.success("Notes saved"),
-    onError: (err) => toast.error(err.message),
+    onError: err => toast.error(err.message),
   });
 
   const getDayKey = (week: number, day: number) => `w${week}d${day}`;
@@ -313,9 +313,9 @@ export default function Agent1TrainingPage() {
 
         {/* Week List */}
         <div className="flex flex-col gap-3">
-          {ALL_WEEKS.map((week) => {
+          {ALL_WEEKS.map(week => {
             const weekDays = week.days;
-            const weekCompleted = weekDays.filter((d) =>
+            const weekCompleted = weekDays.filter(d =>
               completedDays.has(getDayKey(week.week, d.day))
             ).length;
             const isExpanded = expandedWeek === week.week;
@@ -328,9 +328,7 @@ export default function Agent1TrainingPage() {
                 {/* Week Header */}
                 <div
                   className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-muted/30 transition-colors"
-                  onClick={() =>
-                    setExpandedWeek(isExpanded ? null : week.week)
-                  }
+                  onClick={() => setExpandedWeek(isExpanded ? null : week.week)}
                 >
                   <div
                     className={cn(
@@ -380,7 +378,7 @@ export default function Agent1TrainingPage() {
                 {/* Days */}
                 {isExpanded && (
                   <div className="border-t border-border divide-y divide-border/50">
-                    {weekDays.map((d) => {
+                    {weekDays.map(d => {
                       const dayKey = getDayKey(week.week, d.day);
                       const done = completedDays.has(dayKey);
                       const isExpDay = expandedDay === dayKey;
@@ -394,9 +392,12 @@ export default function Agent1TrainingPage() {
                             }
                           >
                             <button
-                              onClick={(e) => {
+                              onClick={e => {
                                 e.stopPropagation();
-                                toggleMutation.mutate({ dayKey, completed: !done });
+                                toggleMutation.mutate({
+                                  dayKey,
+                                  completed: !done,
+                                });
                               }}
                               className="flex-shrink-0"
                             >
@@ -435,8 +436,8 @@ export default function Agent1TrainingPage() {
                               </div>
                               <Textarea
                                 value={notes[dayKey] ?? ""}
-                                onChange={(e) =>
-                                  setNotes((prev) => ({
+                                onChange={e =>
+                                  setNotes(prev => ({
                                     ...prev,
                                     [dayKey]: e.target.value,
                                   }))

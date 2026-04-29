@@ -84,7 +84,7 @@ export default function Agent1DecisionLogPage() {
       setOpen(false);
       refetch();
     },
-    onError: (err) => toast.error(err.message),
+    onError: err => toast.error(err.message),
   });
 
   const updateMutation = trpc.agent1.decisions.update.useMutation({
@@ -93,7 +93,7 @@ export default function Agent1DecisionLogPage() {
       setEditingId(null);
       refetch();
     },
-    onError: (err) => toast.error(err.message),
+    onError: err => toast.error(err.message),
   });
 
   const deleteMutation = trpc.agent1.decisions.delete.useMutation({
@@ -101,7 +101,7 @@ export default function Agent1DecisionLogPage() {
       toast.success("Decision deleted");
       refetch();
     },
-    onError: (err) => toast.error(err.message),
+    onError: err => toast.error(err.message),
   });
 
   const handleCreate = () => {
@@ -195,9 +195,7 @@ export default function Agent1DecisionLogPage() {
               {/* Header */}
               <div
                 className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-muted/30 transition-colors"
-                onClick={() =>
-                  setExpandedId(expandedId === d.id ? null : d.id)
-                }
+                onClick={() => setExpandedId(expandedId === d.id ? null : d.id)}
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -234,7 +232,7 @@ export default function Agent1DecisionLogPage() {
                     variant="ghost"
                     size="icon"
                     className="h-7 w-7"
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       startEdit(d);
                     }}
@@ -245,7 +243,7 @@ export default function Agent1DecisionLogPage() {
                     variant="ghost"
                     size="icon"
                     className="h-7 w-7 hover:text-destructive"
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       deleteMutation.mutate({ id: d.id });
                     }}
@@ -332,7 +330,7 @@ function DecisionForm({
         </label>
         <Input
           value={form.title}
-          onChange={(e) => set("title", e.target.value)}
+          onChange={e => set("title", e.target.value)}
           placeholder="e.g. Hire a second developer"
         />
       </div>
@@ -366,7 +364,7 @@ function DecisionForm({
             </label>
             <Textarea
               value={form[key]}
-              onChange={(e) => set(key, e.target.value)}
+              onChange={e => set(key, e.target.value)}
               placeholder={placeholder}
               rows={3}
               className="text-sm resize-none"
@@ -381,7 +379,7 @@ function DecisionForm({
             Risk Tolerance
           </label>
           <div className="flex gap-2">
-            {RISK_LEVELS.map((r) => (
+            {RISK_LEVELS.map(r => (
               <button
                 key={r}
                 onClick={() => set("riskTolerance", r)}
@@ -405,7 +403,7 @@ function DecisionForm({
             Status
           </label>
           <div className="flex gap-2">
-            {STATUS_OPTIONS.map((s) => (
+            {STATUS_OPTIONS.map(s => (
               <button
                 key={s}
                 onClick={() => set("status", s)}
@@ -428,7 +426,12 @@ function DecisionForm({
 
       <div className="flex gap-2 pt-2">
         {onCancel && (
-          <Button variant="outline" size="sm" onClick={onCancel} className="gap-1.5">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onCancel}
+            className="gap-1.5"
+          >
             <X className="h-3.5 w-3.5" />
             Cancel
           </Button>
