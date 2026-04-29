@@ -20,17 +20,25 @@ import {
   agent1TrainingProgress,
   agent1Reflections,
   agent1Settings,
+  eveningReviewSessions,
+  innovationIdeas,
+  projects,
+  tasks,
 } from "../../drizzle/schema";
 import {
   buildSystemPrompt,
   buildCouncilPrompt,
   buildReflectionPrompt,
+  buildIdeaAssessmentPrompt,
   OPERATING_MODES,
   RESPONSE_LEVELS,
   TRAINING_REGIME,
   type OperatingMode,
   type ResponseLevel,
   type CouncilData,
+  type DecisionEntry,
+  type EveningReviewContext,
+  type PlatformContext,
 } from "../agent1/agentEngine";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -87,7 +95,80 @@ const chatRouter = router({
         (settings.defaultResponseLevel as ResponseLevel) ??
         "Practical";
 
-      // Build system prompt
+      // ── Fetch enrichment context in parallel ─────────────────────────────
+      const [recentDecisions, lastReview, activeProjects, pendingTasks, recentIdeas] =
+        await Promise.all([
+          db
+            .select()
+            .from(agent1DecisionLog)
+            .where(eq(agent1DecisionLog.userId, userId))
+            .orderBy(desc(agent1DecisionLog.createdAt))
+            .limit(5),
+          db
+            .select()
+            .from(eveningReviewSessions)
+            .where(eq(eveningReviewSessions.userId, userId))
+            .orderBy(desc(eveningReviewSessions.createdAt))
+            .limit(1)
+            .then(rows => rows[0] ?? null),
+          db
+            .select({ name: projects.name, status: projects.status, progress: projects.progress })
+            .from(projects)
+            .where(and(eq(projects.userId, userId), eq(projects.status, "active")))
+            .limit(5),
+          db
+            .select({ title: tasks.title, priority: tasks.priority, status: tasks.status })
+            .from(tasks)
+            .where(and(eq(tasks.userId, userId), eq(tasks.status, "not_started")))
+            .orderBy(desc(tasks.createdAt))
+            .limit(8),
+          db
+            .select({ title: innovationIdeas.title, stage: innovationIdeas.currentStage })
+            .from(innovationIdeas)
+            .where(eq(innovationIdeas.userId, userId))
+            .orderBy(desc(innovationIdeas.createdAt))
+            .limit(5),
+        ]);
+
+      const decisionsForPrompt: DecisionEntry[] = recentDecisions.map(d => ({
+        date: d.date,
+        decision: d.decision,
+        chosen: d.chosen,
+        reasons: Array.isArray(d.reasons) ? (d.reasons as string[]) : [],
+        tolerance: d.tolerance,
+        whatIdChange: d.whatIdChange,
+      }));
+
+      const eveningReviewForPrompt: EveningReviewContext | null = lastReview
+        ? {
+            reviewDate: lastReview.reviewDate.toISOString().split("T")[0]!,
+            moodScore: lastReview.moodScore,
+            wentWellNotes: lastReview.wentWellNotes,
+            didntGoWellNotes: lastReview.didntGoWellNotes,
+            tasksAccepted: lastReview.tasksAccepted,
+            tasksDeferred: lastReview.tasksDeferred,
+            tasksRejected: lastReview.tasksRejected,
+          }
+        : null;
+
+      const platformForPrompt: PlatformContext = {
+        activeProjects: activeProjects.map(p => ({
+          name: p.name,
+          status: p.status,
+          progress: p.progress,
+        })),
+        pendingTasks: pendingTasks.map(t => ({
+          title: t.title,
+          priority: t.priority ?? "normal",
+          status: t.status,
+        })),
+        recentIdeas: recentIdeas.map(i => ({
+          title: i.title,
+          stage: `Stage ${i.stage}`,
+        })),
+      };
+
+      // Build system prompt with full context
       const systemPrompt = buildSystemPrompt(
         {
           identityMd: identity?.identityMd,
@@ -97,7 +178,10 @@ const chatRouter = router({
           systemPromptPatch: settings.systemPromptPatch,
         },
         mode,
-        level
+        level,
+        decisionsForPrompt,
+        eveningReviewForPrompt,
+        platformForPrompt
       );
 
       // Fetch recent conversation history (last 20 messages)
@@ -117,13 +201,20 @@ const chatRouter = router({
       let councilData: CouncilData | null = null;
       if (input.surfaceCouncil || settings.showCouncilByDefault) {
         try {
-          const councilContext = identity
-            ? `User identity: ${identity.identityMd?.slice(0, 200) ?? "not set"}`
-            : "No identity profile loaded.";
-          const councilPrompt = buildCouncilPrompt(
-            input.message,
-            councilContext
-          );
+          const councilContext = [
+            identity?.identityMd
+              ? `Identity: ${identity.identityMd.slice(0, 200)}`
+              : "No identity profile.",
+            decisionsForPrompt.length > 0
+              ? `Recent decisions: ${decisionsForPrompt.slice(0, 2).map(d => d.decision).join("; ")}`
+              : "",
+            eveningReviewForPrompt?.wentWellNotes
+              ? `Last evening: went well — ${eveningReviewForPrompt.wentWellNotes.slice(0, 100)}`
+              : "",
+          ]
+            .filter(Boolean)
+            .join(" | ");
+          const councilPrompt = buildCouncilPrompt(input.message, councilContext);
           const councilResult = await invokeLLM({
             messages: [
               { role: "system", content: councilPrompt },
@@ -131,12 +222,9 @@ const chatRouter = router({
             ],
             response_format: { type: "json_object" },
           });
-          const raw = String(
-            councilResult.choices[0]?.message?.content ?? "{}"
-          );
+          const raw = String(councilResult.choices[0]?.message?.content ?? "{}");
           councilData = JSON.parse(raw) as CouncilData;
         } catch {
-          // Council failure is non-fatal
           councilData = null;
         }
       }
@@ -495,6 +583,44 @@ const reflectionRouter = router({
 
       return { success: true };
     }),
+  // Convenience aliases so frontend can call approve/reject directly
+  approve: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+      const userId = ctx.user.id;
+      const [reflection] = await db
+        .select()
+        .from(agent1Reflections)
+        .where(and(eq(agent1Reflections.id, input.id), eq(agent1Reflections.userId, userId)))
+        .limit(1);
+      if (!reflection) throw new Error("Reflection not found.");
+      await db
+        .update(agent1Reflections)
+        .set({ status: "accepted", reviewedAt: new Date() })
+        .where(eq(agent1Reflections.id, input.id));
+      if (reflection.proposedPatch) {
+        const settings = await getOrCreateSettings(userId);
+        const existingPatch = settings.systemPromptPatch ?? "";
+        const newPatch = existingPatch
+          ? `${existingPatch}\n\n---\n\n${reflection.proposedPatch}`
+          : reflection.proposedPatch;
+        await db
+          .update(agent1Settings)
+          .set({ systemPromptPatch: newPatch, updatedAt: new Date() })
+          .where(eq(agent1Settings.userId, userId));
+      }
+      return { success: true };
+    }),
+  reject: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+      const userId = ctx.user.id;
+      await db
+        .update(agent1Reflections)
+        .set({ status: "rejected", reviewedAt: new Date() })
+        .where(and(eq(agent1Reflections.id, input.id), eq(agent1Reflections.userId, userId)));
+      return { success: true };
+    }),
 });
 
 // ─── Settings Router ──────────────────────────────────────────────────────────
@@ -530,6 +656,40 @@ const settingsRouter = router({
   }),
 });
 
+// ─── Ideas Router (Agent1 assesses Innovation Hub ideas) ─────────────────────
+const ideasRouter = router({
+  assess: aiProcedure
+    .input(z.object({ ideaId: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+      const userId = ctx.user.id;
+      const [idea] = await db
+        .select()
+        .from(innovationIdeas)
+        .where(and(eq(innovationIdeas.id, input.ideaId), eq(innovationIdeas.userId, userId)))
+        .limit(1);
+      if (!idea) throw new Error("Idea not found.");
+      const identity = await getIdentityProfile(userId);
+      const userContext = identity?.identityMd
+        ? `User identity: ${identity.identityMd.slice(0, 300)}`
+        : "No identity profile loaded.";
+      const assessmentPrompt = buildIdeaAssessmentPrompt(
+        idea.title,
+        idea.description ?? "",
+        userContext
+      );
+      const result = await invokeLLM({
+        messages: [
+          { role: "system", content: assessmentPrompt },
+          { role: "user", content: "Assess this idea now." },
+        ],
+        response_format: { type: "json_object" },
+      });
+      const raw = String(result.choices[0]?.message?.content ?? "{}");
+      const assessment = JSON.parse(raw);
+      return { ideaId: input.ideaId, ideaTitle: idea.title, assessment };
+    }),
+});
+
 // ─── Combined Agent1 Router ───────────────────────────────────────────────────
 export const agent1Router = router({
   chat: chatRouter,
@@ -538,4 +698,5 @@ export const agent1Router = router({
   training: trainingRouter,
   reflections: reflectionRouter,
   settings: settingsRouter,
+  ideas: ideasRouter,
 });
