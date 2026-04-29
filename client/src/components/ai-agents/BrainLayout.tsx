@@ -1,4 +1,5 @@
 import { useSupabaseAuth } from "@/_core/hooks/useSupabaseAuth";
+import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -41,30 +42,23 @@ import {
   Volume2,
   CheckCircle2,
   Star,
-  GraduationCap,
   Bot,
-  AlertTriangle,
   Shield,
-  Activity,
-  Target,
   Database,
   Zap,
-  Mail,
-  Video,
-  SlidersHorizontal,
-  ClipboardList,
   Brain,
   BookOpen,
   Dumbbell,
   Sparkles,
   FileText,
   MessageSquare,
+  Mic,
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from "@/components/project-management/DashboardLayoutSkeleton";
 import { BottomTabBar } from "@/components/ai-agents/BottomTabBar";
-import { QuickActionsBar } from "@/components/shared/QuickActionsBar";
+import { GlobalVoiceOverlay } from "@/components/shared/GlobalVoiceOverlay";
 import { OfflineIndicator } from "@/components/shared/OfflineIndicator";
 import {
   KeyboardShortcutsHelp,
@@ -82,7 +76,6 @@ import {
   useChangelog,
 } from "@/components/shared/ChangelogModal";
 import { GlobalSearch } from "@/components/shared/GlobalSearch";
-import OpenClawChat from "@/components/ai-agents/OpenClawChat";
 import _NeonBrain from "@/components/ai-agents/NeonBrain";
 import AnimatedBrainLogo from "@/components/ai-agents/AnimatedBrainLogo";
 import { NotificationBell } from "@/components/communication/NotificationCenter";
@@ -105,7 +98,7 @@ const menuItems: MenuItem[] = [
     label: "The Signal",
     path: "/daily-brief",
     children: [
-      { icon: Volume2, label: "Victoria's Briefing", path: "/daily-brief" },
+      { icon: Volume2, label: "Morning Brief", path: "/daily-brief" },
       { icon: Moon, label: "Evening Review", path: "/evening-review" },
     ],
   },
@@ -116,48 +109,15 @@ const menuItems: MenuItem[] = [
     children: [
       {
         icon: BarChart3,
-        label: "Chief of Staff Dashboard",
+        label: "Dashboard",
         path: "/operations",
       },
       { icon: CheckCircle2, label: "Tasks", path: "/tasks" },
-      {
-        icon: Rocket,
-        label: "Odyssey Management",
-        path: "/odyssey-management",
-      },
-      {
-        icon: GraduationCap,
-        label: "Digital Twin Training",
-        path: "/twin-training",
-      },
       { icon: Bot, label: "AI Agents", path: "/ai-agents" },
-      {
-        icon: Activity,
-        label: "Agent Monitoring",
-        path: "/ai-agents-monitoring",
-      },
-      {
-        icon: ClipboardList,
-        label: "Victoria Tracker",
-        path: "/victoria-tracker",
-      },
       { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
-      { icon: TrendingUp, label: "Analytics", path: "/analytics" },
-      { icon: Target, label: "KPIs & OKRs", path: "/kpis" },
       { icon: Database, label: "Knowledge Base", path: "/knowledge-base" },
       { icon: Library, label: "Document Library", path: "/documents" },
       { icon: Zap, label: "Integration Hub", path: "/integrations" },
-      { icon: Mail, label: "Email Intelligence", path: "/email-intelligence" },
-      {
-        icon: Video,
-        label: "Meeting Intelligence",
-        path: "/meeting-intelligence",
-      },
-      {
-        icon: SlidersHorizontal,
-        label: "Briefing Preferences",
-        path: "/briefing-preferences",
-      },
     ],
   },
   {
@@ -168,22 +128,19 @@ const menuItems: MenuItem[] = [
       { icon: TrendingUp, label: "Innovation Hub", path: "/innovation-hub" },
       { icon: Star, label: "Project Genesis", path: "/project-genesis" },
       { icon: Workflow, label: "Workflows", path: "/workflows" },
-      { icon: Users, label: "Persephone Board", path: "/persephone" },
-      { icon: AlertTriangle, label: "War Room", path: "/war-room" },
     ],
   },
-
   {
     icon: Brain,
-    label: "Chief of Staff — Agent1",
+    label: "Agent1",
     path: "/agent1",
     children: [
-      { icon: MessageSquare, label: "Agent1 Chat", path: "/agent1" },
+      { icon: MessageSquare, label: "Chat", path: "/agent1" },
       { icon: FileText, label: "Identity Profile", path: "/agent1/identity" },
       { icon: BookOpen, label: "Decision Log", path: "/agent1/decisions" },
       { icon: Dumbbell, label: "Training Regime", path: "/agent1/training" },
       { icon: Sparkles, label: "Reflection Loop", path: "/agent1/reflection" },
-      { icon: Settings, label: "Agent1 Settings", path: "/agent1/settings" },
+      { icon: Settings, label: "Settings", path: "/agent1/settings" },
     ],
   },
   { icon: Lock, label: "Vault", path: "/settings?tab=vault" },
@@ -268,8 +225,6 @@ function BrainLayoutContent({
   // Global search state
   const [showGlobalSearch, setShowGlobalSearch] = useState(false);
 
-  // Global ClawBot state
-  const [clawOpen, setClawOpen] = useState(false);
 
   // Collapsible navigation groups state - collapsed by default for clean look
   const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
@@ -326,14 +281,8 @@ function BrainLayoutContent({
     };
   }, [isResizing, setSidebarWidth]);
 
-  // Handle voice input from quick actions
-  const handleVoiceInput = (transcript: string) => {
-    // Voice input is processed through the Chief of Staff interface
-    // Navigate to COS page with the transcript as context
-    if (transcript.trim()) {
-      setLocation("/tasks?voice=" + encodeURIComponent(transcript));
-    }
-  };
+  // Global voice overlay state
+  const [voiceOverlayOpen, setVoiceOverlayOpen] = useState(false);
 
   return (
     <>
@@ -559,12 +508,24 @@ function BrainLayoutContent({
         {/* Mobile bottom tab bar - horizontally scrollable */}
         {isMobile && <BottomTabBar />}
 
-        {/* Quick Actions FAB - always visible */}
-        <QuickActionsBar
-          onVoiceInput={handleVoiceInput}
-          position={isMobile ? "bottom-right" : "bottom-right"}
-          className={isMobile ? "bottom-24" : ""}
+        {/* Global Voice Overlay */}
+        <GlobalVoiceOverlay
+          isOpen={voiceOverlayOpen}
+          onClose={() => setVoiceOverlayOpen(false)}
         />
+        {/* Floating mic button — always visible, opens voice overlay */}
+        <button
+          onClick={() => setVoiceOverlayOpen(true)}
+          className={cn(
+            "fixed z-50 flex items-center justify-center w-14 h-14 rounded-full",
+            "bg-primary text-white shadow-lg shadow-primary/40",
+            "hover:bg-primary/90 hover:scale-110 transition-all duration-200",
+            isMobile ? "bottom-20 right-4" : "bottom-6 right-6"
+          )}
+          aria-label="Voice input to Agent1"
+        >
+          <Mic className="w-6 h-6" />
+        </button>
       </SidebarInset>
 
       {/* Keyboard Shortcuts Help */}
@@ -593,25 +554,6 @@ function BrainLayoutContent({
         isOpen={showGlobalSearch}
         onClose={() => setShowGlobalSearch(false)}
       />
-
-      {/* Global ClawBot floating button — accessible from every page */}
-      <div
-        className={`fixed z-50 ${isMobile ? "bottom-24 right-4" : "bottom-6 right-20"}`}
-      >
-        {clawOpen && (
-          <div className="mb-3">
-            <OpenClawChat />
-          </div>
-        )}
-        <button
-          onClick={() => setClawOpen(v => !v)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white text-sm font-semibold shadow-lg hover:from-fuchsia-500 hover:to-purple-500 transition-all"
-          aria-label={clawOpen ? "Close ClawBot" : "Open ClawBot"}
-        >
-          <Bot className="w-4 h-4" />
-          {clawOpen ? "Close" : "ClawBot"}
-        </button>
-      </div>
 
       {/* p5-7: PWA offline / reconnected banner */}
       <OfflineIndicator />

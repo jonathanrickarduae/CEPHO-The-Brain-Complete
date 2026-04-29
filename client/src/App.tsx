@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { useI18n } from "@/hooks/useI18n";
 // Build version: 2026-02-28-v3-cleanup
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ErrorBoundary from "@/components/shared/ErrorBoundary";
@@ -21,6 +21,15 @@ import { PinGate } from "@/components/PinGate";
 import { KeyboardShortcutsGuide } from "@/components/project-management/KeyboardShortcutsGuide";
 import { ChiefOfStaffNotification } from "@/components/communication/ChiefOfStaffNotification";
 
+// Redirect helper
+function RedirectTo({ path }: { path: string }) {
+  const [, setLocation] = useLocation();
+  useEffect(() => {
+    setLocation(path);
+  }, [path, setLocation]);
+  return null;
+}
+
 // Loading fallback
 function PageLoader() {
   return (
@@ -36,13 +45,13 @@ const NexusDashboard = lazy(() => import("@/pages/NexusDashboard"));
 
 // ── The Signal ───────────────────────────────────────────────────────────────
 const DailyBrief = lazy(() => import("./pages/DailyBrief"));
+const MorningAllocation = lazy(() => import("./pages/MorningAllocation"));
 const EveningReview = lazy(() => import("./pages/EveningReview"));
 
 // ── Chief of Staff ───────────────────────────────────────────────────────────
 const OperationsPage = lazy(() => import("./pages/OperationsPage"));
 const ChiefOfStaff = lazy(() => import("@/pages/ChiefOfStaff"));
 const DevelopmentPathway = lazy(() => import("./pages/DevelopmentPathway"));
-const COSTraining = lazy(() => import("./pages/COSTraining"));
 const AIAgentsPage = lazy(() => import("./pages/AIAgentsPage"));
 const AgentDetailPage = lazy(() => import("./pages/AgentDetailPage"));
 const AIAgentsMonitoringPage = lazy(
@@ -148,6 +157,9 @@ function Router() {
         </Route>
 
         {/* The Signal */}
+        <Route path="/morning-allocation">
+          <MorningAllocation />
+        </Route>
         <Route path="/daily-brief">
           <WithLayout>
             <DailyBrief />
@@ -176,9 +188,7 @@ function Router() {
           </WithLayout>
         </Route>
         <Route path="/twin-training">
-          <WithLayout>
-            <COSTraining />
-          </WithLayout>
+          <RedirectTo path="/agent1/training" />
         </Route>
         <Route path="/ai-agents">
           <WithLayout>

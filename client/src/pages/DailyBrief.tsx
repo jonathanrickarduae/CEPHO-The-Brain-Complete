@@ -939,6 +939,22 @@ export default function DailyBrief() {
                         <Headphones className="w-5 h-5 mr-2" /> Listen
                       </Button>
                     </div>
+                    {/* Morning Allocation CTA */}
+                    <div className="mt-4 pt-4 border-t border-border">
+                      <a
+                        href="/morning-allocation"
+                        className="flex items-center gap-3 w-full px-4 py-3 rounded-xl bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-all group cursor-pointer"
+                      >
+                        <div className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+                          <Zap className="w-4 h-4 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-foreground">Allocate Your Day</p>
+                          <p className="text-xs text-muted-foreground">15 min · Agent1 has pre-sorted your tasks</p>
+                        </div>
+                        <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      </a>
+                    </div>
                   </div>
                 </div>
               </CardContent>
