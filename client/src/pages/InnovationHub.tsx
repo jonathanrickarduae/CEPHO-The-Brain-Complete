@@ -50,46 +50,18 @@ import {
   CheckCircle2,
   Eye,
   Loader2,
+  TrendingUp,
+  Filter,
 } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 
 // Flywheel stages
 const FLYWHEEL_STAGES = [
-  {
-    id: 1,
-    name: "Capture",
-    icon: Lightbulb,
-    color: "text-yellow-500",
-    description: "Idea intake from various sources",
-  },
-  {
-    id: 2,
-    name: "Assess",
-    icon: Search,
-    color: "text-primary",
-    description: "Strategic framework evaluation",
-  },
-  {
-    id: 3,
-    name: "Consult",
-    icon: Users,
-    color: "text-purple-500",
-    description: "SME expert feedback",
-  },
-  {
-    id: 4,
-    name: "Refine",
-    icon: RefreshCw,
-    color: "text-orange-500",
-    description: "Iterate based on findings",
-  },
-  {
-    id: 5,
-    name: "Brief",
-    icon: FileText,
-    color: "text-green-500",
-    description: "Generate actionable summary",
-  },
+  { id: 1, name: "Capture",  icon: Lightbulb,  color: "text-yellow-400", bg: "bg-yellow-500/15", border: "border-yellow-500/30", description: "Idea intake" },
+  { id: 2, name: "Assess",   icon: Search,     color: "text-blue-400",   bg: "bg-blue-500/15",   border: "border-blue-500/30",   description: "Strategic eval" },
+  { id: 3, name: "Consult",  icon: Users,      color: "text-purple-400", bg: "bg-purple-500/15", border: "border-purple-500/30", description: "SME feedback" },
+  { id: 4, name: "Refine",   icon: RefreshCw,  color: "text-orange-400", bg: "bg-orange-500/15", border: "border-orange-500/30", description: "Iterate" },
+  { id: 5, name: "Brief",    icon: FileText,   color: "text-green-400",  bg: "bg-green-500/15",  border: "border-green-500/30",  description: "Actionable summary" },
 ];
 
 const STATUS_COLORS: Record<string, string> = {
@@ -301,28 +273,26 @@ export default function InnovationHub() {
       title="Innovation Hub"
       subtitle="Capture, assess, and refine ideas through the strategic flywheel"
       actions={
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button
             variant="outline"
+            size="sm"
             className="gap-2"
             onClick={() => generateDailyIdeasMutation.mutate()}
             disabled={generateDailyIdeasMutation.isPending}
           >
             <Sparkles className="h-4 w-4" />
-            {generateDailyIdeasMutation.isPending
-              ? "Generating..."
-              : "Generate Daily Ideas"}
+            {generateDailyIdeasMutation.isPending ? "Generating..." : "Daily Ideas"}
           </Button>
           <Button
             variant="outline"
+            size="sm"
             className="gap-2 hidden sm:flex"
             onClick={() => backfillAgentIdeasMutation.mutate()}
             disabled={backfillAgentIdeasMutation.isPending}
           >
             <Brain className="h-4 w-4" />
-            {backfillAgentIdeasMutation.isPending
-              ? "Generating..."
-              : "Get Agent Ideas"}
+            {backfillAgentIdeasMutation.isPending ? "Generating..." : "Agent Ideas"}
           </Button>
           <Dialog open={showArticleDialog} onOpenChange={setShowArticleDialog}>
             <DialogTrigger asChild>
@@ -423,94 +393,58 @@ export default function InnovationHub() {
     >
       <div className="space-y-5">
         {/* Stats Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card className="bg-card/50 border-border/50">
-            <CardContent className="p-4 flex items-center gap-4">
-              <div className="p-3 rounded-lg bg-yellow-500/20">
-                <Lightbulb className="h-6 w-6 text-yellow-400" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{totalIdeas}</p>
-                <p className="text-sm text-muted-foreground">Total Ideas</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-card/50 border-border/50">
-            <CardContent className="p-4 flex items-center gap-4">
-              <div className="p-3 rounded-lg bg-primary/20">
-                <RefreshCw className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{activeIdeas}</p>
-                <p className="text-sm text-muted-foreground">In Progress</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-card/50 border-border/50">
-            <CardContent className="p-4 flex items-center gap-4">
-              <div className="p-3 rounded-lg bg-green-500/20">
-                <CheckCircle className="h-6 w-6 text-green-400" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{validatedIdeas}</p>
-                <p className="text-sm text-muted-foreground">Validated</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-card/50 border-border/50">
-            <CardContent className="p-4 flex items-center gap-4">
-              <div className="p-3 rounded-lg bg-purple-500/20">
-                <Rocket className="h-6 w-6 text-purple-400" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{promotedIdeas}</p>
-                <p className="text-sm text-muted-foreground">
-                  Promoted to Genesis
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {[
+            { label: "Total Ideas",        value: totalIdeas,     icon: Lightbulb,   color: "text-yellow-400", bg: "bg-yellow-500/15" },
+            { label: "In Progress",         value: activeIdeas,    icon: TrendingUp,  color: "text-blue-400",   bg: "bg-blue-500/15" },
+            { label: "Validated",           value: validatedIdeas, icon: CheckCircle, color: "text-green-400",  bg: "bg-green-500/15" },
+            { label: "Promoted to Genesis", value: promotedIdeas,  icon: Rocket,      color: "text-purple-400", bg: "bg-purple-500/15" },
+          ].map(stat => (
+            <Card key={stat.label} className="bg-card/50 border-border/50">
+              <CardContent className="p-4 flex items-center gap-3">
+                <div className={`p-2.5 rounded-lg ${stat.bg} shrink-0`}>
+                  <stat.icon className={`h-5 w-5 ${stat.color}`} />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-2xl font-bold leading-none">{stat.value}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 truncate">{stat.label}</p>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
         {/* Flywheel Visualization */}
         <Card className="bg-card/50 border-border/50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <RefreshCw className="h-5 w-5 text-[var(--brain-cyan)]" />
-              Innovation Flywheel
-            </CardTitle>
-            <CardDescription>
-              Ideas progress through 5 stages of strategic assessment and
-              refinement
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto -mx-4 px-4">
-              <div className="flex items-center justify-between min-w-[480px] px-4 md:px-8 py-4">
-                {FLYWHEEL_STAGES.map((stage, index) => (
-                  <div key={stage.id} className="flex items-center">
-                    <div className="flex flex-col items-center">
-                      <div
-                        className={`p-4 rounded-full bg-card border-2 border-border ${stage.color}`}
-                      >
-                        <stage.icon className="h-6 w-6" />
+          <CardContent className="py-4 px-5">
+            <div className="flex items-center gap-1 mb-3">
+              <RefreshCw className="h-3.5 w-3.5 text-cyan-400" />
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Innovation Flywheel</span>
+            </div>
+            <div className="overflow-x-auto">
+              <div className="flex items-center justify-between min-w-[420px]">
+                {FLYWHEEL_STAGES.map((stage, index) => {
+                  const count = ideas?.filter(i => i.currentStage === stage.id).length || 0;
+                  return (
+                    <div key={stage.id} className="flex items-center">
+                      <div className="flex flex-col items-center gap-1.5">
+                        <div className={`relative p-2.5 rounded-xl border ${stage.bg} ${stage.border}`}>
+                          <stage.icon className={`h-5 w-5 ${stage.color}`} />
+                          {count > 0 && (
+                            <span className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
+                              {count}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs font-medium">{stage.name}</p>
+                        <p className="text-[10px] text-muted-foreground">{stage.description}</p>
                       </div>
-                      <p className="mt-2 font-medium text-foreground">
-                        {stage.name}
-                      </p>
-                      <p className="text-xs text-muted-foreground text-center max-w-[100px]">
-                        {stage.description}
-                      </p>
-                      <Badge variant="outline" className="mt-2">
-                        {ideas?.filter(i => i.currentStage === stage.id)
-                          .length || 0}
-                      </Badge>
+                      {index < FLYWHEEL_STAGES.length - 1 && (
+                        <ArrowRight className="h-4 w-4 text-muted-foreground/30 mx-2 shrink-0" />
+                      )}
                     </div>
-                    {index < FLYWHEEL_STAGES.length - 1 && (
-                      <ArrowRight className="h-6 w-6 text-muted-foreground mx-4" />
-                    )}
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </CardContent>
@@ -521,27 +455,24 @@ export default function InnovationHub() {
           {/* Ideas List */}
           <div className="col-span-2">
             <Card className="bg-card/50 border-border/50 h-full">
-              <CardHeader>
-                <div className="flex flex-col gap-2">
-                  <CardTitle className="text-lg">Ideas Pipeline</CardTitle>
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between gap-2">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Lightbulb className="h-4 w-4 text-yellow-400" />
+                    Ideas Pipeline
+                  </CardTitle>
                   <div className="flex gap-1 flex-wrap">
                     {(["all", "manual", "agent", "sme"] as const).map(f => (
                       <button
                         key={f}
                         onClick={() => setSourceFilter(f)}
-                        className={`px-2 py-1 text-xs rounded-md transition-colors ${
+                        className={`px-2 py-0.5 text-[11px] rounded-full transition-colors ${
                           sourceFilter === f
-                            ? "bg-primary text-primary-foreground"
+                            ? "bg-primary text-primary-foreground font-medium"
                             : "bg-muted text-muted-foreground hover:bg-muted/80"
                         }`}
                       >
-                        {f === "all"
-                          ? `All (${ideas?.length ?? 0})`
-                          : f === "manual"
-                            ? "Manual"
-                            : f === "agent"
-                              ? "Agents"
-                              : "SMEs"}
+                        {f === "all" ? `All (${ideas?.length ?? 0})` : f === "manual" ? "Manual" : f === "agent" ? "Agents" : "SMEs"}
                       </button>
                     ))}
                   </div>
