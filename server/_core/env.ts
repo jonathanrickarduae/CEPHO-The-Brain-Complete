@@ -59,7 +59,12 @@ export const ENV = {
   // ── Calendar / Scheduling ─────────────────────────────────────────────────
   calendlyApiKey: process.env.CALENDLY_API_KEY ?? "",
 
-  // ── Communication ─────────────────────────────────────────────────────────
+  // ── Telegram ─────────────────────────────────────────────────────────────
+  telegramBotToken: process.env.TELEGRAM_BOT_TOKEN ?? "",
+  telegramOwnerChatId: process.env.TELEGRAM_OWNER_CHAT_ID ?? "",
+  appBaseUrl: process.env.APP_BASE_URL ?? "",
+
+  // ── Communication ─────────────────────────────────────────────────────────────
   zoomAccountId: process.env.ZOOM_ACCOUNT_ID ?? "",
   zoomClientId: process.env.ZOOM_CLIENT_ID ?? "",
   zoomClientSecret: process.env.ZOOM_CLIENT_SECRET ?? "",
