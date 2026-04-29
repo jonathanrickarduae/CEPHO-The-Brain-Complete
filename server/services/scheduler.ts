@@ -1688,6 +1688,44 @@ export function startScheduler() {
   scheduleTaskDelegation();
   scheduleMeetingPreBriefs();
   scheduleSkillsUpdater();
+  scheduleTelegramMorningBrief();
+  scheduleTelegramEveningCheckin();
 
-  log.info("[Scheduler] All 20 cron jobs are active.");
+  log.info("[Scheduler] All 22 cron jobs are active.");
+}
+
+// ─── Telegram: Morning Brief ──────────────────────────────────────────────────
+function scheduleTelegramMorningBrief() {
+  cron.schedule(
+    "0 6 * * *",
+    async () => {
+      log.info("[Cron] Telegram Morning Brief — starting");
+      try {
+        const { triggerMorningBrief } = await import("./telegram.service");
+        await triggerMorningBrief();
+        log.info("[Cron] Telegram Morning Brief — sent");
+      } catch (err) {
+        log.error("[Cron] Telegram Morning Brief — error:", err);
+      }
+    },
+    { timezone: "UTC" }
+  );
+}
+
+// ─── Telegram: Evening Check-in ───────────────────────────────────────────────
+function scheduleTelegramEveningCheckin() {
+  cron.schedule(
+    "0 18 * * *",
+    async () => {
+      log.info("[Cron] Telegram Evening Check-in — starting");
+      try {
+        const { triggerEveningCheckin } = await import("./telegram.service");
+        await triggerEveningCheckin();
+        log.info("[Cron] Telegram Evening Check-in — sent");
+      } catch (err) {
+        log.error("[Cron] Telegram Evening Check-in — error:", err);
+      }
+    },
+    { timezone: "UTC" }
+  );
 }

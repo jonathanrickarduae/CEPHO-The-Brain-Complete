@@ -141,6 +141,10 @@ async function startServer() {
   const webhooksRoute = await import("../routes/webhooks");
   app.use("/api/webhooks", webhooksRoute.default);
 
+  // Telegram Bot webhook route
+  const telegramRoute = await import("../routes/telegram");
+  app.use("/api/telegram", telegramRoute.default);
+
   // tRPC API (mounted at both /api/trpc and /api/v1/trpc for versioning)
   const trpcMiddleware = createExpressMiddleware({
     router: appRouter,
@@ -182,9 +186,30 @@ async function startServer() {
 
   server.listen(port, () => {
     log.debug(`Server running on http://localhost:${port}/`);
-    // Start all 12 server-side cron jobs
+    // Start all 22 server-side cron jobs
     startScheduler();
   });
+
+  // Initialise Telegram bot after server is listening (polling in dev, webhook in prod)
+  try {
+    const { initTelegramBot } = await import("../services/telegram.service");
+    const bot = initTelegramBot();
+    if (
+      bot &&
+      process.env.NODE_ENV === "production" &&
+      process.env.APP_BASE_URL
+    ) {
+      const webhookUrl = `${process.env.APP_BASE_URL}/api/telegram/webhook`;
+      bot
+        .setWebHook(webhookUrl)
+        .then(() => log.info(`[Telegram] Webhook registered: ${webhookUrl}`))
+        .catch((err: unknown) =>
+          log.error("[Telegram] Failed to set webhook:", String(err))
+        );
+    }
+  } catch (err) {
+    log.error("[Telegram] Failed to initialise bot:", String(err));
+  }
 }
 
 startServer().catch((err: unknown) => {
