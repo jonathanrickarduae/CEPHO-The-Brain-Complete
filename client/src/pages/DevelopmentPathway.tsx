@@ -167,59 +167,18 @@ export default function DevelopmentPathway() {
           onValueChange={setActiveTab}
           className="space-y-4"
         >
-          <TabsList className="bg-gray-900/50 border border-border/50 flex overflow-x-auto scrollbar-hide w-full h-auto flex-nowrap">
-            <TabsTrigger
-              value="overview"
-              className="data-[state=active]:bg-card"
-            >
-              <Target className="w-4 h-4 mr-2" />
-              Overview
+          <TabsList className="bg-gray-900/50 border border-border/50 w-full">
+            <TabsTrigger value="overview" className="data-[state=active]:bg-card flex-1">
+              <Target className="w-4 h-4 mr-1.5" />
+              Pipeline
             </TabsTrigger>
-            <TabsTrigger
-              value="innovation"
-              className="data-[state=active]:bg-card"
-            >
-              <Lightbulb className="w-4 h-4 mr-2" />
-              Innovation Hub
+            <TabsTrigger value="roadmap" className="data-[state=active]:bg-card flex-1">
+              <Map className="w-4 h-4 mr-1.5" />
+              Roadmap
             </TabsTrigger>
-            <TabsTrigger
-              value="funding"
-              className="data-[state=active]:bg-card"
-            >
-              <Building2 className="w-4 h-4 mr-2" />
-              Government Funding
-            </TabsTrigger>
-            <TabsTrigger
-              value="subscriptions"
-              className="data-[state=active]:bg-card"
-            >
-              <CreditCard className="w-4 h-4 mr-2" />
-              Subscriptions
-            </TabsTrigger>
-            <TabsTrigger
-              value="reviews"
-              className="data-[state=active]:bg-card"
-            >
-              <Calendar className="w-4 h-4 mr-2" />
-              Chief of Staff Reviews
-            </TabsTrigger>
-            <TabsTrigger
-              value="optimization"
-              className="data-[state=active]:bg-card"
-            >
-              <Gauge className="w-4 h-4 mr-2" />
-              System Optimization
-            </TabsTrigger>
-            <TabsTrigger value="5phase" className="data-[state=active]:bg-card">
-              <Rocket className="w-4 h-4 mr-2" />
-              5-Phase Roadmap
-            </TabsTrigger>
-            <TabsTrigger
-              value="roadmap"
-              className="data-[state=active]:bg-card"
-            >
-              <Map className="w-4 h-4 mr-2" />
-              CoS Roadmap
+            <TabsTrigger value="funding" className="data-[state=active]:bg-card flex-1">
+              <Building2 className="w-4 h-4 mr-1.5" />
+              Funding
             </TabsTrigger>
           </TabsList>
 

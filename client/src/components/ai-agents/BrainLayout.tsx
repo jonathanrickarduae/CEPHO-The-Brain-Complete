@@ -76,8 +76,7 @@ import {
   useChangelog,
 } from "@/components/shared/ChangelogModal";
 import { GlobalSearch } from "@/components/shared/GlobalSearch";
-import _NeonBrain from "@/components/ai-agents/NeonBrain";
-import AnimatedBrainLogo from "@/components/ai-agents/AnimatedBrainLogo";
+import BrainLogoStatic from "@/components/ai-agents/BrainLogoStatic";
 import { NotificationBell } from "@/components/communication/NotificationCenter";
 import { LanguageSwitcher } from "@/components/settings/LanguageSwitcher";
 import { WorkspaceSwitcher } from "@/components/workspace/WorkspaceSwitcher";
@@ -311,11 +310,7 @@ function BrainLayoutContent({
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
-                  <AnimatedBrainLogo
-                    size="xs"
-                    intensity="active"
-                    color="#00d4ff"
-                  />
+                  <BrainLogoStatic size="xs" color="#00d4ff" />
                   <span className="font-display font-bold tracking-tight truncate text-sidebar-foreground">
                     CEPHO
                   </span>
@@ -467,11 +462,7 @@ function BrainLayoutContent({
             <div className="flex items-center gap-2 px-3">
               <SidebarTrigger className="h-9 w-9 rounded-lg bg-white/5 text-white shrink-0" />
               <div className="flex items-center gap-2 min-w-0">
-                <AnimatedBrainLogo
-                  size="xs"
-                  intensity="active"
-                  color="#00d4ff"
-                />
+                <BrainLogoStatic size="xs" color="#00d4ff" />
                 <span className="tracking-tight text-white font-bold text-sm truncate">
                   CEPHO
                 </span>

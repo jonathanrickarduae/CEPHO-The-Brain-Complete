@@ -15,6 +15,10 @@ import {
   Shield,
   BarChart3,
   Loader2,
+  Rocket,
+  TrendingUp,
+  Layers,
+  ArrowRight,
 } from "lucide-react";
 import { GenesisBlueprintWizard } from "@/components/business-plan/GenesisBlueprintWizard";
 import { BlueprintQMS } from "@/components/business-plan/BlueprintQMS";
@@ -305,86 +309,25 @@ export default function ProjectGenesisPage() {
       fillHeight
     >
       {viewMode === "dashboard" && (
-        <div className="space-y-6">
-          {/* AI Agents Section */}
-          <div className="bg-card/30 backdrop-blur-sm rounded-xl border border-border/50 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
-                <Brain className="w-5 h-5 text-[var(--brain-cyan)]" />
-                AI Agents Working on Projects
-              </h2>
-              <Badge
-                variant="outline"
-                className="bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)] border-cyan-500/50"
-              >
-                {savedProjects.length} Active
-              </Badge>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {/* Financial Analyst Agent */}
-              <div className="bg-gray-900/50 rounded-lg border border-border/50 p-4 hover:border-cyan-500/50 transition-all">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-[var(--brain-cyan)]/20">
-                    <DollarSign className="w-5 h-5 text-[var(--brain-cyan)]" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-foreground mb-1">
-                      Financial Analyst
-                    </h3>
-                    <p className="text-xs text-muted-foreground mb-2">
-                      Analyzing market trends & projections
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                      <span className="text-xs text-emerald-400">Active</span>
-                    </div>
-                  </div>
+        <div className="space-y-5">
+          {/* Stats Banner */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {[
+              { label: "Total Projects",   value: savedProjects.length,                                                                                  icon: Layers,     color: "text-cyan-400",   bg: "bg-cyan-500/15" },
+              { label: "In Progress",      value: savedProjects.filter(p => p.status === "in_progress").length,                                           icon: TrendingUp,  color: "text-blue-400",   bg: "bg-blue-500/15" },
+              { label: "In Review",        value: savedProjects.filter(p => p.status === "in_review").length,                                             icon: Sparkles,   color: "text-yellow-400", bg: "bg-yellow-500/15" },
+              { label: "Approved",         value: savedProjects.filter(p => p.status === "approved").length,                                              icon: Check,      color: "text-green-400",  bg: "bg-green-500/15" },
+            ].map(stat => (
+              <div key={stat.label} className="bg-card/50 border border-border/50 rounded-xl p-4 flex items-center gap-3">
+                <div className={`p-2.5 rounded-lg ${stat.bg} shrink-0`}>
+                  <stat.icon className={`h-5 w-5 ${stat.color}`} />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-2xl font-bold leading-none">{stat.value}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 truncate">{stat.label}</p>
                 </div>
               </div>
-
-              {/* Market Research Agent */}
-              <div className="bg-gray-900/50 rounded-lg border border-border/50 p-4 hover:border-purple-500/50 transition-all">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-purple-500/20">
-                    <BarChart3 className="w-5 h-5 text-purple-400" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-foreground mb-1">
-                      Market Researcher
-                    </h3>
-                    <p className="text-xs text-muted-foreground mb-2">
-                      Gathering competitive intelligence
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                      <span className="text-xs text-emerald-400">Active</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Legal Compliance Agent */}
-              <div className="bg-gray-900/50 rounded-lg border border-border/50 p-4 hover:border-amber-500/50 transition-all">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-amber-500/20">
-                    <Shield className="w-5 h-5 text-amber-400" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-foreground mb-1">
-                      Legal Advisor
-                    </h3>
-                    <p className="text-xs text-muted-foreground mb-2">
-                      Reviewing compliance requirements
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                      <span className="text-xs text-amber-400">Standby</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
 
           {/* Loading State */}
@@ -414,66 +357,44 @@ export default function ProjectGenesisPage() {
 
           {/* Projects List */}
           {!projectsLoading && savedProjects.length > 0 && (
-            <div className="grid gap-4">
+            <div className="grid gap-3">
               {savedProjects.map(project => (
                 <div
                   key={project.id}
-                  className="bg-card/50 backdrop-blur-sm rounded-xl border border-border/50 p-6 hover:border-purple-500/50 transition-all cursor-pointer"
+                  className="bg-card/50 backdrop-blur-sm rounded-xl border border-border/50 p-5 hover:border-purple-500/40 hover:bg-card/70 transition-all cursor-pointer group"
                   onClick={() => {
-                    setCurrentBlueprint({
-                      id: project.id,
-                      name: project.name,
-                      status: project.status,
-                    });
+                    setCurrentBlueprint({ id: project.id, name: project.name, status: project.status });
                     setViewMode("qms");
                   }}
                 >
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-xl font-semibold text-foreground">
-                          {project.name}
-                        </h3>
-                        <Badge className={getStatusColor(project.status)}>
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
+                        <h3 className="text-base font-semibold text-foreground truncate">{project.name}</h3>
+                        <Badge className={`${getStatusColor(project.status)} flex items-center gap-1 text-[11px] py-0`}>
                           {getStatusIcon(project.status)}
-                          <span className="ml-1 capitalize">
-                            {project.status.replace("_", " ")}
-                          </span>
+                          <span className="capitalize">{project.status.replace("_", " ")}</span>
                         </Badge>
                       </div>
-                      <p className="text-muted-foreground text-sm mb-4">
-                        {project.industry} • Created{" "}
-                        {project.createdAt.toLocaleDateString()}
+                      <p className="text-xs text-muted-foreground mb-3">
+                        {project.industry} · Created {project.createdAt.toLocaleDateString()}
                       </p>
-
                       {/* Progress Bar */}
-                      <div className="mb-4">
-                        <div className="flex items-center justify-between text-sm mb-2">
-                          <span className="text-muted-foreground">
-                            Overall Progress
-                          </span>
-                          <span className="text-purple-400 font-medium">
-                            {project.completionPercentage}%
-                          </span>
-                        </div>
-                        <div className="h-2 bg-muted rounded-full overflow-hidden">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-gradient-to-r from-purple-600 to-pink-600 transition-all duration-500"
-                            style={{
-                              width: `${project.completionPercentage}%`,
-                            }}
+                            className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-500"
+                            style={{ width: `${project.completionPercentage}%` }}
                           />
                         </div>
+                        <span className="text-xs text-purple-400 font-medium shrink-0">{project.completionPercentage}%</span>
                       </div>
-
-                      {/* Phase Progress Compact */}
                       <ValueChainProgressCompact
                         phaseProgress={project.phaseProgress}
                         currentPhaseId={project.currentPhaseId}
                       />
                     </div>
-
-                    <ChevronRight className="w-5 h-5 text-muted-foreground ml-4" />
+                    <ChevronRight className="w-4 h-4 text-muted-foreground/50 group-hover:text-muted-foreground shrink-0 mt-1 transition-colors" />
                   </div>
                 </div>
               ))}
@@ -481,26 +402,24 @@ export default function ProjectGenesisPage() {
           )}
 
           {/* Empty State */}
-          {(!projectsLoading || loadingTimedOut) &&
-            savedProjects.length === 0 && (
-              <div className="text-center py-6">
-                <Brain className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-muted-foreground mb-2">
-                  No projects yet
-                </h3>
-                <p className="text-muted-foreground/70 mb-6">
-                  Start your first Project Genesis to build a comprehensive
-                  venture plan
-                </p>
-                <Button
-                  onClick={() => setViewMode("new_project")}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create Your First Project
-                </Button>
+          {(!projectsLoading || loadingTimedOut) && savedProjects.length === 0 && (
+            <div className="rounded-2xl border border-dashed border-purple-500/30 bg-purple-500/5 p-10 text-center">
+              <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-purple-500/15">
+                <Rocket className="h-8 w-8 text-purple-400" />
               </div>
-            )}
+              <h3 className="text-lg font-semibold mb-2">No projects yet</h3>
+              <p className="text-sm text-muted-foreground mb-6 max-w-sm mx-auto">
+                Turn an idea from the Innovation Hub into a structured 6-phase venture plan. Agent1 will guide each phase.
+              </p>
+              <Button
+                onClick={() => setViewMode("new_project")}
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Start Your First Project
+              </Button>
+            </div>
+          )}
         </div>
       )}
 
