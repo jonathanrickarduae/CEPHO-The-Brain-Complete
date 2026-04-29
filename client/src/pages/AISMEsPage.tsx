@@ -25,6 +25,7 @@ import {
   SortAsc,
   SortDesc,
   Globe,
+  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -172,6 +173,25 @@ export default function AISMEsPage() {
   });
 
   const addMemberMutation = trpc.smeTeam.addMember.useMutation();
+
+  // SME Intelligence Scan
+  const [_scanExpertId, setScanExpertId] = useState<string | null>(null);
+  const runScanMutation = trpc.smeIntelligence.runIntelligenceScan.useMutation({
+    onSuccess: (data) => {
+      toast.success(`Intelligence scan complete: ${data.submitted} ideas submitted from ${data.expertName}`);
+      setScanExpertId(null);
+    },
+    onError: (error) => {
+      toast.error(`Scan failed: ${error.message}`);
+      setScanExpertId(null);
+    },
+  });
+  const runFullScanMutation = trpc.smeIntelligence.runFullPanelScan.useMutation({
+    onSuccess: (data) => {
+      toast.success(`Full panel scan complete: ${data.totalSubmitted} ideas from ${data.expertsScanned} experts`);
+    },
+    onError: (error) => toast.error(`Full scan failed: ${error.message}`),
+  });
 
   const deleteTeamMutation = trpc.smeTeam.delete.useMutation({
     onSuccess: () => {
@@ -356,6 +376,20 @@ export default function AISMEsPage() {
       subtitle={`${TOTAL_EXPERTS} Expert Specialists`}
       actions={
         <div className="flex items-center gap-3">
+          <Button
+            size="sm"
+            variant="outline"
+            className="gap-2 border-purple-500/50 text-purple-400 hover:bg-purple-500/10"
+            onClick={() => runFullScanMutation.mutate({ limit: 10 })}
+            disabled={runFullScanMutation.isPending}
+          >
+            {runFullScanMutation.isPending ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Zap className="w-4 h-4" />
+            )}
+            {runFullScanMutation.isPending ? "Scanning..." : "Run Full Panel Scan"}
+          </Button>
           {compareExperts.length > 0 && (
             <Button
               size="sm"
@@ -844,23 +878,44 @@ export default function AISMEsPage() {
                                 </span>
                                 <span>{expert.projectsCompleted} projects</span>
                               </div>
-                              <button
-                                onClick={e => {
-                                  e.stopPropagation();
-                                  toggleExpertSelection(expert);
-                                }}
-                                className={`p-1.5 rounded-lg transition-colors ${
-                                  isSelected
-                                    ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
-                                    : "bg-white/10 hover:bg-white/20 text-foreground/70"
-                                }`}
-                              >
-                                {isSelected ? (
-                                  <CheckCircle2 className="w-4 h-4" />
-                                ) : (
-                                  <Plus className="w-4 h-4" />
-                                )}
-                              </button>
+                              <div className="flex items-center gap-1">
+                                <button
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    setScanExpertId(expert.id);
+                                    runScanMutation.mutate({
+                                      expertId: expert.id,
+                                      expertName: expert.name,
+                                      expertCategory: expert.category,
+                                    });
+                                  }}
+                                  className="p-1.5 rounded-lg transition-colors bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 opacity-0 group-hover:opacity-100"
+                                  title="Run Intelligence Scan"
+                                >
+                                  {runScanMutation.isPending && _scanExpertId === expert.id ? (
+                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                  ) : (
+                                    <Zap className="w-3 h-3" />
+                                  )}
+                                </button>
+                                <button
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    toggleExpertSelection(expert);
+                                  }}
+                                  className={`p-1.5 rounded-lg transition-colors ${
+                                    isSelected
+                                      ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
+                                      : "bg-white/10 hover:bg-white/20 text-foreground/70"
+                                  }`}
+                                >
+                                  {isSelected ? (
+                                    <CheckCircle2 className="w-4 h-4" />
+                                  ) : (
+                                    <Plus className="w-4 h-4" />
+                                  )}
+                                </button>
+                              </div>
                             </div>
                           </>
                         )}
