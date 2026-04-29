@@ -128,7 +128,7 @@ const chatRouter = router({
             ],
             response_format: { type: "json_object" },
           });
-          const raw = councilResult.choices[0]?.message?.content ?? "{}";
+          const raw = String(councilResult.choices[0]?.message?.content ?? "{}");
           councilData = JSON.parse(raw) as CouncilData;
         } catch {
           // Council failure is non-fatal
@@ -155,7 +155,7 @@ const chatRouter = router({
       });
 
       const assistantContent =
-        completion.choices[0]?.message?.content ?? "I was unable to generate a response.";
+        String(completion.choices[0]?.message?.content ?? "I was unable to generate a response.");
 
       // Save assistant message
       await db.insert(agent1Messages).values({
@@ -419,7 +419,7 @@ const reflectionRouter = router({
       response_format: { type: "json_object" },
     });
 
-    const raw = result.choices[0]?.message?.content ?? "{}";
+    const raw = String(result.choices[0]?.message?.content ?? "{}");
     const parsed = JSON.parse(raw);
 
     const weekStart = new Date();
