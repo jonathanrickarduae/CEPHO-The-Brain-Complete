@@ -97,6 +97,16 @@ const AnalyticsDeepDivePage = lazy(
 const EmailAccountsPage = lazy(() => import("./pages/EmailAccountsPage"));
 const AICostTrackerPage = lazy(() => import("./pages/AICostTrackerPage"));
 
+// ── Agent1 Personal AI System ───────────────────────────────────────────────
+const Agent1ChatPage = lazy(() => import("./pages/Agent1ChatPage"));
+const Agent1IdentityPage = lazy(() => import("./pages/Agent1IdentityPage"));
+const Agent1DecisionLogPage = lazy(
+  () => import("./pages/Agent1DecisionLogPage")
+);
+const Agent1TrainingPage = lazy(() => import("./pages/Agent1TrainingPage"));
+const Agent1ReflectionPage = lazy(() => import("./pages/Agent1ReflectionPage"));
+const Agent1SettingsPage = lazy(() => import("./pages/Agent1SettingsPage"));
+
 // ── Standalone ───────────────────────────────────────────────────────────────
 const Vault = lazy(() => import("./pages/Vault"));
 const Settings = lazy(() => import("./pages/Settings"));
@@ -350,6 +360,37 @@ function Router() {
         <Route path="/ai-cost-tracker">
           <WithLayout>
             <AICostTrackerPage />
+          </WithLayout>
+        </Route>
+        {/* Agent1 Personal AI System */}
+        <Route path="/agent1">
+          <WithLayout>
+            <Agent1ChatPage />
+          </WithLayout>
+        </Route>
+        <Route path="/agent1/identity">
+          <WithLayout>
+            <Agent1IdentityPage />
+          </WithLayout>
+        </Route>
+        <Route path="/agent1/decisions">
+          <WithLayout>
+            <Agent1DecisionLogPage />
+          </WithLayout>
+        </Route>
+        <Route path="/agent1/training">
+          <WithLayout>
+            <Agent1TrainingPage />
+          </WithLayout>
+        </Route>
+        <Route path="/agent1/reflection">
+          <WithLayout>
+            <Agent1ReflectionPage />
+          </WithLayout>
+        </Route>
+        <Route path="/agent1/settings">
+          <WithLayout>
+            <Agent1SettingsPage />
           </WithLayout>
         </Route>
         {/* 404 */}

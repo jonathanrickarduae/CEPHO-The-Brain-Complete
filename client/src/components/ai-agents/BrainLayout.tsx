@@ -53,6 +53,12 @@ import {
   Video,
   SlidersHorizontal,
   ClipboardList,
+  Brain,
+  BookOpen,
+  Dumbbell,
+  Sparkles,
+  FileText,
+  MessageSquare,
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -167,6 +173,19 @@ const menuItems: MenuItem[] = [
     ],
   },
 
+  {
+    icon: Brain,
+    label: "Agent1",
+    path: "/agent1",
+    children: [
+      { icon: MessageSquare, label: "Chat", path: "/agent1" },
+      { icon: FileText, label: "Identity Profile", path: "/agent1/identity" },
+      { icon: BookOpen, label: "Decision Log", path: "/agent1/decisions" },
+      { icon: Dumbbell, label: "Training Regime", path: "/agent1/training" },
+      { icon: Sparkles, label: "Reflection", path: "/agent1/reflection" },
+      { icon: Settings, label: "Agent1 Settings", path: "/agent1/settings" },
+    ],
+  },
   { icon: Lock, label: "Vault", path: "/settings?tab=vault" },
   { icon: Settings, label: "Settings", path: "/settings" },
   { icon: Shield, label: "Admin", path: "/admin" },
