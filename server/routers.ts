@@ -76,6 +76,7 @@ import { competitorRouter } from "./routers/competitor.router";
 import { persephoneRagRouter } from "./routers/persephoneRag.router";
 import { scheduledReportsRouter } from "./routers/scheduledReports.router";
 import { promptVersionsRouter } from "./routers/promptVersions.router";
+import { agent1Router } from "./routers/agent1.router";
 import {
   businessPlanReviewRouter as businessPlanReviewRealRouter,
   collaborativeReviewRouter as collaborativeReviewRealRouter,
@@ -276,6 +277,8 @@ export const appRouter = router({
   scheduledReports: scheduledReportsRouter,
   // ─── Prompt Version History & Rollback (p6-12) ───────────────────────────
   promptVersions: promptVersionsRouter,
+  // ─── Agent1 Personal AI System ─────────────────────────────────────────────
+  agent1: agent1Router,
 });
 
 export type AppRouter = typeof appRouter;

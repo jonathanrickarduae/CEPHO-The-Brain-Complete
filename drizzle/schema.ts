@@ -5320,3 +5320,90 @@ export const promptVersions = pgTable("prompt_versions", {
 });
 export type PromptVersion = typeof promptVersions.$inferSelect;
 export type InsertPromptVersion = typeof promptVersions.$inferInsert;
+
+// ============================================================
+// Agent1 Personal AI System Tables
+// ============================================================
+
+export const agent1Messages = pgTable("agent1_messages", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("user_id").notNull(),
+  role: text("role").notNull(),
+  content: text("content").notNull(),
+  operatingMode: text("operating_mode"),
+  responseLevel: text("response_level"),
+  councilData: json("council_data"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+export type Agent1Message = typeof agent1Messages.$inferSelect;
+export type InsertAgent1Message = typeof agent1Messages.$inferInsert;
+
+export const agent1IdentityProfiles = pgTable("agent1_identity_profiles", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("user_id").notNull().unique(),
+  identityMd: text("identity_md"),
+  valuesMd: text("values_md"),
+  relationshipsMd: text("relationships_md"),
+  preferencesMd: text("preferences_md"),
+  onboardingComplete: boolean("onboarding_complete").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+export type Agent1IdentityProfile = typeof agent1IdentityProfiles.$inferSelect;
+export type InsertAgent1IdentityProfile = typeof agent1IdentityProfiles.$inferInsert;
+
+export const agent1DecisionLog = pgTable("agent1_decision_log", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("user_id").notNull(),
+  date: text("date").notNull(),
+  decision: text("decision").notNull(),
+  optionsConsidered: json("options_considered").$type<string[]>().notNull(),
+  chosen: text("chosen").notNull(),
+  reasons: json("reasons").$type<string[]>().notNull(),
+  tolerance: text("tolerance").notNull(),
+  whatIdChange: text("what_id_change"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+export type Agent1DecisionLogEntry = typeof agent1DecisionLog.$inferSelect;
+export type InsertAgent1DecisionLogEntry = typeof agent1DecisionLog.$inferInsert;
+
+export const agent1TrainingProgress = pgTable("agent1_training_progress", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("user_id").notNull(),
+  phase: text("phase").notNull(),
+  dayOrWeek: integer("day_or_week").notNull(),
+  completed: boolean("completed").default(false).notNull(),
+  notes: text("notes"),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+export type Agent1TrainingProgress = typeof agent1TrainingProgress.$inferSelect;
+export type InsertAgent1TrainingProgress = typeof agent1TrainingProgress.$inferInsert;
+
+export const agent1Reflections = pgTable("agent1_reflections", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("user_id").notNull(),
+  weekStart: text("week_start").notNull(),
+  wellDone: json("well_done").$type<Array<{ point: string; example: string }>>(),
+  missed: json("missed").$type<Array<{ point: string; example: string }>>(),
+  proposedPatch: text("proposed_patch"),
+  status: text("status").default("pending").notNull(),
+  reviewedAt: timestamp("reviewed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+export type Agent1Reflection = typeof agent1Reflections.$inferSelect;
+export type InsertAgent1Reflection = typeof agent1Reflections.$inferInsert;
+
+export const agent1Settings = pgTable("agent1_settings", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("user_id").notNull().unique(),
+  defaultResponseLevel: text("default_response_level").default("Practical").notNull(),
+  defaultOperatingMode: text("default_operating_mode").default("Life Optimiser").notNull(),
+  systemPromptPatch: text("system_prompt_patch"),
+  showCouncilByDefault: boolean("show_council_by_default").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+export type Agent1Settings = typeof agent1Settings.$inferSelect;
+export type InsertAgent1Settings = typeof agent1Settings.$inferInsert;
