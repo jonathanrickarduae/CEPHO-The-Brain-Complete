@@ -472,8 +472,80 @@ const trainingRouter = router({
         );
       return { success: true };
     }),
+  // Convenience aliases for frontend which uses dayKey (e.g. "w1d3") format
+  toggle: protectedProcedure
+    .input(z.object({ dayKey: z.string(), completed: z.boolean() }))
+    .mutation(async ({ input, ctx }) => {
+      const userId = ctx.user.id;
+      // Parse dayKey: w1d3 → phase=foundation, dayOrWeek=3 (week 1 day 3)
+      const match = input.dayKey.match(/^w(\d+)d(\d+)$/);
+      const phase = "foundation";
+      const dayOrWeek = match ? parseInt(match[2]!) : 0;
+      const existing = await db
+        .select()
+        .from(agent1TrainingProgress)
+        .where(
+          and(
+            eq(agent1TrainingProgress.userId, userId),
+            eq(agent1TrainingProgress.phase, phase),
+            eq(agent1TrainingProgress.dayOrWeek, dayOrWeek)
+          )
+        )
+        .limit(1);
+      if (existing.length > 0) {
+        await db
+          .update(agent1TrainingProgress)
+          .set({
+            completed: input.completed,
+            completedAt: input.completed ? new Date() : null,
+          })
+          .where(eq(agent1TrainingProgress.id, existing[0]!.id));
+      } else if (input.completed) {
+        await db.insert(agent1TrainingProgress).values({
+          userId,
+          phase,
+          dayOrWeek,
+          completed: true,
+          completedAt: new Date(),
+        });
+      }
+      return { success: true };
+    }),
+  saveNotes: protectedProcedure
+    .input(z.object({ dayKey: z.string(), notes: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const userId = ctx.user.id;
+      const match = input.dayKey.match(/^w(\d+)d(\d+)$/);
+      const phase = "foundation";
+      const dayOrWeek = match ? parseInt(match[2]!) : 0;
+      const existing = await db
+        .select()
+        .from(agent1TrainingProgress)
+        .where(
+          and(
+            eq(agent1TrainingProgress.userId, userId),
+            eq(agent1TrainingProgress.phase, phase),
+            eq(agent1TrainingProgress.dayOrWeek, dayOrWeek)
+          )
+        )
+        .limit(1);
+      if (existing.length > 0) {
+        await db
+          .update(agent1TrainingProgress)
+          .set({ notes: input.notes })
+          .where(eq(agent1TrainingProgress.id, existing[0]!.id));
+      } else {
+        await db.insert(agent1TrainingProgress).values({
+          userId,
+          phase,
+          dayOrWeek,
+          completed: false,
+          notes: input.notes,
+        });
+      }
+      return { success: true };
+    }),
 });
-
 // ─── Reflection Router ────────────────────────────────────────────────────────
 const reflectionRouter = router({
   list: protectedProcedure.query(async ({ ctx }) => {
