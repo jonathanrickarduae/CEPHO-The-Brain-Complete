@@ -175,14 +175,14 @@ const menuItems: MenuItem[] = [
 
   {
     icon: Brain,
-    label: "Agent1",
+    label: "Chief of Staff — Agent1",
     path: "/agent1",
     children: [
-      { icon: MessageSquare, label: "Chat", path: "/agent1" },
+      { icon: MessageSquare, label: "Agent1 Chat", path: "/agent1" },
       { icon: FileText, label: "Identity Profile", path: "/agent1/identity" },
       { icon: BookOpen, label: "Decision Log", path: "/agent1/decisions" },
       { icon: Dumbbell, label: "Training Regime", path: "/agent1/training" },
-      { icon: Sparkles, label: "Reflection", path: "/agent1/reflection" },
+      { icon: Sparkles, label: "Reflection Loop", path: "/agent1/reflection" },
       { icon: Settings, label: "Agent1 Settings", path: "/agent1/settings" },
     ],
   },

@@ -360,6 +360,19 @@ export default function DailyBrief() {
   });
   const { data: kpiList } = trpc.kpiOkr.list.useQuery();
   const { data: genesisProjects } = trpc.projectGenesis.listProjects.useQuery();
+  // Live tasks and projects for Key Things section
+  const { data: liveTasks } = trpc.tasks.list.useQuery({
+    status: "not_started",
+    limit: 10,
+  });
+  const { data: liveInProgress } = trpc.tasks.list.useQuery({
+    status: "in_progress",
+    limit: 5,
+  });
+  const { data: liveProjects } = trpc.projects.list.useQuery({
+    status: "active",
+    limit: 5,
+  });
 
   // Live briefing data from AI
   const { data: liveBrief, isLoading: briefLoading } =
@@ -737,7 +750,12 @@ export default function DailyBrief() {
                       month: "short",
                       day: "numeric",
                     })
-                  : BRIEF_DATA.date}
+                  : new Date().toLocaleDateString("en-GB", {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
               </p>
             </div>
 
@@ -897,14 +915,9 @@ export default function DailyBrief() {
                       </div>
                     ) : (
                       <p className="text-foreground/90 leading-relaxed mb-4">
-                        "Good morning. Here's your brief for today.{" "}
-                        {BRIEF_DATA.overviewSummary.headline}. You have{" "}
-                        {
-                          BRIEF_DATA.schedule.filter(s => s.type === "meeting")
-                            .length
-                        }{" "}
-                        meetings scheduled, including your investor lunch at
-                        noon. {BRIEF_DATA.overviewSummary.energyFocus}."
+                        Good morning. Your briefing is being generated. You have{" "}
+                        {liveTasks?.total ?? 0} pending tasks and{" "}
+                        {liveProjects?.length ?? 0} active projects.
                       </p>
                     )}
 
@@ -942,24 +955,41 @@ export default function DailyBrief() {
               <CardContent>
                 <div className="p-4 rounded-xl bg-primary/10 border border-primary/20 mb-4">
                   <p className="text-lg font-medium text-foreground">
-                    {BRIEF_DATA.overviewSummary.headline}
+                    {liveBrief
+                      ? "Your AI briefing is ready"
+                      : "Busy day ahead with key decision points"}
                   </p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    {BRIEF_DATA.overviewSummary.energyFocus}
+                    {liveBrief
+                      ? `${liveBrief.stats?.activeProjects ?? 0} active projects · ${liveBrief.stats?.pendingTasks ?? 0} pending tasks · ${liveBrief.stats?.highPriorityTasks ?? 0} high priority`
+                      : "Focus on high-priority items first"}
                   </p>
                 </div>
                 <ul className="space-y-2">
-                  {BRIEF_DATA.overviewSummary.highlights.map(
-                    (highlight, idx) => (
-                      <li
-                        key={idx}
-                        className="flex items-start gap-3 text-muted-foreground"
-                      >
-                        <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                        <span>{highlight}</span>
-                      </li>
-                    )
-                  )}
+                  {(liveProjects?.slice(0, 4) ?? []).map((project, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-start gap-3 text-muted-foreground"
+                    >
+                      <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                      <span>
+                        {project.name} — {project.status}
+                        {project.progress ? ` (${project.progress}%)` : ""}
+                      </span>
+                    </li>
+                  ))}
+                  {(!liveProjects || liveProjects.length === 0) &&
+                    ["No active projects yet — add one in Project Genesis"].map(
+                      (highlight, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-start gap-3 text-muted-foreground"
+                        >
+                          <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                          <span>{highlight}</span>
+                        </li>
+                      )
+                    )}
                 </ul>
               </CardContent>
             </Card>
@@ -973,12 +1003,12 @@ export default function DailyBrief() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {BRIEF_DATA.keyThings.map(item => (
+                {(liveTasks?.tasks ?? BRIEF_DATA.keyThings).map(item => (
                   <div
                     key={item.id}
-                    className={`group p-4 rounded-xl border ${getPriorityColor(item.priority)} ${isActioned(`key-${item.id}`) ? "opacity-60" : ""} hover:border-primary/50 transition-all cursor-pointer`}
+                    className={`group p-4 rounded-xl border ${getPriorityColor(item.priority ?? "medium")} ${isActioned(`key-${item.id}`) ? "opacity-60" : ""} hover:border-primary/50 transition-all cursor-pointer`}
                     onClick={() =>
-                      (window.location.href = `/ai-experts?mission=${encodeURIComponent(item.title + ": " + item.description)}`)
+                      (window.location.href = `/ai-experts?mission=${encodeURIComponent(item.title + ": " + (item.description ?? ""))}`)
                     }
                   >
                     <div className="flex items-start justify-between gap-4">
@@ -986,9 +1016,11 @@ export default function DailyBrief() {
                         <div className="flex items-center gap-2 mb-1">
                           <Badge
                             variant="outline"
-                            className={getPriorityColor(item.priority)}
+                            className={getPriorityColor(
+                              item.priority ?? "medium"
+                            )}
                           >
-                            {item.category}
+                            {item.priority ?? "task"}
                           </Badge>
                         </div>
                         <h3 className="font-bold text-foreground mb-1 group-hover:text-primary transition-colors">
@@ -996,14 +1028,14 @@ export default function DailyBrief() {
                           <ArrowRight className="w-4 h-4 inline ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </h3>
                         <p className="text-sm text-muted-foreground">
-                          {item.description}
+                          {item.description ?? ""}
                         </p>
                       </div>
                       <ActionButtons
                         itemId={`key-${item.id}`}
                         title={item.title}
-                        description={item.description}
-                        category={item.category}
+                        description={item.description ?? ""}
+                        category={item.priority ?? "task"}
                         source="key"
                       />
                     </div>
@@ -1023,36 +1055,44 @@ export default function DailyBrief() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {BRIEF_DATA.twinRecommendations.map(rec => (
-                  <div
-                    key={rec.id}
-                    className={`p-4 rounded-xl bg-purple-500/5 border border-purple-500/20 ${isActioned(`rec-${rec.id}`) ? "opacity-60" : ""}`}
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Lightbulb className="w-4 h-4 text-purple-400" />
-                          <Badge className="bg-purple-500/20 text-purple-400 border-0">
-                            {rec.confidence}% confidence
-                          </Badge>
+                {(liveInProgress?.tasks ?? []).length > 0 ? (
+                  liveInProgress!.tasks.map(task => (
+                    <div
+                      key={task.id}
+                      className={`p-4 rounded-xl bg-purple-500/5 border border-purple-500/20 ${isActioned(`rec-${task.id}`) ? "opacity-60" : ""}`}
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Lightbulb className="w-4 h-4 text-purple-400" />
+                            <Badge className="bg-purple-500/20 text-purple-400 border-0">
+                              In Progress
+                            </Badge>
+                          </div>
+                          <h4 className="font-bold text-foreground mb-1">
+                            {task.title}
+                          </h4>
+                          <p className="text-sm text-muted-foreground">
+                            {task.description ??
+                              "Continue working on this task today."}
+                          </p>
                         </div>
-                        <h4 className="font-bold text-foreground mb-1">
-                          {rec.title}
-                        </h4>
-                        <p className="text-sm text-muted-foreground">
-                          {rec.reason}
-                        </p>
+                        <ActionButtons
+                          itemId={`rec-${task.id}`}
+                          title={task.title}
+                          description={task.description ?? ""}
+                          category="In Progress"
+                          source="recommendation"
+                        />
                       </div>
-                      <ActionButtons
-                        itemId={`rec-${rec.id}`}
-                        title={rec.title}
-                        description={rec.reason}
-                        category="Recommendation"
-                        source="recommendation"
-                      />
                     </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p className="text-sm text-muted-foreground text-center py-4">
+                    No tasks in progress. Start a task to see Chief of Staff
+                    recommendations here.
+                  </p>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -1073,64 +1113,65 @@ export default function DailyBrief() {
                 <div className="absolute left-[76px] top-0 bottom-0 w-px bg-border"></div>
 
                 <div className="space-y-4">
-                  {BRIEF_DATA.schedule.map(item => (
-                    <div
-                      key={item.id}
-                      className="flex items-start gap-4 relative"
-                    >
-                      <div className="text-center min-w-[60px] shrink-0">
-                        <div className="text-lg font-bold text-foreground">
-                          {item.time}
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          {item.duration}
-                        </div>
-                      </div>
-
-                      {/* Timeline dot */}
+                  {(liveTasks?.tasks ?? []).length > 0 ? (
+                    liveTasks!.tasks.map((task, idx) => (
                       <div
-                        className={`w-3 h-3 rounded-full mt-2 shrink-0 z-10 ${
-                          item.type === "deadline"
-                            ? "bg-red-500"
-                            : item.type === "external"
-                              ? "bg-green-500"
-                              : item.type === "focus"
-                                ? "bg-purple-500"
-                                : "bg-primary"
-                        }`}
-                      ></div>
-
-                      <div
-                        className={`flex-1 p-4 rounded-xl border transition-colors ${
-                          item.type === "deadline"
-                            ? "bg-red-500/5 border-red-500/20"
-                            : item.type === "external"
-                              ? "bg-green-500/5 border-green-500/20"
-                              : item.type === "focus"
-                                ? "bg-purple-500/5 border-purple-500/20"
-                                : "bg-card border-border hover:border-primary/30"
-                        }`}
+                        key={task.id}
+                        className="flex items-start gap-4 relative"
                       >
-                        <div className="flex items-center gap-2 mb-1">
-                          {getTypeIcon(item.type)}
-                          <span className="font-medium text-foreground">
-                            {item.title}
-                          </span>
+                        <div className="text-center min-w-[60px] shrink-0">
+                          <div className="text-sm font-bold text-foreground">
+                            {task.dueDate
+                              ? new Date(task.dueDate).toLocaleTimeString([], {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })
+                              : `Task ${idx + 1}`}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {task.priority ?? "normal"}
+                          </div>
                         </div>
-                        <div className="text-xs text-muted-foreground">
-                          {item.location}
-                        </div>
-                        {item.attendees.length > 0 && (
-                          <div className="flex items-center gap-1 mt-2">
-                            <Users className="w-3 h-3 text-muted-foreground" />
-                            <span className="text-xs text-muted-foreground">
-                              {item.attendees.join(", ")}
+                        {/* Timeline dot */}
+                        <div
+                          className={`w-3 h-3 rounded-full mt-2 shrink-0 z-10 ${
+                            task.priority === "urgent" ||
+                            task.priority === "high"
+                              ? "bg-red-500"
+                              : task.priority === "medium"
+                                ? "bg-yellow-500"
+                                : "bg-primary"
+                          }`}
+                        ></div>
+                        <div className="flex-1 p-4 rounded-xl border bg-card border-border hover:border-primary/30 transition-colors">
+                          <div className="flex items-center gap-2 mb-1">
+                            <ListChecks className="w-4 h-4 text-primary" />
+                            <span className="font-medium text-foreground">
+                              {task.title}
                             </span>
                           </div>
-                        )}
+                          {task.description && (
+                            <div className="text-xs text-muted-foreground">
+                              {task.description}
+                            </div>
+                          )}
+                          {task.dueDate && (
+                            <div className="text-xs text-muted-foreground mt-1">
+                              Due: {new Date(task.dueDate).toLocaleDateString()}
+                            </div>
+                          )}
+                        </div>
                       </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <Calendar className="w-8 h-8 mx-auto mb-2 opacity-40" />
+                      <p className="text-sm">No tasks scheduled for today.</p>
+                      <p className="text-xs mt-1">
+                        Add tasks in the Task Manager to see them here.
+                      </p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
             </CardContent>

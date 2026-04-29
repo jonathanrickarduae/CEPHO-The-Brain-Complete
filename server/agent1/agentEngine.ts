@@ -6,6 +6,9 @@
  *   - Council of Sub-Agents (ARIA, ABEL, LEX, SAFI, LUNA, INDI, ODIN)
  *   - 7 Operating Modes
  *   - Three-level response format (Simple, Practical, Full)
+ *   - Decision Log context injection
+ *   - Evening Review / Signal context injection
+ *   - Platform context (active projects, tasks, ideas)
  */
 
 export const OPERATING_MODES = [
@@ -39,6 +42,35 @@ export interface IdentityContext {
   relationshipsMd?: string | null;
   preferencesMd?: string | null;
   systemPromptPatch?: string | null;
+}
+
+export interface DecisionEntry {
+  date: string;
+  decision: string;
+  chosen: string;
+  reasons: string[];
+  tolerance: string;
+  whatIdChange?: string | null;
+}
+
+export interface EveningReviewContext {
+  reviewDate: string;
+  moodScore?: number | null;
+  wentWellNotes?: string | null;
+  didntGoWellNotes?: string | null;
+  tasksAccepted?: number | null;
+  tasksDeferred?: number | null;
+  tasksRejected?: number | null;
+}
+
+export interface PlatformContext {
+  activeProjects?: Array<{
+    name: string;
+    status: string;
+    progress?: number | null;
+  }>;
+  pendingTasks?: Array<{ title: string; priority: string; status: string }>;
+  recentIdeas?: Array<{ title: string; stage: string }>;
 }
 
 // ─── Constitutional Articles ──────────────────────────────────────────────────
@@ -110,17 +142,24 @@ const RESPONSE_LEVEL_INSTRUCTIONS: Record<ResponseLevel, string> = {
 export function buildSystemPrompt(
   identity: IdentityContext,
   mode: OperatingMode,
-  responseLevel: ResponseLevel
+  responseLevel: ResponseLevel,
+  decisions?: DecisionEntry[],
+  eveningReview?: EveningReviewContext | null,
+  platform?: PlatformContext | null
 ): string {
   const identitySection = buildIdentitySection(identity);
   const modeInstruction = MODE_DESCRIPTIONS[mode];
   const levelInstruction = RESPONSE_LEVEL_INSTRUCTIONS[responseLevel];
+  const decisionSection = buildDecisionSection(decisions);
+  const signalSection = buildSignalSection(eveningReview);
+  const platformSection = buildPlatformSection(platform);
 
   return `
 # IDENTITY
-You are Agent1 — a high-intelligence personal AI agent integrated into CEPHO.
+You are Agent1 — the central intelligence and Chief of Staff for CEPHO. You are the user's personal operating system for life, work, and decisions.
 Your purpose is to make the user's life calmer, clearer, and better across work, family, health, money, learning, and decisions.
 You are direct, functional, and precise. You do not use greetings or pleasantries. You get straight to the point.
+You have access to the user's full context: their identity, values, relationships, preferences, recent decisions, last evening review, active projects, and pending tasks. Use all of it.
 
 ${CONSTITUTIONAL_ARTICLES}
 
@@ -150,6 +189,12 @@ Always check what you already know about the user before asking.
 When they tell you something new about themselves, their values, or their preferences, acknowledge it and confirm you have noted it.
 
 ${identitySection}
+
+${decisionSection}
+
+${signalSection}
+
+${platformSection}
 
 # HONESTY
 If you don't know, say so. If a source is uncertain, say so. If you were wrong last time, say so.
@@ -181,6 +226,69 @@ function buildIdentitySection(identity: IdentityContext): string {
     );
   }
 
+  return parts.join("\n\n");
+}
+
+function buildDecisionSection(decisions?: DecisionEntry[]): string {
+  if (!decisions || decisions.length === 0) {
+    return "# RECENT DECISIONS\nNo decisions logged yet. Encourage the user to log key decisions in the Decision Log.";
+  }
+  const lines = decisions.slice(0, 5).map(d => {
+    const reasonsSummary = d.reasons.slice(0, 2).join("; ");
+    const change = d.whatIdChange ? ` Retrospective: "${d.whatIdChange}"` : "";
+    return `- [${d.date}] **${d.decision}** → Chose: ${d.chosen}. Reasons: ${reasonsSummary}. Risk tolerance: ${d.tolerance}.${change}`;
+  });
+  return `# RECENT DECISIONS (last ${decisions.length} logged)\nUse these to understand the user's decision-making patterns, risk tolerance, and what they have already committed to.\n${lines.join("\n")}`;
+}
+
+function buildSignalSection(review?: EveningReviewContext | null): string {
+  if (!review) {
+    return "# LAST EVENING REVIEW\nNo evening review on record yet.";
+  }
+  const mood =
+    review.moodScore != null ? `Mood score: ${review.moodScore}/10.` : "";
+  const well = review.wentWellNotes
+    ? `What went well: "${review.wentWellNotes}".`
+    : "";
+  const didnt = review.didntGoWellNotes
+    ? `What didn't go well: "${review.didntGoWellNotes}".`
+    : "";
+  const tasks =
+    review.tasksAccepted != null || review.tasksDeferred != null
+      ? `Tasks: ${review.tasksAccepted ?? 0} accepted, ${review.tasksDeferred ?? 0} deferred, ${review.tasksRejected ?? 0} rejected.`
+      : "";
+  return `# LAST EVENING REVIEW (${review.reviewDate})\n${[mood, well, didnt, tasks].filter(Boolean).join(" ")}\nUse this to understand the user's current energy, what is weighing on them, and what momentum they are carrying into today.`;
+}
+
+function buildPlatformSection(platform?: PlatformContext | null): string {
+  if (!platform) return "";
+  const parts: string[] = ["# PLATFORM CONTEXT (live data from CEPHO)"];
+
+  if (platform.activeProjects && platform.activeProjects.length > 0) {
+    const projectLines = platform.activeProjects
+      .slice(0, 5)
+      .map(
+        p =>
+          `  - ${p.name} [${p.status}${p.progress != null ? `, ${p.progress}% complete` : ""}]`
+      );
+    parts.push(`## Active Projects\n${projectLines.join("\n")}`);
+  }
+
+  if (platform.pendingTasks && platform.pendingTasks.length > 0) {
+    const taskLines = platform.pendingTasks
+      .slice(0, 8)
+      .map(t => `  - [${t.priority.toUpperCase()}] ${t.title} (${t.status})`);
+    parts.push(`## Pending Tasks\n${taskLines.join("\n")}`);
+  }
+
+  if (platform.recentIdeas && platform.recentIdeas.length > 0) {
+    const ideaLines = platform.recentIdeas
+      .slice(0, 5)
+      .map(i => `  - ${i.title} [${i.stage}]`);
+    parts.push(`## Ideas in Pipeline\n${ideaLines.join("\n")}`);
+  }
+
+  if (parts.length === 1) return "";
   return parts.join("\n\n");
 }
 
@@ -227,6 +335,39 @@ export function formatContextBuilder(cb: ContextBuilder): string {
 **Preferences:** ${cb.preferences}
 **Importance:** ${cb.importance}
 **Success criteria:** ${cb.successCriteria}
+`.trim();
+}
+
+// ─── Idea Assessment Prompt ───────────────────────────────────────────────────
+export function buildIdeaAssessmentPrompt(
+  ideaTitle: string,
+  ideaDescription: string,
+  userContext: string
+): string {
+  return `
+You are Agent1, the user's Chief of Staff. A new idea has been captured in their Odyssey pipeline. Assess it using the Council of Sub-Agents framework.
+
+IDEA: "${ideaTitle}"
+DESCRIPTION: "${ideaDescription}"
+USER CONTEXT: ${userContext}
+
+Provide a structured assessment in this exact JSON format:
+{
+  "council": {
+    "ARIA": "What does the evidence say about this idea's viability?",
+    "ABEL": "What are the key risks or downsides?",
+    "LEX": "Are there any ethical, legal, or honesty concerns?",
+    "SAFI": "What assumptions might be wrong here?",
+    "LUNA": "What is the emotional pull of this idea? What does it say about the user's deeper goals?",
+    "INDI": "What is the single most practical next step?",
+    "ODIN": "What does this look like in 12 months if it succeeds? If it fails?"
+  },
+  "verdict": "proceed | refine | pause | discard",
+  "verdictReason": "One clear sentence explaining the verdict.",
+  "nextStep": "The single most important action to take in the next 48 hours.",
+  "riskLevel": "low | medium | high",
+  "potentialScore": 1
+}
 `.trim();
 }
 
