@@ -64,7 +64,11 @@ export interface EveningReviewContext {
 }
 
 export interface PlatformContext {
-  activeProjects?: Array<{ name: string; status: string; progress?: number | null }>;
+  activeProjects?: Array<{
+    name: string;
+    status: string;
+    progress?: number | null;
+  }>;
   pendingTasks?: Array<{ title: string; priority: string; status: string }>;
   recentIdeas?: Array<{ title: string; stage: string }>;
 }
@@ -241,9 +245,14 @@ function buildSignalSection(review?: EveningReviewContext | null): string {
   if (!review) {
     return "# LAST EVENING REVIEW\nNo evening review on record yet.";
   }
-  const mood = review.moodScore != null ? `Mood score: ${review.moodScore}/10.` : "";
-  const well = review.wentWellNotes ? `What went well: "${review.wentWellNotes}".` : "";
-  const didnt = review.didntGoWellNotes ? `What didn't go well: "${review.didntGoWellNotes}".` : "";
+  const mood =
+    review.moodScore != null ? `Mood score: ${review.moodScore}/10.` : "";
+  const well = review.wentWellNotes
+    ? `What went well: "${review.wentWellNotes}".`
+    : "";
+  const didnt = review.didntGoWellNotes
+    ? `What didn't go well: "${review.didntGoWellNotes}".`
+    : "";
   const tasks =
     review.tasksAccepted != null || review.tasksDeferred != null
       ? `Tasks: ${review.tasksAccepted ?? 0} accepted, ${review.tasksDeferred ?? 0} deferred, ${review.tasksRejected ?? 0} rejected.`

@@ -96,39 +96,57 @@ const chatRouter = router({
         "Practical";
 
       // ── Fetch enrichment context in parallel ─────────────────────────────
-      const [recentDecisions, lastReview, activeProjects, pendingTasks, recentIdeas] =
-        await Promise.all([
-          db
-            .select()
-            .from(agent1DecisionLog)
-            .where(eq(agent1DecisionLog.userId, userId))
-            .orderBy(desc(agent1DecisionLog.createdAt))
-            .limit(5),
-          db
-            .select()
-            .from(eveningReviewSessions)
-            .where(eq(eveningReviewSessions.userId, userId))
-            .orderBy(desc(eveningReviewSessions.createdAt))
-            .limit(1)
-            .then(rows => rows[0] ?? null),
-          db
-            .select({ name: projects.name, status: projects.status, progress: projects.progress })
-            .from(projects)
-            .where(and(eq(projects.userId, userId), eq(projects.status, "active")))
-            .limit(5),
-          db
-            .select({ title: tasks.title, priority: tasks.priority, status: tasks.status })
-            .from(tasks)
-            .where(and(eq(tasks.userId, userId), eq(tasks.status, "not_started")))
-            .orderBy(desc(tasks.createdAt))
-            .limit(8),
-          db
-            .select({ title: innovationIdeas.title, stage: innovationIdeas.currentStage })
-            .from(innovationIdeas)
-            .where(eq(innovationIdeas.userId, userId))
-            .orderBy(desc(innovationIdeas.createdAt))
-            .limit(5),
-        ]);
+      const [
+        recentDecisions,
+        lastReview,
+        activeProjects,
+        pendingTasks,
+        recentIdeas,
+      ] = await Promise.all([
+        db
+          .select()
+          .from(agent1DecisionLog)
+          .where(eq(agent1DecisionLog.userId, userId))
+          .orderBy(desc(agent1DecisionLog.createdAt))
+          .limit(5),
+        db
+          .select()
+          .from(eveningReviewSessions)
+          .where(eq(eveningReviewSessions.userId, userId))
+          .orderBy(desc(eveningReviewSessions.createdAt))
+          .limit(1)
+          .then(rows => rows[0] ?? null),
+        db
+          .select({
+            name: projects.name,
+            status: projects.status,
+            progress: projects.progress,
+          })
+          .from(projects)
+          .where(
+            and(eq(projects.userId, userId), eq(projects.status, "active"))
+          )
+          .limit(5),
+        db
+          .select({
+            title: tasks.title,
+            priority: tasks.priority,
+            status: tasks.status,
+          })
+          .from(tasks)
+          .where(and(eq(tasks.userId, userId), eq(tasks.status, "not_started")))
+          .orderBy(desc(tasks.createdAt))
+          .limit(8),
+        db
+          .select({
+            title: innovationIdeas.title,
+            stage: innovationIdeas.currentStage,
+          })
+          .from(innovationIdeas)
+          .where(eq(innovationIdeas.userId, userId))
+          .orderBy(desc(innovationIdeas.createdAt))
+          .limit(5),
+      ]);
 
       const decisionsForPrompt: DecisionEntry[] = recentDecisions.map(d => ({
         date: d.date,
@@ -206,7 +224,10 @@ const chatRouter = router({
               ? `Identity: ${identity.identityMd.slice(0, 200)}`
               : "No identity profile.",
             decisionsForPrompt.length > 0
-              ? `Recent decisions: ${decisionsForPrompt.slice(0, 2).map(d => d.decision).join("; ")}`
+              ? `Recent decisions: ${decisionsForPrompt
+                  .slice(0, 2)
+                  .map(d => d.decision)
+                  .join("; ")}`
               : "",
             eveningReviewForPrompt?.wentWellNotes
               ? `Last evening: went well — ${eveningReviewForPrompt.wentWellNotes.slice(0, 100)}`
@@ -214,7 +235,10 @@ const chatRouter = router({
           ]
             .filter(Boolean)
             .join(" | ");
-          const councilPrompt = buildCouncilPrompt(input.message, councilContext);
+          const councilPrompt = buildCouncilPrompt(
+            input.message,
+            councilContext
+          );
           const councilResult = await invokeLLM({
             messages: [
               { role: "system", content: councilPrompt },
@@ -222,7 +246,9 @@ const chatRouter = router({
             ],
             response_format: { type: "json_object" },
           });
-          const raw = String(councilResult.choices[0]?.message?.content ?? "{}");
+          const raw = String(
+            councilResult.choices[0]?.message?.content ?? "{}"
+          );
           councilData = JSON.parse(raw) as CouncilData;
         } catch {
           councilData = null;
@@ -663,7 +689,12 @@ const reflectionRouter = router({
       const [reflection] = await db
         .select()
         .from(agent1Reflections)
-        .where(and(eq(agent1Reflections.id, input.id), eq(agent1Reflections.userId, userId)))
+        .where(
+          and(
+            eq(agent1Reflections.id, input.id),
+            eq(agent1Reflections.userId, userId)
+          )
+        )
         .limit(1);
       if (!reflection) throw new Error("Reflection not found.");
       await db
@@ -690,7 +721,12 @@ const reflectionRouter = router({
       await db
         .update(agent1Reflections)
         .set({ status: "rejected", reviewedAt: new Date() })
-        .where(and(eq(agent1Reflections.id, input.id), eq(agent1Reflections.userId, userId)));
+        .where(
+          and(
+            eq(agent1Reflections.id, input.id),
+            eq(agent1Reflections.userId, userId)
+          )
+        );
       return { success: true };
     }),
 });
@@ -737,7 +773,12 @@ const ideasRouter = router({
       const [idea] = await db
         .select()
         .from(innovationIdeas)
-        .where(and(eq(innovationIdeas.id, input.ideaId), eq(innovationIdeas.userId, userId)))
+        .where(
+          and(
+            eq(innovationIdeas.id, input.ideaId),
+            eq(innovationIdeas.userId, userId)
+          )
+        )
         .limit(1);
       if (!idea) throw new Error("Idea not found.");
       const identity = await getIdentityProfile(userId);
@@ -851,16 +892,26 @@ User task: ${input.task}`;
 
       // Step 2 — Run the task with the chosen agent via invokeLLM
       const agentSystemPrompts: Record<string, string> = {
-        email_composer: "You are an expert Email Composer. Write clear, professional, and effective emails.",
-        meeting_summariser: "You are a Meeting Summariser. Extract key decisions, action items, and insights from meeting content.",
-        market_analyst: "You are a Market Analyst. Provide data-driven market insights, trends, and competitive analysis.",
-        financial_analyst: "You are a Financial Analyst. Analyse financial data, identify trends, and provide investment insights.",
-        decision_analyst: "You are a Decision Analyst. Break down complex decisions using structured frameworks.",
-        strategic_advisor: "You are a Strategic Advisor. Provide high-level strategic guidance aligned with long-term goals.",
-        goal_strategist: "You are a Goal Strategist. Help set, prioritise, and achieve meaningful goals.",
-        risk_assessor: "You are a Risk Assessor. Identify, quantify, and mitigate risks in plans and decisions.",
-        research_synthesiser: "You are a Research Synthesiser. Gather, analyse, and synthesise information into clear insights.",
-        task_manager: "You are a Task Manager. Organise, prioritise, and track tasks for maximum productivity.",
+        email_composer:
+          "You are an expert Email Composer. Write clear, professional, and effective emails.",
+        meeting_summariser:
+          "You are a Meeting Summariser. Extract key decisions, action items, and insights from meeting content.",
+        market_analyst:
+          "You are a Market Analyst. Provide data-driven market insights, trends, and competitive analysis.",
+        financial_analyst:
+          "You are a Financial Analyst. Analyse financial data, identify trends, and provide investment insights.",
+        decision_analyst:
+          "You are a Decision Analyst. Break down complex decisions using structured frameworks.",
+        strategic_advisor:
+          "You are a Strategic Advisor. Provide high-level strategic guidance aligned with long-term goals.",
+        goal_strategist:
+          "You are a Goal Strategist. Help set, prioritise, and achieve meaningful goals.",
+        risk_assessor:
+          "You are a Risk Assessor. Identify, quantify, and mitigate risks in plans and decisions.",
+        research_synthesiser:
+          "You are a Research Synthesiser. Gather, analyse, and synthesise information into clear insights.",
+        task_manager:
+          "You are a Task Manager. Organise, prioritise, and track tasks for maximum productivity.",
       };
       const agentPrompt =
         agentSystemPrompts[routing.agentId] ??

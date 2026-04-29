@@ -361,9 +361,18 @@ export default function DailyBrief() {
   const { data: kpiList } = trpc.kpiOkr.list.useQuery();
   const { data: genesisProjects } = trpc.projectGenesis.listProjects.useQuery();
   // Live tasks and projects for Key Things section
-  const { data: liveTasks } = trpc.tasks.list.useQuery({ status: "not_started", limit: 10 });
-  const { data: liveInProgress } = trpc.tasks.list.useQuery({ status: "in_progress", limit: 5 });
-  const { data: liveProjects } = trpc.projects.list.useQuery({ status: "active", limit: 5 });
+  const { data: liveTasks } = trpc.tasks.list.useQuery({
+    status: "not_started",
+    limit: 10,
+  });
+  const { data: liveInProgress } = trpc.tasks.list.useQuery({
+    status: "in_progress",
+    limit: 5,
+  });
+  const { data: liveProjects } = trpc.projects.list.useQuery({
+    status: "active",
+    limit: 5,
+  });
 
   // Live briefing data from AI
   const { data: liveBrief, isLoading: briefLoading } =
@@ -741,7 +750,12 @@ export default function DailyBrief() {
                       month: "short",
                       day: "numeric",
                     })
-                  : new Date().toLocaleDateString("en-GB", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
+                  : new Date().toLocaleDateString("en-GB", {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
               </p>
             </div>
 
@@ -941,7 +955,9 @@ export default function DailyBrief() {
               <CardContent>
                 <div className="p-4 rounded-xl bg-primary/10 border border-primary/20 mb-4">
                   <p className="text-lg font-medium text-foreground">
-                    {liveBrief ? "Your AI briefing is ready" : "Busy day ahead with key decision points"}
+                    {liveBrief
+                      ? "Your AI briefing is ready"
+                      : "Busy day ahead with key decision points"}
                   </p>
                   <p className="text-sm text-muted-foreground mt-1">
                     {liveBrief
@@ -951,19 +967,29 @@ export default function DailyBrief() {
                 </div>
                 <ul className="space-y-2">
                   {(liveProjects?.slice(0, 4) ?? []).map((project, idx) => (
-                    <li key={idx} className="flex items-start gap-3 text-muted-foreground">
+                    <li
+                      key={idx}
+                      className="flex items-start gap-3 text-muted-foreground"
+                    >
                       <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                      <span>{project.name} — {project.status}{project.progress ? ` (${project.progress}%)` : ""}</span>
+                      <span>
+                        {project.name} — {project.status}
+                        {project.progress ? ` (${project.progress}%)` : ""}
+                      </span>
                     </li>
                   ))}
-                  {(!liveProjects || liveProjects.length === 0) && [
-                    "No active projects yet — add one in Project Genesis",
-                  ].map((highlight, idx) => (
-                    <li key={idx} className="flex items-start gap-3 text-muted-foreground">
-                      <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                      <span>{highlight}</span>
-                    </li>
-                  ))}
+                  {(!liveProjects || liveProjects.length === 0) &&
+                    ["No active projects yet — add one in Project Genesis"].map(
+                      (highlight, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-start gap-3 text-muted-foreground"
+                        >
+                          <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                          <span>{highlight}</span>
+                        </li>
+                      )
+                    )}
                 </ul>
               </CardContent>
             </Card>
@@ -990,7 +1016,9 @@ export default function DailyBrief() {
                         <div className="flex items-center gap-2 mb-1">
                           <Badge
                             variant="outline"
-                            className={getPriorityColor(item.priority ?? "medium")}
+                            className={getPriorityColor(
+                              item.priority ?? "medium"
+                            )}
                           >
                             {item.priority ?? "task"}
                           </Badge>
@@ -1045,7 +1073,8 @@ export default function DailyBrief() {
                             {task.title}
                           </h4>
                           <p className="text-sm text-muted-foreground">
-                            {task.description ?? "Continue working on this task today."}
+                            {task.description ??
+                              "Continue working on this task today."}
                           </p>
                         </div>
                         <ActionButtons
@@ -1060,7 +1089,8 @@ export default function DailyBrief() {
                   ))
                 ) : (
                   <p className="text-sm text-muted-foreground text-center py-4">
-                    No tasks in progress. Start a task to see Chief of Staff recommendations here.
+                    No tasks in progress. Start a task to see Chief of Staff
+                    recommendations here.
                   </p>
                 )}
               </CardContent>
@@ -1085,11 +1115,17 @@ export default function DailyBrief() {
                 <div className="space-y-4">
                   {(liveTasks?.tasks ?? []).length > 0 ? (
                     liveTasks!.tasks.map((task, idx) => (
-                      <div key={task.id} className="flex items-start gap-4 relative">
+                      <div
+                        key={task.id}
+                        className="flex items-start gap-4 relative"
+                      >
                         <div className="text-center min-w-[60px] shrink-0">
                           <div className="text-sm font-bold text-foreground">
                             {task.dueDate
-                              ? new Date(task.dueDate).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+                              ? new Date(task.dueDate).toLocaleTimeString([], {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })
                               : `Task ${idx + 1}`}
                           </div>
                           <div className="text-xs text-muted-foreground">
@@ -1099,7 +1135,8 @@ export default function DailyBrief() {
                         {/* Timeline dot */}
                         <div
                           className={`w-3 h-3 rounded-full mt-2 shrink-0 z-10 ${
-                            task.priority === "urgent" || task.priority === "high"
+                            task.priority === "urgent" ||
+                            task.priority === "high"
                               ? "bg-red-500"
                               : task.priority === "medium"
                                 ? "bg-yellow-500"
@@ -1109,10 +1146,14 @@ export default function DailyBrief() {
                         <div className="flex-1 p-4 rounded-xl border bg-card border-border hover:border-primary/30 transition-colors">
                           <div className="flex items-center gap-2 mb-1">
                             <ListChecks className="w-4 h-4 text-primary" />
-                            <span className="font-medium text-foreground">{task.title}</span>
+                            <span className="font-medium text-foreground">
+                              {task.title}
+                            </span>
                           </div>
                           {task.description && (
-                            <div className="text-xs text-muted-foreground">{task.description}</div>
+                            <div className="text-xs text-muted-foreground">
+                              {task.description}
+                            </div>
                           )}
                           {task.dueDate && (
                             <div className="text-xs text-muted-foreground mt-1">
@@ -1126,7 +1167,9 @@ export default function DailyBrief() {
                     <div className="text-center py-8 text-muted-foreground">
                       <Calendar className="w-8 h-8 mx-auto mb-2 opacity-40" />
                       <p className="text-sm">No tasks scheduled for today.</p>
-                      <p className="text-xs mt-1">Add tasks in the Task Manager to see them here.</p>
+                      <p className="text-xs mt-1">
+                        Add tasks in the Task Manager to see them here.
+                      </p>
                     </div>
                   )}
                 </div>
