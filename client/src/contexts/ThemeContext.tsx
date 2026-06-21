@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "light" | "dark" | "mix";
+type Theme = "light" | "dark";
 
 interface ThemeContextType {
   theme: Theme;
-  setTheme: (theme: Theme) => void;
+  toggleTheme?: () => void;
   switchable: boolean;
 }
 
@@ -21,27 +21,20 @@ export function ThemeProvider({
   defaultTheme = "light",
   switchable = false,
 }: ThemeProviderProps) {
-  const [theme, setThemeState] = useState<Theme>(() => {
+  const [theme, setTheme] = useState<Theme>(() => {
     if (switchable) {
       const stored = localStorage.getItem("theme");
-      if (stored === "light" || stored === "dark" || stored === "mix") {
-        return stored;
-      }
+      return (stored as Theme) || defaultTheme;
     }
     return defaultTheme;
   });
 
   useEffect(() => {
     const root = document.documentElement;
-    // Remove all theme classes first
-    root.classList.remove("dark", "light", "mix");
-    
     if (theme === "dark") {
       root.classList.add("dark");
-    } else if (theme === "mix") {
-      root.classList.add("mix");
-    } else if (theme === "light") {
-      root.classList.add("light");
+    } else {
+      root.classList.remove("dark");
     }
 
     if (switchable) {
@@ -49,12 +42,14 @@ export function ThemeProvider({
     }
   }, [theme, switchable]);
 
-  const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
-  };
+  const toggleTheme = switchable
+    ? () => {
+        setTheme(prev => (prev === "light" ? "dark" : "light"));
+      }
+    : undefined;
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, switchable }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, switchable }}>
       {children}
     </ThemeContext.Provider>
   );

@@ -152,7 +152,7 @@ const ragConfig: Record<RAGStatus, { label: string; color: string; dotColor: str
 const priorityConfig = {
   high: { label: "High", className: "bg-red-50 text-red-700 border-red-200" },
   medium: { label: "Medium", className: "bg-amber-50 text-amber-700 border-amber-200" },
-  low: { label: "Low", className: "bg-slate-50 text-slate-600 border-slate-200" },
+  low: { label: "Low", className: "bg-muted text-muted-foreground border-border" },
 };
 
 const docTypeColors: Record<string, string> = {
@@ -309,7 +309,7 @@ export default function ProjectPortal() {
                     <p className="text-sm font-medium text-foreground truncate">{doc.name}</p>
                     <p className="text-xs text-muted-foreground">Updated {doc.updated}</p>
                   </div>
-                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${docTypeColors[doc.type] ?? "bg-slate-50 text-slate-600"}`}>
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${docTypeColors[doc.type] ?? "bg-muted text-muted-foreground"}`}>
                     {doc.type}
                   </span>
                 </div>

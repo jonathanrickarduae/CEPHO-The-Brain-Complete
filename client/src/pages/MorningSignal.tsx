@@ -1,927 +1,573 @@
-import { useState, useEffect, useRef } from "react";
-import { useAuth } from "@/_core/hooks/useAuth";
-import BrainLayout from "@/components/BrainLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// MorningSignal — Victoria's daily briefing page
+// Design: Meridian Light — white bg, electric cyan, neon pink
+// Layout: Left-anchored, asymmetric, signal-first hierarchy
+
+import { useState } from "react";
+import { useLocation } from "wouter";
+import {
+  Sun,
+  ChevronRight,
+  CheckCircle2,
+  Clock,
+  AlertCircle,
+  Mail,
+  ArrowRight,
+  Sparkles,
+  Target,
+  TrendingUp,
+  Calendar,
+  FileText,
+  Check,
+  X,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { trpc } from "@/lib/trpc";
-import { toast } from "sonner";
-import {
-  Sun,
-  CheckCircle2,
-  Clock,
-  AlertTriangle,
-  Brain,
-  Sparkles,
-  Calendar,
-  Target,
-  TrendingUp,
-  Coffee,
-  ArrowRight,
-  Play,
-  Volume2,
-  Pause,
-  Loader2,
-  Download,
-  FileText,
-  Video,
-} from "lucide-react";
-import { VictoriaPresenter } from "@/components/VictoriaPresenter";
-import { useLocation } from "wouter";
+import AnimatedBrainLogo from "@/components/AnimatedBrainLogo";
 
-interface SignalItem {
+type RAGStatus = "red" | "amber" | "green";
+
+interface ProjectAction {
   id: string;
-  type: "accepted" | "deferred" | "insight" | "overnight";
-  title: string;
-  description: string;
+  project: string;
+  projectColor: string;
+  action: string;
   priority: "high" | "medium" | "low";
-  source: string;
-  actionUrl?: string;
+  status: RAGStatus;
+  dueTime?: string;
+}
+
+interface EmailDraft {
+  id: string;
+  to: string;
+  subject: string;
+  preview: string;
+  project: string;
+  projectColor: string;
+  approved: boolean | null;
+}
+
+interface OvernightTask {
+  id: string;
+  task: string;
+  project: string;
+  projectColor: string;
+  completedAt: string;
+  completedBy: string;
+}
+
+const projectActions: ProjectAction[] = [
+  {
+    id: "1",
+    project: "Perfect",
+    projectColor: "#F59E0B",
+    action: "Escalate 3 overdue deliverables to supplier — deadline passed yesterday",
+    priority: "high",
+    status: "red",
+    dueTime: "09:00",
+  },
+  {
+    id: "2",
+    project: "Celadon",
+    projectColor: "#10B981",
+    action: "Follow up on licence renewal — renewal window closes in 5 days",
+    priority: "high",
+    status: "amber",
+    dueTime: "10:30",
+  },
+  {
+    id: "3",
+    project: "Boundless",
+    projectColor: "#EF4444",
+    action: "Review supplier contract terms before Thursday board meeting",
+    priority: "medium",
+    status: "amber",
+    dueTime: "14:00",
+  },
+  {
+    id: "4",
+    project: "Celanova",
+    projectColor: "#8B5CF6",
+    action: "Review Q3 roadmap draft and approve for team distribution",
+    priority: "medium",
+    status: "green",
+    dueTime: "16:00",
+  },
+  {
+    id: "5",
+    project: "Olmack",
+    projectColor: "#3B82F6",
+    action: "Prepare monthly review deck — meeting scheduled for Friday",
+    priority: "low",
+    status: "green",
+  },
+  {
+    id: "6",
+    project: "Personal",
+    projectColor: "#EC4899",
+    action: "Complete weekly review — 4 open items from last week",
+    priority: "low",
+    status: "green",
+  },
+];
+
+const emailDrafts: EmailDraft[] = [
+  {
+    id: "e1",
+    to: "Mark Davies <mark@perfect-supplier.com>",
+    subject: "Urgent: Overdue Deliverables — Action Required",
+    preview:
+      "Following up on the three deliverables that were due on 18 June. We need confirmation of revised delivery dates by end of business today...",
+    project: "Perfect",
+    projectColor: "#F59E0B",
+    approved: null,
+  },
+  {
+    id: "e2",
+    to: "Licensing Team <licensing@celadon.gov>",
+    subject: "Licence Renewal — Reference #CLD-2024-881",
+    preview:
+      "I am writing to initiate the renewal process for our operating licence (ref #CLD-2024-881). Our current licence expires on 26 June 2026...",
+    project: "Celadon",
+    projectColor: "#10B981",
+    approved: null,
+  },
+  {
+    id: "e3",
+    to: "Sarah Chen <sarah@boundless-supply.com>",
+    subject: "Contract Review Request — Boundless Supply Agreement",
+    preview:
+      "Please could you send over the latest version of the supply agreement ahead of our Thursday board meeting? We need to review the revised terms...",
+    project: "Boundless",
+    projectColor: "#EF4444",
+    approved: null,
+  },
+];
+
+const overnightTasks: OvernightTask[] = [
+  {
+    id: "o1",
+    task: "Celanova Q2 financial summary compiled and formatted",
+    project: "Celanova",
+    projectColor: "#8B5CF6",
+    completedAt: "02:14",
+    completedBy: "Victoria",
+  },
+  {
+    id: "o2",
+    task: "Olmack supplier database updated with 12 new contacts",
+    project: "Olmack",
+    projectColor: "#3B82F6",
+    completedAt: "03:47",
+    completedBy: "Victoria",
+  },
+  {
+    id: "o3",
+    task: "Perfect project risk register updated — 3 new risks flagged",
+    project: "Perfect",
+    projectColor: "#F59E0B",
+    completedAt: "04:22",
+    completedBy: "Victoria",
+  },
+];
+
+const ragBorder: Record<RAGStatus, string> = {
+  red: "border-l-red-500",
+  amber: "border-l-amber-400",
+  green: "border-l-emerald-500",
+};
+
+const ragDot: Record<RAGStatus, string> = {
+  red: "bg-red-500",
+  amber: "bg-amber-400",
+  green: "bg-emerald-500",
+};
+
+const priorityLabel: Record<string, string> = {
+  high: "High",
+  medium: "Medium",
+  low: "Low",
+};
+
+const priorityColor: Record<string, string> = {
+  high: "text-red-600 bg-red-50",
+  medium: "text-amber-600 bg-amber-50",
+  low: "text-emerald-600 bg-emerald-50",
+};
+
+function getDateString() {
+  return new Date().toLocaleDateString("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+function getGreeting() {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Good morning";
+  if (hour < 17) return "Good afternoon";
+  return "Good evening";
 }
 
 export default function MorningSignal() {
-  const { user, loading: authLoading } = useAuth();
   const [, setLocation] = useLocation();
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
-  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
-  const [victoriaBriefingText, setVictoriaBriefingText] = useState<string | undefined>(undefined);
-  const [isLoadingVictoriaBriefing, setIsLoadingVictoriaBriefing] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  const victoriaBriefingMutation = trpc.morningSignal.generateVictoriaBriefing.useMutation({
-    onSuccess: (data) => {
-      setVictoriaBriefingText(data.text);
-      setIsLoadingVictoriaBriefing(false);
-    },
-    onError: () => setIsLoadingVictoriaBriefing(false),
-  });
-
-  // Fetch evening review data
-  const { data: eveningReviewData } = trpc.eveningReview.getLatest.useQuery(
-    undefined,
-    { enabled: !!user }
+  const [emailStates, setEmailStates] = useState<Record<string, boolean | null | undefined>>(
+    Object.fromEntries(emailDrafts.map((e) => [e.id, null]))
   );
+  const [completedActions, setCompletedActions] = useState<Set<string>>(new Set());
 
-  // Pattern data from evening review metadata
-  const patternData = eveningReviewData?.metadata as any;
+  const redCount = projectActions.filter((a) => a.status === "red").length;
+  const amberCount = projectActions.filter((a) => a.status === "amber").length;
+  const pendingEmails = Object.values(emailStates).filter((v) => v === null).length;
 
-  // Fetch real morning briefing (Gmail + Calendar + Projects)
-  const { data: briefingData, isLoading: briefingLoading } = trpc.morningSignal.getBriefing.useQuery(
-    undefined,
-    { enabled: !!user, staleTime: 5 * 60 * 1000 }
-  );
-
-  // Update time every minute
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 60000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const getGreeting = () => {
-    const hour = currentTime.getHours();
-    if (hour < 12) return "Good Morning";
-    if (hour < 17) return "Good Afternoon";
-    return "Good Evening";
-  };
-
-  const formatDate = () => {
-    return currentTime.toLocaleDateString("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-      year: "numeric",
+  const toggleAction = (id: string) => {
+    setCompletedActions((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
     });
   };
 
-  // Generate signal items from evening review
-  const generateSignalItems = (): SignalItem[] => {
-    const items: SignalItem[] = [];
-
-    if (eveningReviewData) {
-      // Add accepted tasks from metadata
-      const meta = eveningReviewData.metadata as any;
-      if (meta?.acceptedTasks) {
-        (meta.acceptedTasks as any[]).forEach((task: any, index: number) => {
-          items.push({
-            id: `accepted-${index}`,
-            type: "accepted",
-            title: task.title || `Task ${index + 1}`,
-            description: task.description || "Ready for today",
-            priority: task.priority || "medium",
-            source: task.project || "Evening Review",
-            actionUrl: "/workflow",
-          });
-        });
-      }
-
-      // Add deferred tasks from metadata
-      if (meta?.deferredTasks) {
-        (meta.deferredTasks as any[]).forEach((task: any, index: number) => {
-          items.push({
-            id: `deferred-${index}`,
-            type: "deferred",
-            title: task.title || `Deferred Task ${index + 1}`,
-            description: task.reason || "Needs attention",
-            priority: "high",
-            source: task.project || "Evening Review",
-            actionUrl: "/workflow",
-          });
-        });
-      }
-
-      // Add insights from metadata
-      const metadata = eveningReviewData.metadata as any;
-      if (metadata?.insights) {
-        (metadata.insights as any[]).forEach((insight: any, index: number) => {
-          items.push({
-            id: `insight-${index}`,
-            type: "insight",
-            title: insight.title || "Insight",
-            description: insight.content || insight,
-            priority: "medium",
-            source: "Digital Twin Analysis",
-          });
-        });
-      }
-
-      // Add overnight work from metadata
-      if (metadata?.overnightWork) {
-        (metadata.overnightWork as any[]).forEach((work: any, index: number) => {
-          items.push({
-            id: `overnight-${index}`,
-            type: "overnight",
-            title: work.title || "Overnight Progress",
-            description: work.summary || "Completed while you slept",
-            priority: "low",
-            source: "Chief of Staff",
-          });
-        });
-      }
-    }
-
-    // Add default items if no data
-    if (items.length === 0) {
-      items.push(
-        {
-          id: "default-1",
-          type: "insight",
-          title: "Morning Signal Ready",
-          description:
-            "Complete your first Evening Review to populate your morning briefing with personalized insights.",
-          priority: "medium",
-          source: "System",
-          actionUrl: "/evening-review",
-        },
-        {
-          id: "default-2",
-          type: "accepted",
-          title: "Set Up Your Day",
-          description:
-            "Use the Daily Brief to review your schedule and priorities for today.",
-          priority: "high",
-          source: "Getting Started",
-          actionUrl: "/daily-brief",
-        }
-      );
-    }
-
-    return items;
+  const approveEmail = (id: string, approved: boolean | null) => {
+    setEmailStates((prev) => ({ ...prev, [id]: approved }));
   };
-
-  const signalItems = generateSignalItems();
-  const acceptedItems = signalItems.filter((i) => i.type === "accepted");
-  const deferredItems = signalItems.filter((i) => i.type === "deferred");
-  const insightItems = signalItems.filter((i) => i.type === "insight");
-  const overnightItems = signalItems.filter((i) => i.type === "overnight");
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case "high":
-        return "bg-red-500/20 text-red-400 border-red-500/30";
-      case "medium":
-        return "bg-amber-500/20 text-amber-400 border-amber-500/30";
-      case "low":
-        return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
-      default:
-        return "bg-slate-500/20 text-slate-400 border-slate-500/30";
-    }
-  };
-
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case "accepted":
-        return <CheckCircle2 className="h-4 w-4 text-emerald-400" />;
-      case "deferred":
-        return <Clock className="h-4 w-4 text-amber-400" />;
-      case "insight":
-        return <Sparkles className="h-4 w-4 text-cyan-400" />;
-      case "overnight":
-        return <Brain className="h-4 w-4 text-purple-400" />;
-      default:
-        return <Target className="h-4 w-4 text-slate-400" />;
-    }
-  };
-
-  // TTS mutation for generating audio
-  const generateVoiceMutation = trpc.expertEvolution.generateVoice.useMutation();
-
-  // Generate brief text for TTS
-  const generateBriefText = (): string => {
-    const greeting = getGreeting();
-    // Removed personalized greeting per sprint item #40
-    const date = formatDate();
-    
-    let briefText = `${greeting}. Here's your morning signal for ${date}. `;
-    
-    // Add summary stats
-    briefText += `You have ${acceptedItems.length} tasks ready for today`;
-    if (deferredItems.length > 0) {
-      briefText += `, and ${deferredItems.length} items that need your attention`;
-    }
-    briefText += ". ";
-    
-    // Add top priority items
-    const highPriorityItems = signalItems.filter(i => i.priority === "high");
-    if (highPriorityItems.length > 0) {
-      briefText += `Your high priority items are: `;
-      highPriorityItems.slice(0, 3).forEach((item, index) => {
-        briefText += `${index + 1}. ${item.title}. `;
-      });
-    }
-    
-    // Add insights if any
-    if (insightItems.length > 0) {
-      briefText += `I have ${insightItems.length} insights from your digital twin. `;
-      insightItems.slice(0, 2).forEach((item) => {
-        briefText += `${item.title}: ${item.description}. `;
-      });
-    }
-    
-    // Add overnight work if any
-    if (overnightItems.length > 0) {
-      briefText += `While you were away, ${overnightItems.length} items were processed. `;
-    }
-    
-    briefText += "Have a productive day!";
-    
-    return briefText;
-  };
-
-  const handlePlayBrief = async () => {
-    // If already playing, pause
-    if (isPlaying && audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-      return;
-    }
-    
-    // If we have cached audio, play it
-    if (audioRef.current && audioRef.current.src) {
-      audioRef.current.play();
-      setIsPlaying(true);
-      return;
-    }
-    
-    // Generate new audio
-    setIsGeneratingAudio(true);
-    try {
-      const briefText = generateBriefText();
-      const result = await generateVoiceMutation.mutateAsync({
-        text: briefText,
-        expertId: "chief-of-staff", // Use Chief of Staff voice
-      });
-      
-      // Create audio from base64
-      const audioBlob = new Blob(
-        [Uint8Array.from(atob(result.audio), c => c.charCodeAt(0))],
-        { type: result.contentType }
-      );
-      const audioUrl = URL.createObjectURL(audioBlob);
-      
-      // Create and play audio element
-      const audio = new Audio(audioUrl);
-      audioRef.current = audio;
-      
-      audio.onended = () => {
-        setIsPlaying(false);
-      };
-      
-      audio.onerror = () => {
-        toast.error("Failed to play audio");
-        setIsPlaying(false);
-      };
-      
-      await audio.play();
-      setIsPlaying(true);
-      toast.success(`Playing brief with ${result.voiceName} voice`);
-    } catch (error) {
-      console.error("Failed to generate audio:", error);
-      toast.error("Failed to generate audio brief. Please try again.");
-    } finally {
-      setIsGeneratingAudio(false);
-    }
-  };
-
-  // PDF generation mutation
-  const generatePdfMutation = trpc.morningSignal.generatePdf.useMutation();
-
-  const handleDownloadPdf = async () => {
-    setIsGeneratingPdf(true);
-    try {
-      const result = await generatePdfMutation.mutateAsync({ includePatterns: true });
-      
-      // Create a blob from the HTML and trigger download
-      const blob = new Blob([result.html], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      
-      // Open in new window for printing/saving as PDF
-      const printWindow = window.open(url, '_blank');
-      if (printWindow) {
-        printWindow.onload = () => {
-          // Auto-trigger print dialog for PDF saving
-          setTimeout(() => {
-            printWindow.print();
-          }, 500);
-        };
-      }
-      
-      toast.success('Morning Signal opened for printing. Use "Save as PDF" in the print dialog.');
-    } catch (error) {
-      console.error('Failed to generate PDF:', error);
-      toast.error('Failed to generate PDF. Please try again.');
-    } finally {
-      setIsGeneratingPdf(false);
-    }
-  };
-
-  // Cleanup audio on unmount
-  useEffect(() => {
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        if (audioRef.current.src) {
-          URL.revokeObjectURL(audioRef.current.src);
-        }
-      }
-    };
-  }, []);
-
-  if (authLoading) {
-    return (
-      <div className="p-6 max-w-6xl mx-auto space-y-6">
-          {/* Header skeleton */}
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div className="space-y-2">
-              <div className="h-8 w-48 bg-white/10 rounded animate-pulse" />
-              <div className="h-4 w-64 bg-white/10 rounded animate-pulse" />
-            </div>
-            <div className="h-10 w-32 bg-white/10 rounded animate-pulse" />
-          </div>
-          {/* Stats skeleton */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="p-4 rounded-xl border bg-card animate-pulse">
-                <div className="h-3 w-16 bg-white/10 rounded mb-2" />
-                <div className="h-6 w-12 bg-white/10 rounded" />
-              </div>
-            ))}
-          </div>
-          {/* Content skeleton */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="p-6 rounded-xl border bg-card space-y-4 animate-pulse">
-              <div className="h-5 w-32 bg-white/10 rounded" />
-              <div className="space-y-2">
-                {Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="h-4 w-full bg-white/10 rounded" />
-                ))}
-              </div>
-            </div>
-            <div className="p-6 rounded-xl border bg-card space-y-4 animate-pulse">
-              <div className="h-5 w-32 bg-white/10 rounded" />
-              <div className="space-y-2">
-                {Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="h-4 w-full bg-white/10 rounded" />
-                ))}
-              </div>
-            </div>
-          </div>
-      </div>
-    );
-  }
 
   return (
-      <div className="p-6 max-w-6xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30">
-                <Sun className="h-6 w-6 text-amber-400" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">
+    <div className="min-h-screen bg-background">
+      {/* Page header */}
+      <div className="border-b border-border bg-background px-4 sm:px-6 py-4 sm:py-5">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <Sun className="h-4 w-4 text-amber-500" />
+                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Morning Signal
-                </h1>
-                <p className="text-sm text-foreground/70">{formatDate()}</p>
+                </span>
               </div>
+              <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
+                {getGreeting()}, Jonathan
+              </h1>
+              <p className="text-sm text-muted-foreground mt-0.5">{getDateString()}</p>
+            </div>
+            {/* Summary chips */}
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 flex-wrap justify-end">
+              {redCount > 0 && (
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 border border-red-200">
+                  <div className="h-2 w-2 rounded-full bg-red-500" />
+                  <span className="text-xs font-semibold text-red-700">
+                    {redCount} critical
+                  </span>
+                </div>
+              )}
+              {amberCount > 0 && (
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-200">
+                  <div className="h-2 w-2 rounded-full bg-amber-400" />
+                  <span className="text-xs font-semibold text-amber-700">
+                    {amberCount} in progress
+                  </span>
+                </div>
+              )}
+              {pendingEmails > 0 && (
+                <div
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border"
+                  style={{
+                    background: "oklch(0.78 0.18 195 / 0.08)",
+                    borderColor: "oklch(0.78 0.18 195 / 0.3)",
+                  }}
+                >
+                  <Mail className="h-3 w-3" style={{ color: "oklch(0.78 0.18 195)" }} />
+                  <span
+                    className="text-xs font-semibold"
+                    style={{ color: "oklch(0.55 0.18 195)" }}
+                  >
+                    {pendingEmails} drafts pending
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleDownloadPdf}
-              disabled={isGeneratingPdf}
-              className="border-pink-500/30 text-pink-400 hover:bg-pink-500/10"
-            >
-              {isGeneratingPdf ? (
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              ) : (
-                <Download className="h-4 w-4 mr-2" />
+          {/* Victoria briefing strip */}
+          <div
+            className="mt-4 p-4 rounded-xl border flex items-start gap-3"
+            style={{
+              background: "oklch(0.78 0.18 195 / 0.05)",
+              borderColor: "oklch(0.78 0.18 195 / 0.2)",
+            }}
+          >
+            <AnimatedBrainLogo size="xs" intensity="active" color="oklch(0.78 0.18 195)" />
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <span
+                  className="text-xs font-bold uppercase tracking-wider"
+                  style={{ color: "oklch(0.55 0.18 195)" }}
+                >
+                  Victoria
+                </span>
+                <span className="text-xs text-muted-foreground">· AI Chief of Staff</span>
+              </div>
+              <p className="text-sm text-foreground leading-relaxed">
+                You have <strong>1 critical issue</strong> (Perfect deliverables overdue) and{" "}
+                <strong>2 items requiring action today</strong>. I've drafted 3 emails ready for
+                your approval. Overnight I completed 3 background tasks across Celanova, Olmack,
+                and Perfect. Your highest-priority action is the Perfect supplier escalation —
+                recommend addressing before 09:00.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main content */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
+        <Tabs defaultValue="actions">
+          <TabsList className="mb-4 sm:mb-6 bg-muted/50 p-1 rounded-xl w-full sm:w-auto">
+            <TabsTrigger value="actions" className="rounded-lg text-sm">
+              Today's Actions
+              <span className="ml-2 text-[10px] bg-primary/15 text-primary px-1.5 py-0.5 rounded-full font-bold">
+                {projectActions.length}
+              </span>
+            </TabsTrigger>
+            <TabsTrigger value="emails" className="rounded-lg text-sm">
+              Email Drafts
+              {pendingEmails > 0 && (
+                <span
+                  className="ml-2 text-[10px] px-1.5 py-0.5 rounded-full font-bold"
+                  style={{
+                    background: "oklch(0.78 0.18 195 / 0.15)",
+                    color: "oklch(0.45 0.18 195)",
+                  }}
+                >
+                  {pendingEmails}
+                </span>
               )}
-              {isGeneratingPdf ? "Generating..." : "Download PDF"}
-            </Button>
-          </div>
-        </div>
-
-        {/* Victoria Presenter - Morning Brief */}
-        <VictoriaPresenter
-          onPlayAudio={handlePlayBrief}
-          isPlaying={isPlaying}
-          isGenerating={isGeneratingAudio}
-          briefTitle="Morning Brief"
-          briefingText={victoriaBriefingText}
-          isLoadingBriefing={isLoadingVictoriaBriefing}
-        />
-        {/* Generate Victoria Briefing Button */}
-        {!victoriaBriefingText && !isLoadingVictoriaBriefing && briefingData && (
-          <div className="flex justify-center">
-            <Button
-              size="sm"
-              variant="outline"
-              className="border-pink-500/30 text-pink-400 hover:bg-pink-500/10 text-xs"
-              onClick={() => {
-                setIsLoadingVictoriaBriefing(true);
-                victoriaBriefingMutation.mutate({
-                  projects: briefingData.projects,
-                  calendarEventCount: briefingData.calendarEvents.length,
-                  emailCount: briefingData.emails.length,
-                  userName: briefingData.userName,
-                });
-              }}
-            >
-              <Sparkles className="h-3.5 w-3.5 mr-1.5" />
-              Generate Victoria's Briefing
-            </Button>
-          </div>
-        )}
-
-        {/* Connection Status + Real Data */}
-        {briefingData && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Gmail Panel */}
-            <Card className="border-cyan-500/30">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${briefingData.connections.gmail ? 'bg-emerald-400' : 'bg-slate-500'}`} />
-                  Gmail {briefingData.connections.gmail ? `— ${briefingData.emails.length} unread` : '— Not connected'}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {briefingData.connections.gmail ? (
-                  briefingData.emails.length > 0 ? (
-                    briefingData.emails.slice(0, 5).map((email: any, i: number) => (
-                      <div key={i} className="p-2 rounded-lg bg-muted/50 border border-border">
-                        <p className="text-xs font-medium text-foreground truncate">{email.subject || '(no subject)'}</p>
-                        <p className="text-xs text-muted-foreground truncate">{email.from || ''}</p>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-xs text-muted-foreground">No unread emails in the last 24 hours.</p>
-                  )
-                ) : (
-                  <div className="text-center py-3">
-                    <p className="text-xs text-muted-foreground mb-2">Connect Gmail to see your emails here.</p>
-                    <Button size="sm" variant="outline" className="text-xs" onClick={() => setLocation('/integrations')}>
-                      Connect Gmail
-                    </Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Calendar Panel */}
-            <Card className="border-pink-500/30">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-pink-400" />
-                  Today's Calendar {briefingData.connections.calendar ? `— ${briefingData.calendarEvents.length} events` : '— Not connected'}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {briefingData.connections.calendar ? (
-                  briefingData.calendarEvents.length > 0 ? (
-                    briefingData.calendarEvents.slice(0, 5).map((event: any, i: number) => (
-                      <div key={i} className="p-2 rounded-lg bg-muted/50 border border-border">
-                        <p className="text-xs font-medium text-foreground truncate">{event.title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {event.startTime ? new Date(event.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
-                          {event.location ? ` · ${event.location}` : ''}
-                        </p>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-xs text-muted-foreground">No events scheduled for today.</p>
-                  )
-                ) : (
-                  <div className="text-center py-3">
-                    <p className="text-xs text-muted-foreground mb-2">Connect Google Calendar to see your schedule.</p>
-                    <Button size="sm" variant="outline" className="text-xs" onClick={() => setLocation('/integrations')}>
-                      Connect Calendar
-                    </Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {/* Quick Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card className="bg-slate-900/50 border-emerald-500/30">
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-emerald-500/20">
-                <CheckCircle2 className="h-5 w-5 text-emerald-400" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-white">
-                  {acceptedItems.length}
-                </p>
-                <p className="text-xs text-foreground/70">Tasks Ready</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-900/50 border-amber-500/30">
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-amber-500/20">
-                <AlertTriangle className="h-5 w-5 text-amber-400" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-white">
-                  {deferredItems.length}
-                </p>
-                <p className="text-xs text-foreground/70">Need Attention</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-900/50 border-cyan-500/30">
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-cyan-500/20">
-                <Sparkles className="h-5 w-5 text-cyan-400" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-white">
-                  {insightItems.length}
-                </p>
-                <p className="text-xs text-foreground/70">Insights</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-900/50 border-purple-500/30">
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-purple-500/20">
-                <Brain className="h-5 w-5 text-purple-400" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-white">
-                  {overnightItems.length}
-                </p>
-                <p className="text-xs text-foreground/70">Overnight Work</p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Pattern Insights Banner */}
-        {patternData && patternData.preferredTime && (
-          <Card className="bg-gradient-to-r from-purple-900/30 to-cyan-900/30 border-purple-500/30">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <TrendingUp className="h-5 w-5 text-purple-400" />
-                <div className="flex-1">
-                  <p className="text-sm text-white">
-                    <span className="text-purple-400 font-medium">
-                      Pattern Insight:
-                    </span>{" "}
-                    You typically complete evening reviews around{" "}
-                    <span className="text-cyan-400 font-medium">
-                      {patternData.preferredTime}
-                    </span>
-                    {patternData.preferredDay && (
-                      <>
-                        , especially on{" "}
-                        <span className="text-cyan-400 font-medium">
-                          {patternData.preferredDay}s
-                        </span>
-                      </>
-                    )}
-                    .
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Main Content Tabs */}
-        <Tabs defaultValue="today" className="space-y-4">
-          <TabsList className="bg-slate-800/50 border border-slate-700/50">
-            <TabsTrigger value="today" className="data-[state=active]:bg-cyan-500/20">
-              Today's Focus
             </TabsTrigger>
-            <TabsTrigger value="attention" className="data-[state=active]:bg-amber-500/20">
-              Needs Attention
-            </TabsTrigger>
-            <TabsTrigger value="insights" className="data-[state=active]:bg-purple-500/20">
-              Insights
-            </TabsTrigger>
-            <TabsTrigger value="overnight" className="data-[state=active]:bg-blue-500/20">
+            <TabsTrigger value="overnight" className="rounded-lg text-sm">
               Overnight
+              <span className="ml-2 text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full font-bold">
+                {overnightTasks.length}
+              </span>
             </TabsTrigger>
           </TabsList>
 
-          {/* Today's Focus Tab */}
-          <TabsContent value="today" className="space-y-4">
-            <Card className="bg-slate-900/50 border-slate-700/50">
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-emerald-400" />
-                  Tasks Ready for Today
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {acceptedItems.length > 0 ? (
-                  acceptedItems.map((item) => (
-                    <div
-                      key={item.id}
-                      className="p-4 rounded-lg bg-slate-800/50 border border-slate-700/50 hover:border-emerald-500/30 transition-colors cursor-pointer"
-                      onClick={() => item.actionUrl && setLocation(item.actionUrl)}
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex items-start gap-3">
-                          {getTypeIcon(item.type)}
-                          <div>
-                            <h4 className="font-medium text-white">
-                              {item.title}
-                            </h4>
-                            <p className="text-sm text-slate-400 mt-1">
-                              {item.description}
-                            </p>
-                            <p className="text-xs text-slate-500 mt-2">
-                              Source: {item.source}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Badge
-                            variant="outline"
-                            className={getPriorityColor(item.priority)}
+          {/* TODAY'S ACTIONS */}
+          <TabsContent value="actions">
+            <div className="flex flex-col gap-3">
+              {projectActions.map((action) => {
+                const done = completedActions.has(action.id);
+                return (
+                  <div
+                    key={action.id}
+                    className={`bg-white border border-border rounded-xl p-4 border-l-4 ${ragBorder[action.status]} transition-all ${done ? "opacity-50" : ""}`}
+                  >
+                    <div className="flex items-start gap-3">
+                      {/* Checkbox */}
+                      <button
+                        onClick={() => toggleAction(action.id)}
+                        className={`mt-0.5 h-5 w-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-all ${
+                          done
+                            ? "bg-emerald-500 border-emerald-500"
+                            : "border-border hover:border-primary"
+                        }`}
+                      >
+                        {done && <Check className="h-3 w-3 text-white" strokeWidth={3} />}
+                      </button>
+
+                      {/* Content */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
+                          <span
+                            className="text-xs font-bold px-2 py-0.5 rounded-full text-white"
+                            style={{ background: action.projectColor }}
                           >
-                            {item.priority}
-                          </Badge>
-                          {item.actionUrl && (
-                            <ArrowRight className="h-4 w-4 text-slate-500" />
+                            {action.project}
+                          </span>
+                          <span
+                            className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${priorityColor[action.priority]}`}
+                          >
+                            {priorityLabel[action.priority]}
+                          </span>
+                          {action.dueTime && (
+                            <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+                              <Clock className="h-3 w-3" />
+                              {action.dueTime}
+                            </span>
                           )}
                         </div>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center py-8 text-slate-400">
-                    <CheckCircle2 className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                    <p>No tasks scheduled for today yet.</p>
-                    <p className="text-sm mt-1">
-                      Complete an Evening Review to populate your morning signal.
-                    </p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Needs Attention Tab */}
-          <TabsContent value="attention" className="space-y-4">
-            <Card className="bg-slate-900/50 border-slate-700/50">
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-amber-400" />
-                  Items Requiring Attention
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {deferredItems.length > 0 ? (
-                  deferredItems.map((item) => (
-                    <div
-                      key={item.id}
-                      className="p-4 rounded-lg bg-amber-900/20 border border-amber-500/30 hover:border-amber-400/50 transition-colors cursor-pointer"
-                      onClick={() => item.actionUrl && setLocation(item.actionUrl)}
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex items-start gap-3">
-                          {getTypeIcon(item.type)}
-                          <div>
-                            <h4 className="font-medium text-white">
-                              {item.title}
-                            </h4>
-                            <p className="text-sm text-amber-300/80 mt-1">
-                              {item.description}
-                            </p>
-                            <p className="text-xs text-slate-500 mt-2">
-                              Source: {item.source}
-                            </p>
-                          </div>
-                        </div>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="border-amber-500/30 text-amber-400 hover:bg-amber-500/10"
+                        <p
+                          className={`text-sm text-foreground leading-snug ${done ? "line-through text-muted-foreground" : ""}`}
                         >
-                          Review
-                        </Button>
+                          {action.action}
+                        </p>
                       </div>
+
+                      {/* Navigate to project */}
+                      <button
+                        onClick={() => setLocation(`/projects/${action.project.toLowerCase()}`)}
+                        className="shrink-0 h-8 w-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </button>
                     </div>
-                  ))
-                ) : (
-                  <div className="text-center py-8 text-slate-400">
-                    <CheckCircle2 className="h-12 w-12 mx-auto mb-3 text-emerald-400 opacity-50" />
-                    <p>All clear! No items need immediate attention.</p>
                   </div>
-                )}
-              </CardContent>
-            </Card>
+                );
+              })}
+            </div>
           </TabsContent>
 
-          {/* Insights Tab */}
-          <TabsContent value="insights" className="space-y-4">
-            <Card className="bg-slate-900/50 border-slate-700/50">
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-cyan-400" />
-                  Digital Twin Insights
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {insightItems.length > 0 ? (
-                  insightItems.map((item) => (
-                    <div
-                      key={item.id}
-                      className="p-4 rounded-lg bg-gradient-to-r from-cyan-900/20 to-purple-900/20 border border-cyan-500/30"
-                    >
-                      <div className="flex items-start gap-3">
-                        {getTypeIcon(item.type)}
-                        <div>
-                          <h4 className="font-medium text-white">
-                            {item.title}
-                          </h4>
-                          <p className="text-sm text-slate-300 mt-1">
-                            {item.description}
-                          </p>
-                          <p className="text-xs text-slate-500 mt-2">
-                            Generated by: {item.source}
-                          </p>
+          {/* EMAIL DRAFTS */}
+          <TabsContent value="emails">
+            <div className="flex flex-col gap-4">
+              <p className="text-sm text-muted-foreground">
+                Victoria has drafted these emails based on your project status. Review and approve
+                before sending.
+              </p>
+              {emailDrafts.map((email) => {
+                const state = emailStates[email.id];
+                return (
+                  <div
+                    key={email.id}
+                    className={`bg-white border rounded-xl p-5 transition-all ${
+                      state === true
+                        ? "border-emerald-300 bg-emerald-50/30"
+                        : state === false
+                          ? "border-border opacity-50"
+                          : "border-border"
+                    }`}
+                  >
+                    {/* Email header */}
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span
+                            className="text-xs font-bold px-2 py-0.5 rounded-full text-white"
+                            style={{ background: email.projectColor }}
+                          >
+                            {email.project}
+                          </span>
+                          {state === true && (
+                            <span className="text-xs font-semibold text-emerald-600 flex items-center gap-1">
+                              <CheckCircle2 className="h-3 w-3" />
+                              Approved
+                            </span>
+                          )}
+                          {state === false && (
+                            <span className="text-xs font-semibold text-muted-foreground">
+                              Declined
+                            </span>
+                          )}
                         </div>
+                        <p className="text-xs text-muted-foreground mb-0.5">To: {email.to}</p>
+                        <p className="text-sm font-semibold text-foreground">{email.subject}</p>
                       </div>
+                      <Mail className="h-4 w-4 text-muted-foreground shrink-0 mt-1" />
                     </div>
-                  ))
-                ) : (
-                  <div className="text-center py-8 text-slate-400">
-                    <Sparkles className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                    <p>No insights available yet.</p>
-                    <p className="text-sm mt-1">
-                      Insights are generated from your Evening Reviews.
+
+                    {/* Preview */}
+                    <p className="text-sm text-muted-foreground leading-relaxed border-l-2 border-border pl-3 mb-4">
+                      {email.preview}
                     </p>
+
+                    {/* Actions */}
+                    {state === null && (
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => approveEmail(email.id, true)}
+                          className="flex-1 flex items-center justify-center gap-1.5 h-10 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium hover:bg-emerald-100 active:scale-95 transition-all"
+                          style={{ minHeight: 44 }}
+                        >
+                          <Check className="h-3.5 w-3.5" />
+                          Approve & Send
+                        </button>
+                        <button
+                          onClick={() => approveEmail(email.id, false)}
+                          className="flex-1 flex items-center justify-center gap-1.5 h-10 rounded-lg bg-muted border border-border text-muted-foreground text-xs font-medium hover:bg-muted/80 active:scale-95 transition-all"
+                          style={{ minHeight: 44 }}
+                        >
+                          <X className="h-3.5 w-3.5" />
+                          Decline
+                        </button>
+                      </div>
+                    )}
+                    {state === true && (
+                      <p className="text-xs text-emerald-600 font-medium">
+                        Email queued for sending.
+                      </p>
+                    )}
+                    {state === false && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => approveEmail(email.id, null)}
+                        className="text-xs h-8 px-3 text-muted-foreground"
+                      >
+                        Undo
+                      </Button>
+                    )}
                   </div>
-                )}
-              </CardContent>
-            </Card>
+                );
+              })}
+            </div>
           </TabsContent>
 
-          {/* Overnight Tab */}
-          <TabsContent value="overnight" className="space-y-4">
-            <Card className="bg-slate-900/50 border-slate-700/50">
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Brain className="h-5 w-5 text-purple-400" />
-                  Overnight Work by Chief of Staff
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {overnightItems.length > 0 ? (
-                  overnightItems.map((item) => (
-                    <div
-                      key={item.id}
-                      className="p-4 rounded-lg bg-purple-900/20 border border-purple-500/30"
-                    >
-                      <div className="flex items-start gap-3">
-                        {getTypeIcon(item.type)}
-                        <div className="flex-1">
-                          <h4 className="font-medium text-white">
-                            {item.title}
-                          </h4>
-                          <p className="text-sm text-slate-300 mt-1">
-                            {item.description}
-                          </p>
-                          <p className="text-xs text-slate-500 mt-2">
-                            Completed by: {item.source}
-                          </p>
-                          <div className="flex items-center gap-2 mt-3">
-                            <Button
-                              size="sm"
-                              className="bg-gradient-to-r from-emerald-500 to-green-500 text-white text-xs"
-                              onClick={() => {
-                                toast.success(`"${item.title}" marked as ready to start`);
-                              }}
-                            >
-                              <CheckCircle2 className="w-3 h-3 mr-1" />
-                              Ready to Start
-                            </Button>
-                            {item.actionUrl && (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="text-xs"
-                                onClick={() => setLocation(item.actionUrl!)}
-                              >
-                                <ArrowRight className="w-3 h-3 mr-1" />
-                                View Details
-                              </Button>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center py-8 text-slate-400">
-                    <Brain className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                    <p>No overnight work completed yet.</p>
-                    <p className="text-sm mt-1">
-                      Delegate tasks to Chief of Staff during Evening Review for
-                      overnight processing.
-                    </p>
+          {/* OVERNIGHT TASKS */}
+          <TabsContent value="overnight">
+            <div className="flex flex-col gap-3">
+              <p className="text-sm text-muted-foreground mb-1">
+                Tasks completed by Victoria while you were away.
+              </p>
+              {overnightTasks.map((task) => (
+                <div
+                  key={task.id}
+                  className="bg-white border border-border rounded-xl p-4 flex items-start gap-3"
+                >
+                  <div className="h-8 w-8 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                   </div>
-                )}
-              </CardContent>
-            </Card>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span
+                        className="text-xs font-bold px-2 py-0.5 rounded-full text-white"
+                        style={{ background: task.projectColor }}
+                      >
+                        {task.project}
+                      </span>
+                      <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        {task.completedAt} · {task.completedBy}
+                      </span>
+                    </div>
+                    <p className="text-sm text-foreground">{task.task}</p>
+                  </div>
+                </div>
+              ))}
+
+              {/* Victoria overnight summary */}
+              <div
+                className="mt-2 p-4 rounded-xl border flex items-start gap-3"
+                style={{
+                  background: "oklch(0.78 0.18 195 / 0.04)",
+                  borderColor: "oklch(0.78 0.18 195 / 0.15)",
+                }}
+              >
+                <Sparkles
+                  className="h-4 w-4 shrink-0 mt-0.5"
+                  style={{ color: "oklch(0.78 0.18 195)" }}
+                />
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Victoria completed <strong>3 background tasks</strong> overnight across 3
+                  projects. No errors or blockers were encountered. All outputs are available in
+                  the relevant project portals.
+                </p>
+              </div>
+            </div>
           </TabsContent>
         </Tabs>
-
-        {/* Quick Actions */}
-        <Card className="bg-slate-900/50 border-slate-700/50">
-          <CardContent className="p-4">
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <Button
-                variant="outline"
-                onClick={() => setLocation("/daily-brief")}
-                className="border-slate-600"
-              >
-                <Calendar className="h-4 w-4 mr-2" />
-                View Schedule
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => setLocation("/workflow")}
-                className="border-slate-600"
-              >
-                <Target className="h-4 w-4 mr-2" />
-                Open Workflow
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => setLocation("/ai-experts")}
-                className="border-slate-600"
-              >
-                <Sparkles className="h-4 w-4 mr-2" />
-                AI Experts
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => setLocation("/digital-twin")}
-                className="border-slate-600"
-              >
-                <Brain className="h-4 w-4 mr-2" />
-                Digital Twin
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+      </div>
     </div>
   );
 }

@@ -1,271 +1,127 @@
-import { motion } from "framer-motion";
-import { useMemo } from "react";
+// AnimatedBrainLogo — SVG brain with pulsing cyan nodes
+// Design: Meridian Light — electric cyan nodes, geometric precision
+
+import { useEffect, useRef } from "react";
 
 interface AnimatedBrainLogoProps {
-  className?: string;
-  size?: "xs" | "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  intensity?: "subtle" | "normal" | "strong" | "active";
   color?: string;
-  intensity?: "subtle" | "gentle" | "active"; // How active the neurons are
+  className?: string;
 }
 
-// Generate neuron positions that form a brain-like shape
-function generateNeurons(count: number) {
-  const neurons: Array<{
-    id: number;
-    x: number;
-    y: number;
-    size: number;
-    delay: number;
-    duration: number;
-  }> = [];
-  
-  // Create neurons in a brain-like distribution
-  for (let i = 0; i < count; i++) {
-    // Distribute neurons in a brain shape (two hemispheres)
-    const angle = (i / count) * Math.PI * 2;
-    const isLeftHemisphere = i % 2 === 0;
-    
-    // Base position with some randomness
-    const baseX = isLeftHemisphere 
-      ? 35 + Math.random() * 25 
-      : 55 + Math.random() * 25;
-    const baseY = 25 + Math.random() * 50;
-    
-    // Add some organic variation
-    const offsetX = Math.sin(angle * 3) * 8;
-    const offsetY = Math.cos(angle * 2) * 8;
-    
-    neurons.push({
-      id: i,
-      x: baseX + offsetX,
-      y: baseY + offsetY,
-      size: 1.5 + Math.random() * 2,
-      delay: Math.random() * 8, // Spread out the firing over 8 seconds
-      duration: 4 + Math.random() * 4, // 4-8 second cycles
-    });
-  }
-  
-  return neurons;
-}
+const sizeMap = {
+  xs: 24,
+  sm: 32,
+  md: 48,
+  lg: 64,
+  xl: 96,
+};
 
-// Generate subtle connection lines between neurons
-function generateConnections(neurons: ReturnType<typeof generateNeurons>) {
-  const connections: Array<{
-    id: number;
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-    delay: number;
-    duration: number;
-  }> = [];
-  
-  // Connect nearby neurons
-  for (let i = 0; i < neurons.length; i++) {
-    for (let j = i + 1; j < neurons.length; j++) {
-      const dist = Math.sqrt(
-        Math.pow(neurons[i].x - neurons[j].x, 2) + 
-        Math.pow(neurons[i].y - neurons[j].y, 2)
-      );
-      
-      // Only connect neurons that are close enough
-      if (dist < 20 && connections.length < 15) {
-        connections.push({
-          id: connections.length,
-          x1: neurons[i].x,
-          y1: neurons[i].y,
-          x2: neurons[j].x,
-          y2: neurons[j].y,
-          delay: Math.random() * 10,
-          duration: 6 + Math.random() * 6, // 6-12 second cycles
-        });
-      }
-    }
-  }
-  
-  return connections;
-}
-
-export default function AnimatedBrainLogo({ 
-  className = "",
+export default function AnimatedBrainLogo({
   size = "md",
-  color = "#06b6d4", // Default cyan
-  intensity = "subtle"
+  intensity = "normal",
+  color = "oklch(0.78 0.18 195)",
+  className = "",
 }: AnimatedBrainLogoProps) {
-  // Memoize neurons and connections
-  const neurons = useMemo(() => generateNeurons(20), []);
-  const connections = useMemo(() => generateConnections(neurons), [neurons]);
-  
-  // Size classes
-  const sizeClasses = {
-    xs: "w-8 h-8",
-    sm: "w-12 h-12",
-    md: "w-16 h-16",
-    lg: "w-24 h-24"
+  const px = sizeMap[size];
+
+  // Node positions (normalised 0-100 within a 100x100 viewBox)
+  const nodes = [
+    { cx: 50, cy: 20, r: 3.5, delay: 0 },
+    { cx: 30, cy: 32, r: 2.5, delay: 0.3 },
+    { cx: 70, cy: 32, r: 2.5, delay: 0.6 },
+    { cx: 20, cy: 50, r: 3, delay: 0.9 },
+    { cx: 50, cy: 45, r: 4, delay: 0.2 },
+    { cx: 80, cy: 50, r: 3, delay: 1.1 },
+    { cx: 35, cy: 62, r: 2.5, delay: 0.5 },
+    { cx: 65, cy: 62, r: 2.5, delay: 0.8 },
+    { cx: 25, cy: 72, r: 2, delay: 1.4 },
+    { cx: 50, cy: 70, r: 3, delay: 0.4 },
+    { cx: 75, cy: 72, r: 2, delay: 1.0 },
+    { cx: 40, cy: 82, r: 2, delay: 0.7 },
+    { cx: 60, cy: 82, r: 2, delay: 1.3 },
+  ];
+
+  // Edges between nodes (index pairs)
+  const edges = [
+    [0, 1], [0, 2], [1, 3], [2, 5],
+    [1, 4], [2, 4], [3, 6], [5, 7],
+    [4, 6], [4, 7], [3, 8], [6, 9],
+    [7, 9], [5, 10], [8, 11], [9, 11],
+    [9, 12], [10, 12], [4, 9],
+  ];
+
+  const opacityMap: Record<string, number> = {
+    subtle: 0.6,
+    normal: 0.85,
+    strong: 1,
+    active: 1,
   };
-  
-  // Intensity settings
-  const intensitySettings = {
-    subtle: { 
-      neuronOpacity: [0.2, 0.5, 0.2],
-      connectionOpacity: [0, 0.15, 0],
-      glowOpacity: 0.1
-    },
-    gentle: { 
-      neuronOpacity: [0.3, 0.7, 0.3],
-      connectionOpacity: [0, 0.25, 0],
-      glowOpacity: 0.15
-    },
-    active: { 
-      neuronOpacity: [0.4, 0.9, 0.4],
-      connectionOpacity: [0, 0.4, 0],
-      glowOpacity: 0.25
-    }
+
+  const glowMap: Record<string, number> = {
+    subtle: 2,
+    normal: 4,
+    strong: 6,
+    active: 6,
   };
-  
-  const settings = intensitySettings[intensity];
 
   return (
-    <div className={`relative ${sizeClasses[size]} ${className}`}>
-      {/* Subtle background glow */}
-      <motion.div
-        className="absolute inset-[-10%] rounded-full blur-xl"
-        style={{ backgroundColor: color }}
-        animate={{
-          opacity: [settings.glowOpacity, settings.glowOpacity * 1.5, settings.glowOpacity],
-        }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-      
-      <svg
-        viewBox="0 0 100 100"
-        className="w-full h-full relative z-10"
-        style={{ filter: `drop-shadow(0 0 8px ${color}40)` }}
-      >
-        <defs>
-          <filter id="neuron-glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="1.5" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-          
-          <linearGradient id="brain-connection-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor={color} stopOpacity="0" />
-            <stop offset="50%" stopColor={color} stopOpacity="0.6" />
-            <stop offset="100%" stopColor={color} stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        
-        {/* Brain outline - subtle and static */}
-        <motion.ellipse
-          cx="50"
-          cy="50"
-          rx="35"
-          ry="30"
-          fill="none"
+    <svg
+      width={px}
+      height={px}
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-label="CEPHO brain logo"
+    >
+      <defs>
+        <filter id={`glow-${size}`} x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation={glowMap[intensity]} result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      {/* Edges */}
+      {edges.map(([a, b], i) => (
+        <line
+          key={i}
+          x1={nodes[a].cx}
+          y1={nodes[a].cy}
+          x2={nodes[b].cx}
+          y2={nodes[b].cy}
           stroke={color}
-          strokeWidth="1"
-          strokeOpacity="0.2"
-          animate={{
-            strokeOpacity: [0.15, 0.25, 0.15],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          strokeWidth="0.8"
+          strokeOpacity={opacityMap[intensity] * 0.35}
         />
-        
-        {/* Center dividing line */}
-        <motion.line
-          x1="50"
-          y1="22"
-          x2="50"
-          y2="78"
-          stroke={color}
-          strokeWidth="0.5"
-          strokeOpacity="0.15"
-          strokeDasharray="2 3"
-          animate={{
-            strokeOpacity: [0.1, 0.2, 0.1],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        
-        {/* Neural connections - subtle pulses traveling along them */}
-        {connections.map((conn) => (
-          <motion.line
-            key={`conn-${conn.id}`}
-            x1={conn.x1}
-            y1={conn.y1}
-            x2={conn.x2}
-            y2={conn.y2}
-            stroke="url(#brain-connection-gradient)"
-            strokeWidth="0.8"
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: settings.connectionOpacity,
-            }}
-            transition={{
-              duration: conn.duration,
-              repeat: Infinity,
-              delay: conn.delay,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-        
-        {/* Neurons - gentle pulsing */}
-        {neurons.map((neuron) => (
-          <motion.circle
-            key={`neuron-${neuron.id}`}
-            cx={neuron.x}
-            cy={neuron.y}
-            r={neuron.size}
-            fill={color}
-            filter="url(#neuron-glow)"
-            initial={{ opacity: 0.2 }}
-            animate={{
-              opacity: settings.neuronOpacity,
-              r: [neuron.size, neuron.size * 1.3, neuron.size],
-            }}
-            transition={{
-              duration: neuron.duration,
-              repeat: Infinity,
-              delay: neuron.delay,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-        
-        {/* Central "consciousness" point - very subtle pulse */}
-        <motion.circle
-          cx="50"
-          cy="50"
-          r="3"
+      ))}
+
+      {/* Nodes */}
+      {nodes.map((node, i) => (
+        <circle
+          key={i}
+          cx={node.cx}
+          cy={node.cy}
+          r={node.r}
           fill={color}
-          filter="url(#neuron-glow)"
-          animate={{
-            opacity: [0.4, 0.7, 0.4],
-            r: [3, 4, 3],
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut",
+          filter={`url(#glow-${size})`}
+          style={{
+            animation: `brainPulse 2.4s ease-in-out ${node.delay}s infinite`,
+            opacity: opacityMap[intensity],
           }}
         />
-      </svg>
-    </div>
+      ))}
+
+      <style>{`
+        @keyframes brainPulse {
+          0%, 100% { opacity: ${opacityMap[intensity] * 0.5}; r: ${0.8}; }
+          50% { opacity: ${opacityMap[intensity]}; }
+        }
+      `}</style>
+    </svg>
   );
 }
