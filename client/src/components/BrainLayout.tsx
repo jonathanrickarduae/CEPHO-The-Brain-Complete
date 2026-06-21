@@ -27,7 +27,6 @@ import {
   Settings,
   Inbox,
   Calendar,
-  Lightbulb,
   FlaskConical,
   BookOpen,
   Users,
@@ -40,6 +39,8 @@ import {
   Cpu,
   PanelLeft,
   Plus,
+  X,
+  MoreHorizontal,
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -85,7 +86,7 @@ const navGroups: NavGroup[] = [
     items: [
       { icon: Bot, label: "Victoria AI", mobileLabel: "Victoria", path: "/victoria" },
       { icon: Cpu, label: "AI Agents", mobileLabel: "Agents", path: "/agents" },
-      { icon: Users, label: "AI SME Workflow", mobileLabel: "SMEs", path: "/sme" },
+      { icon: Users, label: "AI SME Workflow", mobileLabel: "AI SMEs", path: "/sme" },
       { icon: FlaskConical, label: "Innovation Hub", mobileLabel: "Innovation", path: "/innovation" },
       { icon: TrendingUp, label: "Financial Pulse", mobileLabel: "Finance", path: "/financial" },
     ],
@@ -99,13 +100,13 @@ const navGroups: NavGroup[] = [
   },
 ];
 
-// Primary mobile bottom nav — 5 most important items
+// Primary mobile bottom nav — 5 core items + More
 const mobileBottomNav: MenuItem[] = [
   { icon: LayoutDashboard, label: "Nexus", path: "/dashboard" },
   { icon: Sun, label: "Signal", path: "/morning-signal" },
   { icon: Briefcase, label: "Projects", path: "/projects" },
   { icon: Bot, label: "Victoria", path: "/victoria" },
-  { icon: Settings, label: "Settings", path: "/settings" },
+  { icon: CheckSquare, label: "Tasks", path: "/tasks" },
 ];
 
 // Flat list for active-path matching
@@ -153,6 +154,7 @@ function BrainLayoutContent({
   const { state, toggleSidebar } = useSidebar();
   const isCollapsed = state === "collapsed";
   const [isResizing, setIsResizing] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 
@@ -182,6 +184,11 @@ function BrainLayoutContent({
     };
   }, [isResizing, setSidebarWidth]);
 
+  // Close More drawer on navigation
+  useEffect(() => {
+    setMoreOpen(false);
+  }, [location]);
+
   const currentLabel = allMenuItems.find(
     (m) => m.path === location || (m.path === "/dashboard" && location === "/")
   )?.label ?? (location === "/settings" ? "Settings" : "");
@@ -191,24 +198,24 @@ function BrainLayoutContent({
     (item.path === "/dashboard" && location === "/") ||
     (item.path === "/projects" && location.startsWith("/projects/"));
 
-  // Mobile layout — completely different structure
+  // ─── Mobile layout ────────────────────────────────────────────────────────
   if (isMobile) {
     return (
-      <div className="flex flex-col min-h-screen min-h-[100dvh] bg-background">
-        {/* Black top banner — mobile */}
-        <header className="h-14 flex items-center justify-between px-4 bg-black sticky top-0 z-30 shrink-0">
-          <div className="flex items-center gap-2.5">
+      <div className="flex flex-col h-[100dvh] bg-background overflow-hidden">
+        {/* Black top banner */}
+        <header className="h-12 flex items-center justify-between px-4 bg-black shrink-0 z-30">
+          <div className="flex items-center gap-2">
             <AnimatedBrainLogo size="xs" intensity="subtle" color="oklch(0.78 0.18 195)" />
-            <span className="font-display font-bold text-white tracking-tight text-base">CEPHO</span>
+            <span className="font-bold text-white tracking-tight text-sm">CEPHO</span>
             {currentLabel && (
-              <span className="text-sm text-white/50">· {currentLabel}</span>
+              <span className="text-xs text-white/45 ml-1">· {currentLabel}</span>
             )}
           </div>
-          <div className="flex items-center gap-2">
-            {/* Quick action — Victoria */}
+          <div className="flex items-center gap-1.5">
+            {/* Quick Victoria button */}
             <button
               onClick={() => setLocation("/victoria")}
-              className="h-11 w-11 flex items-center justify-center rounded-full bg-[oklch(0.78_0.18_195)]/20 border border-[oklch(0.78_0.18_195)]/30 active:scale-95 transition-transform"
+              className="h-8 w-8 flex items-center justify-center rounded-full bg-[oklch(0.78_0.18_195)]/20 active:scale-95 transition-transform"
               aria-label="Ask Victoria"
             >
               <Bot className="h-4 w-4 text-[oklch(0.78_0.18_195)]" />
@@ -216,7 +223,7 @@ function BrainLayoutContent({
             {/* User avatar */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="h-11 w-11 rounded-full border border-white/20 overflow-hidden active:scale-95 transition-transform focus:outline-none">
+                <button className="h-8 w-8 rounded-full border border-white/20 overflow-hidden active:scale-95 transition-transform focus:outline-none">
                   <Avatar className="h-8 w-8">
                     <AvatarFallback className="text-xs font-bold bg-[oklch(0.78_0.18_195)]/20 text-[oklch(0.78_0.18_195)]">
                       {user?.name?.charAt(0).toUpperCase()}
@@ -224,7 +231,7 @@ function BrainLayoutContent({
                   </Avatar>
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent align="end" className="w-44">
                 <DropdownMenuItem onClick={() => setLocation("/settings")} className="cursor-pointer">
                   <Settings className="h-4 w-4 mr-2" />
                   Settings
@@ -241,51 +248,131 @@ function BrainLayoutContent({
           </div>
         </header>
 
-        {/* Page content — scrollable, padded for bottom nav */}
-        <main className="flex-1 overflow-y-auto pb-20">
+        {/* Page content — fills remaining space */}
+        <main className="flex-1 overflow-y-auto overflow-x-hidden pb-16">
           {children}
         </main>
 
-        {/* Bottom navigation bar — iPhone style */}
-        <nav className="fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-border safe-area-bottom">
-          <div className="flex items-center justify-around px-2 pt-2 pb-safe">
+        {/* Bottom navigation bar */}
+        <nav className="fixed bottom-0 left-0 right-0 z-30 bg-white/96 backdrop-blur-xl border-t border-border/60"
+          style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
+          <div className="flex items-center justify-around px-1 pt-1.5 pb-1.5">
             {mobileBottomNav.map((item) => {
-              const active = isActive(item) || (item.path === "/settings" && location === "/settings");
+              const active = isActive(item);
               return (
                 <button
                   key={item.path}
                   onClick={() => setLocation(item.path)}
-                  className="flex flex-col items-center gap-1 min-w-[56px] py-1 px-2 rounded-xl active:scale-95 transition-transform focus:outline-none"
+                  className="flex flex-col items-center gap-0.5 min-w-[52px] py-1 rounded-xl active:scale-95 transition-transform focus:outline-none"
                   aria-label={item.label}
                 >
-                  <div className={`h-6 w-6 flex items-center justify-center rounded-lg transition-colors ${
+                  <item.icon className={`h-5 w-5 transition-colors ${
                     active ? "text-[oklch(0.78_0.18_195)]" : "text-muted-foreground"
-                  }`}>
-                    <item.icon className="h-5 w-5" />
-                  </div>
+                  }`} />
                   <span className={`text-[10px] font-medium leading-none transition-colors ${
                     active ? "text-[oklch(0.78_0.18_195)]" : "text-muted-foreground"
                   }`}>
                     {item.label}
                   </span>
-                  {active && (
-                    <div className="absolute -bottom-0 h-0.5 w-8 bg-[oklch(0.78_0.18_195)] rounded-full" />
-                  )}
                 </button>
               );
             })}
+            {/* More button */}
+            <button
+              onClick={() => setMoreOpen(true)}
+              className="flex flex-col items-center gap-0.5 min-w-[52px] py-1 rounded-xl active:scale-95 transition-transform focus:outline-none"
+              aria-label="More"
+            >
+              <MoreHorizontal className="h-5 w-5 text-muted-foreground" />
+              <span className="text-[10px] font-medium leading-none text-muted-foreground">More</span>
+            </button>
           </div>
-          {/* iPhone home indicator safe area */}
-          <div className="h-safe-area-inset-bottom bg-white/95" />
         </nav>
 
-        {/* Floating action button — quick actions */}
+        {/* More drawer — full screen overlay */}
+        {moreOpen && (
+          <>
+            <div
+              className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+              onClick={() => setMoreOpen(false)}
+            />
+            <div className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl shadow-2xl"
+              style={{ paddingBottom: "env(safe-area-inset-bottom, 16px)" }}>
+              {/* Handle */}
+              <div className="flex justify-center pt-3 pb-1">
+                <div className="w-10 h-1 rounded-full bg-border" />
+              </div>
+              {/* Header */}
+              <div className="flex items-center justify-between px-5 py-3">
+                <span className="font-semibold text-base text-foreground">All Sections</span>
+                <button
+                  onClick={() => setMoreOpen(false)}
+                  className="h-8 w-8 flex items-center justify-center rounded-full bg-muted active:scale-95 transition-transform"
+                >
+                  <X className="h-4 w-4 text-muted-foreground" />
+                </button>
+              </div>
+              {/* Nav groups */}
+              <div className="px-4 pb-4 space-y-4 max-h-[70vh] overflow-y-auto">
+                {navGroups.map((group) => (
+                  <div key={group.label}>
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 px-1 mb-2">
+                      {group.label}
+                    </p>
+                    <div className="grid grid-cols-3 gap-2">
+                      {group.items.map((item) => {
+                        const active = isActive(item);
+                        return (
+                          <button
+                            key={item.path}
+                            onClick={() => { setLocation(item.path); setMoreOpen(false); }}
+                            className={`flex flex-col items-center gap-2 p-3 rounded-xl border active:scale-95 transition-all ${
+                              active
+                                ? "bg-[oklch(0.78_0.18_195)]/10 border-[oklch(0.78_0.18_195)]/30 text-[oklch(0.78_0.18_195)]"
+                                : "bg-muted/40 border-transparent text-foreground"
+                            }`}
+                          >
+                            <item.icon className="h-5 w-5" />
+                            <span className="text-[11px] font-medium text-center leading-tight">
+                              {item.mobileLabel || item.label}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+                {/* Settings */}
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 px-1 mb-2">
+                    System
+                  </p>
+                  <div className="grid grid-cols-3 gap-2">
+                    <button
+                      onClick={() => { setLocation("/settings"); setMoreOpen(false); }}
+                      className={`flex flex-col items-center gap-2 p-3 rounded-xl border active:scale-95 transition-all ${
+                        location === "/settings"
+                          ? "bg-[oklch(0.78_0.18_195)]/10 border-[oklch(0.78_0.18_195)]/30 text-[oklch(0.78_0.18_195)]"
+                          : "bg-muted/40 border-transparent text-foreground"
+                      }`}
+                    >
+                      <Settings className="h-5 w-5" />
+                      <span className="text-[11px] font-medium text-center leading-tight">Settings</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Floating + button */}
         <MobileQuickActionFAB onNavigate={setLocation} />
       </div>
     );
   }
 
-  // Desktop layout — sidebar
+  // ─── Desktop layout — sidebar ─────────────────────────────────────────────
   return (
     <>
       <div className="relative" ref={sidebarRef}>
@@ -295,11 +382,11 @@ function BrainLayoutContent({
           disableTransition={isResizing}
         >
           {/* Header */}
-          <SidebarHeader className="h-16 justify-center border-b border-sidebar-border bg-black">
+          <SidebarHeader className="h-14 justify-center border-b border-sidebar-border bg-black">
             <div className="flex items-center gap-3 px-2 w-full">
               <button
                 onClick={toggleSidebar}
-                className="h-8 w-8 flex items-center justify-center hover:bg-white/10 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30 shrink-0"
+                className="h-8 w-8 flex items-center justify-center hover:bg-white/10 rounded-lg transition-colors focus:outline-none shrink-0"
                 aria-label="Toggle navigation"
               >
                 <PanelLeft className="h-4 w-4 text-white/60" />
@@ -307,7 +394,7 @@ function BrainLayoutContent({
               {!isCollapsed && (
                 <div className="flex items-center gap-2 min-w-0">
                   <AnimatedBrainLogo size="xs" intensity="subtle" color="oklch(0.78 0.18 195)" />
-                  <span className="font-display font-bold tracking-tight truncate text-white text-lg">
+                  <span className="font-bold tracking-tight truncate text-white text-base">
                     CEPHO
                   </span>
                 </div>
@@ -315,7 +402,7 @@ function BrainLayoutContent({
             </div>
           </SidebarHeader>
 
-          {/* Navigation — grouped */}
+          {/* Navigation */}
           <SidebarContent className="gap-0 bg-transparent overflow-y-auto">
             <SidebarMenu className="px-2 py-3 gap-0">
               {navGroups.map((group, gi) => (
@@ -337,7 +424,7 @@ function BrainLayoutContent({
                             isActive={active}
                             onClick={() => setLocation(item.path)}
                             tooltip={item.label}
-                            className={`h-10 transition-all font-normal rounded-xl ${
+                            className={`h-9 transition-all font-normal rounded-xl ${
                               active
                                 ? "bg-primary/10 text-primary font-medium"
                                 : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/60"
@@ -349,11 +436,6 @@ function BrainLayoutContent({
                               }`}
                             />
                             <span className="text-sm">{item.label}</span>
-                            {item.count !== undefined && item.count > 0 && (
-                              <span className="ml-auto text-[10px] bg-primary/15 text-primary px-1.5 py-0.5 rounded-full font-semibold">
-                                {item.count}
-                              </span>
-                            )}
                           </SidebarMenuButton>
                         </SidebarMenuItem>
                       );
@@ -361,7 +443,6 @@ function BrainLayoutContent({
                   </div>
                 </div>
               ))}
-
               {/* Settings */}
               <div className="mt-4">
                 {!isCollapsed && (
@@ -375,7 +456,7 @@ function BrainLayoutContent({
                     isActive={location === "/settings"}
                     onClick={() => setLocation("/settings")}
                     tooltip="Settings"
-                    className={`h-10 transition-all font-normal rounded-xl ${
+                    className={`h-9 transition-all font-normal rounded-xl ${
                       location === "/settings"
                         ? "bg-primary/10 text-primary font-medium"
                         : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/60"
@@ -391,25 +472,14 @@ function BrainLayoutContent({
                 </SidebarMenuItem>
               </div>
             </SidebarMenu>
-
-            {/* Victoria status */}
-            {!isCollapsed && (
-              <div className="mx-3 mt-3 mb-3 p-3 rounded-xl border border-primary/15 bg-gradient-to-br from-primary/5 to-[oklch(0.58_0.26_340)]/5">
-                <div className="flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-primary animate-pulse shrink-0" />
-                  <span className="text-xs font-semibold text-primary">Victoria</span>
-                </div>
-                <p className="text-[11px] text-muted-foreground mt-0.5">AI Chief of Staff · Active</p>
-              </div>
-            )}
           </SidebarContent>
 
           {/* Footer */}
           <SidebarFooter className="p-3 border-t border-sidebar-border">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-sidebar-accent transition-colors w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring">
-                  <Avatar className="h-8 w-8 border border-primary/20 shrink-0">
+                <button className="flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-sidebar-accent transition-colors w-full text-left focus:outline-none">
+                  <Avatar className="h-7 w-7 border border-primary/20 shrink-0">
                     <AvatarFallback className="text-xs font-bold bg-primary/10 text-primary">
                       {user?.name?.charAt(0).toUpperCase()}
                     </AvatarFallback>
@@ -419,14 +489,14 @@ function BrainLayoutContent({
                       <p className="text-sm font-medium truncate leading-none text-sidebar-foreground">
                         {user?.name || "-"}
                       </p>
-                      <p className="text-xs text-sidebar-foreground/45 truncate mt-1">
+                      <p className="text-xs text-sidebar-foreground/45 truncate mt-0.5">
                         {user?.email || "-"}
                       </p>
                     </div>
                   )}
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent align="end" className="w-44">
                 <DropdownMenuItem onClick={() => setLocation("/settings")} className="cursor-pointer">
                   <Settings className="h-4 w-4 mr-2" />
                   Settings
@@ -454,27 +524,24 @@ function BrainLayoutContent({
 
       <SidebarInset className="flex flex-col min-h-screen">
         {/* Black top banner — desktop */}
-        <header className="h-14 flex items-center gap-3 px-4 bg-black sticky top-0 z-20">
+        <header className="h-12 flex items-center gap-3 px-4 bg-black sticky top-0 z-20">
           <div className="flex items-center gap-2">
             <AnimatedBrainLogo size="xs" intensity="subtle" color="oklch(0.78 0.18 195)" />
-            <span className="font-display font-bold text-white tracking-tight">CEPHO</span>
+            <span className="font-bold text-white tracking-tight text-sm">CEPHO</span>
           </div>
           {currentLabel && (
-            <span className="text-sm text-white/50">· {currentLabel}</span>
+            <span className="text-sm text-white/45">· {currentLabel}</span>
           )}
-          {/* Desktop quick action */}
           <div className="ml-auto flex items-center gap-2">
             <button
               onClick={() => setLocation("/genesis")}
-              className="flex items-center gap-1.5 h-8 px-3 rounded-lg bg-[oklch(0.78_0.18_195)]/15 border border-[oklch(0.78_0.18_195)]/25 text-[oklch(0.78_0.18_195)] text-xs font-medium hover:bg-[oklch(0.78_0.18_195)]/25 transition-colors active:scale-95"
+              className="flex items-center gap-1.5 h-7 px-3 rounded-lg bg-[oklch(0.78_0.18_195)]/15 border border-[oklch(0.78_0.18_195)]/25 text-[oklch(0.78_0.18_195)] text-xs font-medium hover:bg-[oklch(0.78_0.18_195)]/25 transition-colors active:scale-95"
             >
-              <Plus className="h-3.5 w-3.5" />
+              <Plus className="h-3 w-3" />
               New Project
             </button>
           </div>
         </header>
-
-        {/* Page content */}
         <main className="flex-1 overflow-auto">
           {children}
         </main>
@@ -483,59 +550,52 @@ function BrainLayoutContent({
   );
 }
 
-// Mobile floating action button for quick actions
+// Mobile floating action button
 function MobileQuickActionFAB({ onNavigate }: { onNavigate: (path: string) => void }) {
   const [open, setOpen] = useState(false);
-
   const actions = [
     { icon: Bot, label: "Ask Victoria", path: "/victoria", color: "oklch(0.78 0.18 195)" },
     { icon: GitBranch, label: "New Project", path: "/genesis", color: "oklch(0.58 0.26 340)" },
     { icon: CheckSquare, label: "Add Task", path: "/tasks", color: "oklch(0.65 0.18 145)" },
     { icon: BookOpen, label: "Log Decision", path: "/decisions", color: "oklch(0.70 0.15 55)" },
   ];
-
   return (
     <>
-      {/* Backdrop */}
       {open && (
         <div
           className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
           onClick={() => setOpen(false)}
         />
       )}
-
-      {/* Action items */}
       {open && (
-        <div className="fixed bottom-24 right-4 z-50 flex flex-col-reverse gap-3">
+        <div className="fixed bottom-20 right-4 z-50 flex flex-col-reverse gap-2.5">
           {actions.map((action, i) => (
             <button
               key={action.path}
               onClick={() => { onNavigate(action.path); setOpen(false); }}
               className="flex items-center gap-3 self-end active:scale-95 transition-all"
-              style={{ animationDelay: `${i * 50}ms` }}
+              style={{ animationDelay: `${i * 40}ms` }}
             >
               <span className="text-sm font-medium text-foreground bg-white rounded-lg px-3 py-1.5 shadow-md border border-border">
                 {action.label}
               </span>
               <div
-                className="h-11 w-11 rounded-full flex items-center justify-center shadow-lg border border-white/20"
+                className="h-10 w-10 rounded-full flex items-center justify-center shadow-lg"
                 style={{ backgroundColor: action.color }}
               >
-                <action.icon className="h-5 w-5 text-white" />
+                <action.icon className="h-4 w-4 text-white" />
               </div>
             </button>
           ))}
         </div>
       )}
-
-      {/* FAB button */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-[84px] right-4 z-50 h-14 w-14 rounded-full bg-[oklch(0.78_0.18_195)] shadow-lg shadow-[oklch(0.78_0.18_195)]/30 flex items-center justify-center active:scale-95 transition-all border border-white/20"
+        className="fixed bottom-[72px] right-4 z-50 h-12 w-12 rounded-full bg-[oklch(0.78_0.18_195)] shadow-lg shadow-[oklch(0.78_0.18_195)]/30 flex items-center justify-center active:scale-95 transition-all"
         aria-label="Quick actions"
       >
         <Plus
-          className={`h-6 w-6 text-white transition-transform duration-200 ${open ? "rotate-45" : ""}`}
+          className={`h-5 w-5 text-white transition-transform duration-200 ${open ? "rotate-45" : ""}`}
         />
       </button>
     </>

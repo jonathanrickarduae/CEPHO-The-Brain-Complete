@@ -25,7 +25,30 @@ function formatMessage(level: LogLevel, message: string, context?: Record<string
   return `${colour}[${ts}] [${level}] ${message}${ctx}${reset}`;
 }
 
+type ScopedLogger = {
+  debug: (message: string, context?: Record<string, unknown>) => void;
+  info: (message: string, context?: Record<string, unknown>) => void;
+  warn: (message: string, context?: Record<string, unknown>) => void;
+  error: (message: string, context?: Record<string, unknown>) => void;
+};
+
 export const logger = {
+  module: (moduleName: string): ScopedLogger => ({
+    debug: (message: string, context?: Record<string, unknown>) => {
+      if (process.env.NODE_ENV !== "production") {
+        console.debug(formatMessage(LogLevel.DEBUG, `[${moduleName}] ${message}`, context));
+      }
+    },
+    info: (message: string, context?: Record<string, unknown>) => {
+      console.info(formatMessage(LogLevel.INFO, `[${moduleName}] ${message}`, context));
+    },
+    warn: (message: string, context?: Record<string, unknown>) => {
+      console.warn(formatMessage(LogLevel.WARN, `[${moduleName}] ${message}`, context));
+    },
+    error: (message: string, context?: Record<string, unknown>) => {
+      console.error(formatMessage(LogLevel.ERROR, `[${moduleName}] ${message}`, context));
+    },
+  }),
   debug: (message: string, context?: Record<string, unknown>) => {
     if (process.env.NODE_ENV !== "production") {
       console.debug(formatMessage(LogLevel.DEBUG, message, context));
