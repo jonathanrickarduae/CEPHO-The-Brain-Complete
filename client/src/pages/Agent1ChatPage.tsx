@@ -44,7 +44,7 @@ const MODE_COLORS: Record<string, string> = {
   "Strategic Thinker": "bg-blue-500/10 text-blue-400 border-blue-500/20",
   "Systems Architect": "bg-violet-500/10 text-violet-400 border-violet-500/20",
   "Research Analyst": "bg-amber-500/10 text-amber-400 border-amber-500/20",
-  "Emotional Translator": "bg-pink-500/10 text-pink-400 border-pink-500/20",
+  "Emotional Translator": "bg-[oklch(0.72_0.19_45/0.08)] text-[oklch(0.72_0.19_45)] border-pink-500/20",
   Simplifier: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
   "Accountability Partner":
     "bg-orange-500/10 text-orange-400 border-orange-500/20",

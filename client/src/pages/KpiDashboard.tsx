@@ -26,7 +26,7 @@ const mockScores = generateMockScores();
 
 // Perspective mock data
 const perspectives = [
-  { id: "cos", name: "Chief of Staff", color: "bg-fuchsia-500" },
+  { id: "cos", name: "Chief of Staff", color: "bg-primary" },
   { id: "sme", name: "SME Experts", color: "bg-cyan-500" },
   { id: "customer", name: "Customer Groups", color: "bg-amber-500" },
 ];
@@ -133,7 +133,7 @@ export default function KpiDashboard() {
       {/* Black Top Banner */}
       <div className="bg-black text-white py-4 px-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-fuchsia-500 to-cyan-500 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-cyan-500 flex items-center justify-center">
             <span className="text-lg font-bold">C</span>
           </div>
           <div>
@@ -142,7 +142,7 @@ export default function KpiDashboard() {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <Badge variant="outline" className="border-fuchsia-500 text-fuchsia-400">
+          <Badge variant="outline" className="border-primary text-primary">
             Stage 1: Project Genesis
           </Badge>
           <span className="text-sm text-foreground/70">
@@ -154,10 +154,10 @@ export default function KpiDashboard() {
       <div className="container py-6 space-y-6">
         {/* Overall Score Card */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="md:col-span-1 bg-gradient-to-br from-fuchsia-900/20 to-cyan-900/20 border-fuchsia-500/30">
+          <Card className="md:col-span-1 bg-gradient-to-br from-primary/10 to-cyan-900/20 border-primary/30">
             <CardContent className="pt-6">
               <div className="text-center">
-                <div className="text-6xl font-bold text-fuchsia-400">{overallScore}</div>
+                <div className="text-6xl font-bold text-primary">{overallScore}</div>
                 <div className="text-sm text-muted-foreground mt-2">Overall Score</div>
                 <Progress value={overallScore} className="mt-4 h-2" />
                 <div className="text-xs text-muted-foreground mt-2">

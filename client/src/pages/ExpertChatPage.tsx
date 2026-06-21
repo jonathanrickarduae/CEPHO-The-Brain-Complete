@@ -357,7 +357,7 @@ ${messages.map(msg => {
           </Button>
           
           <div className="flex items-center gap-3 flex-1">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-fuchsia-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white font-bold text-sm">
               {expert.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
             </div>
             <div>
@@ -371,12 +371,12 @@ ${messages.map(msg => {
               variant="ghost"
               size="sm"
               onClick={toggleTts}
-              className={`text-white/70 hover:text-white hover:bg-white/10 ${ttsEnabled ? 'bg-fuchsia-500/20 text-fuchsia-300' : ''}`}
+              className={`text-white/70 hover:text-white hover:bg-white/10 ${ttsEnabled ? 'bg-primary/10 text-primary/80' : ''}`}
               title={ttsEnabled ? 'Disable text-to-speech' : 'Enable text-to-speech'}
             >
               {ttsEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
             </Button>
-            <Badge className="bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/30">
+            <Badge className="bg-primary/10 text-primary/80 border-primary/30">
               <Star className="w-3 h-3 mr-1" />
               {expert.performanceScore}/100
             </Badge>
@@ -401,7 +401,7 @@ ${messages.map(msg => {
           {messages.length === 0 && (
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-fuchsia-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white font-bold">
                   {expert.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                 </div>
                 <div className="flex-1">
@@ -432,7 +432,7 @@ ${messages.map(msg => {
             >
               <div className={`max-w-[80%] ${
                 msg.role === 'user' 
-                  ? 'bg-fuchsia-600/30 border-fuchsia-500/30' 
+                  ? 'bg-primary/30 border-primary/30' 
                   : msg.role === 'system'
                   ? 'bg-red-500/20 border-red-500/30'
                   : 'bg-white/10 border-white/10'
@@ -440,7 +440,7 @@ ${messages.map(msg => {
                 <div className="flex items-start gap-3">
                   {msg.role !== 'user' && (
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      msg.role === 'system' ? 'bg-red-500/30' : 'bg-gradient-to-br from-fuchsia-500 to-purple-600'
+                      msg.role === 'system' ? 'bg-red-500/30' : 'bg-gradient-to-br from-primary to-purple-600'
                     }`}>
                       {msg.role === 'system' ? (
                         <MessageSquare className="w-4 h-4 text-red-300" />
@@ -453,8 +453,8 @@ ${messages.map(msg => {
                     <Streamdown>{msg.content}</Streamdown>
                   </div>
                   {msg.role === 'user' && (
-                    <div className="w-8 h-8 rounded-full bg-fuchsia-500/30 flex items-center justify-center">
-                      <User className="w-4 h-4 text-fuchsia-300" />
+                    <div className="w-8 h-8 rounded-full bg-primary/30 flex items-center justify-center">
+                      <User className="w-4 h-4 text-primary/80" />
                     </div>
                   )}
                 </div>
@@ -467,7 +467,7 @@ ${messages.map(msg => {
                       onClick={() => handleSpeak(msg.content, index)}
                       className={`text-xs h-7 px-2 ${
                         speakingMessageIndex === index
-                          ? 'text-fuchsia-300 bg-fuchsia-500/20'
+                          ? 'text-primary/80 bg-primary/10'
                           : 'text-white/50 hover:text-white/80 hover:bg-white/10'
                       }`}
                     >
@@ -494,7 +494,7 @@ ${messages.map(msg => {
             <div className="flex justify-start">
               <div className="bg-white/10 rounded-2xl p-4 border border-white/10">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-fuchsia-500 to-purple-600 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center">
                     <Loader2 className="w-4 h-4 text-white animate-spin" />
                   </div>
                   <span className="text-white/60">Thinking...</span>
@@ -586,7 +586,7 @@ ${messages.map(msg => {
             <Button
               onClick={handleSend}
               disabled={!message.trim() || isLoading || !sessionId}
-              className="bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-500 hover:to-purple-500 h-12 px-6"
+              className="bg-gradient-to-r from-primary to-violet-600 hover:from-primary hover:to-purple-500 h-12 px-6"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />

@@ -24,7 +24,7 @@ const CATEGORY_GRADIENTS: Record<string, string> = {
   'Marketing': 'from-pink-500 to-rose-400',
   'Operations': 'from-amber-500 to-orange-400',
   'Healthcare': 'from-red-500 to-pink-400',
-  'Creative': 'from-fuchsia-500 to-purple-400',
+  'Creative': 'from-primary to-purple-400',
   'Research': 'from-indigo-500 to-blue-400',
   'HR': 'from-green-500 to-emerald-400',
   'Sales': 'from-orange-500 to-amber-400',

@@ -719,7 +719,7 @@ export default function AISMEsPage() {
                       <Sparkles className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-pink-400">Recommended For You</h3>
+                      <h3 className="font-semibold text-[oklch(0.72_0.19_45)]">Recommended For You</h3>
                       <p className="text-xs text-foreground/70">Based on your consultation history</p>
                     </div>
                   </div>
@@ -744,7 +744,7 @@ export default function AISMEsPage() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <h4 className="font-medium text-sm truncate">{expert.name}</h4>
-                            <p className="text-xs text-pink-400 truncate">{rec.reason}</p>
+                            <p className="text-xs text-[oklch(0.72_0.19_45)] truncate">{rec.reason}</p>
                           </div>
                           <Button size="sm" variant="ghost" className="shrink-0 text-white hover:text-white hover:bg-white/20">
                             <MessageSquare className="w-4 h-4" />

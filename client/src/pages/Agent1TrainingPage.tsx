@@ -128,8 +128,8 @@ const WEEKS = [
     week: 3,
     theme: "Council Activation",
     icon: Brain,
-    color: "text-pink-400",
-    bg: "bg-pink-500/10",
+    color: "text-[oklch(0.72_0.19_45)]",
+    bg: "bg-[oklch(0.72_0.19_45/0.08)]",
     border: "border-pink-500/20",
     days: [
       {

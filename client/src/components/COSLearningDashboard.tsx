@@ -177,7 +177,7 @@ const getLessonTypeIcon = (type: LearnedLesson["type"]) => {
     case "pattern": return <TrendingUp className="h-4 w-4 text-green-400" />;
     case "exception": return <Zap className="h-4 w-4 text-purple-400" />;
     case "context_rule": return <Target className="h-4 w-4 text-cyan-400" />;
-    case "communication_style": return <MessageSquare className="h-4 w-4 text-pink-400" />;
+    case "communication_style": return <MessageSquare className="h-4 w-4 text-[oklch(0.72_0.19_45)]" />;
   }
 };
 
@@ -187,7 +187,7 @@ const getPatternTypeIcon = (type: Pattern["type"]) => {
     case "context_based": return <Target className="h-4 w-4 text-blue-400" />;
     case "content_based": return <BookOpen className="h-4 w-4 text-green-400" />;
     case "decision_based": return <Lightbulb className="h-4 w-4 text-purple-400" />;
-    case "communication_based": return <MessageSquare className="h-4 w-4 text-pink-400" />;
+    case "communication_based": return <MessageSquare className="h-4 w-4 text-[oklch(0.72_0.19_45)]" />;
   }
 };
 

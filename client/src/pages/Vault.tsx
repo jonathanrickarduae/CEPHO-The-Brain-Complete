@@ -188,7 +188,7 @@ export default function Vault() {
             <Card className="bg-white/5 border-white/10 flex flex-col min-h-0">
               <div className="flex items-center justify-between p-4 border-b border-white/10 shrink-0">
                 <div className="flex items-center gap-2">
-                  <FileText className="w-5 h-5 text-fuchsia-500" />
+                  <FileText className="w-5 h-5 text-primary" />
                   <h3 className="font-semibold">Contract Renewals</h3>
                 </div>
                 <div className="flex items-center gap-2">
@@ -229,7 +229,7 @@ export default function Vault() {
                         </div>
                       </div>
                       <div className="text-right shrink-0">
-                        <p className="text-sm font-semibold text-fuchsia-400">{contract.value}</p>
+                        <p className="text-sm font-semibold text-primary">{contract.value}</p>
                         <div className="flex items-center gap-1 justify-end mt-1">
                           <Calendar className="w-3 h-3 text-muted-foreground" />
                           <p className="text-[10px] text-muted-foreground">

@@ -222,7 +222,7 @@ export function DocumentUploadZone({ onExtractedData, onDocumentsChange }: Docum
         onDrop={handleDrop}
         className={`border-2 border-dashed rounded-2xl p-8 text-center transition-all ${
           isDragging
-            ? 'border-fuchsia-500 bg-fuchsia-500/10'
+            ? 'border-primary bg-primary/8'
             : 'border-white/20 hover:border-white/40 bg-white/5'
         }`}
       >
@@ -236,9 +236,9 @@ export function DocumentUploadZone({ onExtractedData, onDocumentsChange }: Docum
         />
         <label htmlFor="document-upload" className="cursor-pointer block">
           <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center transition-all ${
-            isDragging ? 'bg-fuchsia-500/20' : 'bg-white/10'
+            isDragging ? 'bg-primary/10' : 'bg-white/10'
           }`}>
-            <Upload className={`w-8 h-8 ${isDragging ? 'text-fuchsia-400' : 'text-foreground/70'}`} />
+            <Upload className={`w-8 h-8 ${isDragging ? 'text-primary' : 'text-foreground/70'}`} />
           </div>
           <p className="text-lg font-medium text-white mb-2">
             {isDragging ? 'Drop files here' : 'Upload your documents'}
@@ -306,9 +306,9 @@ export function DocumentUploadZone({ onExtractedData, onDocumentsChange }: Docum
 
                       {/* AI Summary */}
                       {doc.aiSummary && (
-                        <div className="p-2 bg-gradient-to-r from-cyan-500/10 to-fuchsia-500/10 rounded-lg border border-white/10">
+                        <div className="p-2 bg-gradient-to-r from-cyan-500/10 to-primary/10 rounded-lg border border-white/10">
                           <div className="flex items-start gap-2">
-                            <Sparkles className="w-3 h-3 text-fuchsia-400 mt-0.5 flex-shrink-0" />
+                            <Sparkles className="w-3 h-3 text-primary mt-0.5 flex-shrink-0" />
                             <p className="text-xs text-foreground/80">{doc.aiSummary}</p>
                           </div>
                         </div>
@@ -343,7 +343,7 @@ export function DocumentUploadZone({ onExtractedData, onDocumentsChange }: Docum
                             </Badge>
                           )}
                           {doc.extractedData.keyInsights && (
-                            <Badge variant="outline" className="text-[10px] border-fuchsia-500/30 text-fuchsia-400">
+                            <Badge variant="outline" className="text-[10px] border-primary/30 text-primary">
                               {doc.extractedData.keyInsights.length} Insights
                             </Badge>
                           )}

@@ -166,8 +166,8 @@ const platformSpecs: PlatformSpecs[] = [
     id: "instagram",
     name: "Instagram",
     icon: Instagram,
-    color: "text-pink-400",
-    bgColor: "bg-pink-500/20",
+    color: "text-[oklch(0.72_0.19_45)]",
+    bgColor: "bg-[oklch(0.72_0.19_45/0.1)]",
     specs: {
       profile: {
         name: "Profile Picture",

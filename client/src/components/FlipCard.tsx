@@ -72,7 +72,7 @@ export function FlipCard({ expert, corporate, onStartProject, onTweakApproach }:
 
           {/* Back of Card */}
           <div 
-            className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/10 to-cyan-500/10 border border-fuchsia-500/30 rounded-xl p-4 backface-hidden rotate-y-180 overflow-y-auto"
+            className="absolute inset-0 bg-gradient-to-br from-primary/10 to-cyan-500/10 border border-primary/30 rounded-xl p-4 backface-hidden rotate-y-180 overflow-y-auto"
             style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
           >
             <div className="space-y-3">
@@ -87,7 +87,7 @@ export function FlipCard({ expert, corporate, onStartProject, onTweakApproach }:
 
               {/* Thinking Style */}
               <div>
-                <div className="flex items-center gap-1 text-fuchsia-400 text-xs font-medium mb-1">
+                <div className="flex items-center gap-1 text-primary text-xs font-medium mb-1">
                   <Brain className="w-3 h-3" />
                   Thinking Style
                 </div>
@@ -143,7 +143,7 @@ export function FlipCard({ expert, corporate, onStartProject, onTweakApproach }:
               <div className="flex gap-2 pt-2 border-t border-white/10">
                 <Button 
                   size="sm" 
-                  className="flex-1 text-xs h-7 bg-gradient-to-r from-cyan-500 to-fuchsia-500"
+                  className="flex-1 text-xs h-7 bg-gradient-to-r from-cyan-500 to-primary"
                   onClick={(e) => {
                     e.stopPropagation();
                     onStartProject?.();
@@ -155,7 +155,7 @@ export function FlipCard({ expert, corporate, onStartProject, onTweakApproach }:
                 <Button 
                   size="sm" 
                   variant="outline"
-                  className="flex-1 text-xs h-7 border-fuchsia-500/50 text-fuchsia-400"
+                  className="flex-1 text-xs h-7 border-primary/50 text-primary"
                   onClick={(e) => {
                     e.stopPropagation();
                     onTweakApproach?.();
@@ -226,7 +226,7 @@ export function FlipCard({ expert, corporate, onStartProject, onTweakApproach }:
 
           {/* Back of Card - Research Methodology */}
           <div 
-            className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/10 to-cyan-500/10 border border-fuchsia-500/30 rounded-xl p-5 backface-hidden rotate-y-180 overflow-y-auto"
+            className="absolute inset-0 bg-gradient-to-br from-primary/10 to-cyan-500/10 border border-primary/30 rounded-xl p-5 backface-hidden rotate-y-180 overflow-y-auto"
             style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
           >
             <div className="space-y-4">
@@ -235,7 +235,7 @@ export function FlipCard({ expert, corporate, onStartProject, onTweakApproach }:
                 <span className="text-3xl">{corporate.logo}</span>
                 <div>
                   <h4 className="font-bold text-white">{corporate.name}</h4>
-                  <p className="text-xs text-fuchsia-400">Research Methodology</p>
+                  <p className="text-xs text-primary">Research Methodology</p>
                 </div>
               </div>
 
@@ -252,7 +252,7 @@ export function FlipCard({ expert, corporate, onStartProject, onTweakApproach }:
 
               {/* Research Approach */}
               <div>
-                <div className="flex items-center gap-2 text-fuchsia-400 text-sm font-medium mb-2">
+                <div className="flex items-center gap-2 text-primary text-sm font-medium mb-2">
                   <BookOpen className="w-4 h-4" />
                   Research Approach
                 </div>
@@ -295,7 +295,7 @@ export function FlipCard({ expert, corporate, onStartProject, onTweakApproach }:
               <div className="flex gap-2 pt-3 border-t border-white/10">
                 <Button 
                   size="sm" 
-                  className="flex-1 text-xs bg-gradient-to-r from-cyan-500 to-fuchsia-500"
+                  className="flex-1 text-xs bg-gradient-to-r from-cyan-500 to-primary"
                   onClick={(e) => {
                     e.stopPropagation();
                     onStartProject?.();
@@ -307,7 +307,7 @@ export function FlipCard({ expert, corporate, onStartProject, onTweakApproach }:
                 <Button 
                   size="sm" 
                   variant="outline"
-                  className="flex-1 text-xs border-fuchsia-500/50 text-fuchsia-400"
+                  className="flex-1 text-xs border-primary/50 text-primary"
                   onClick={(e) => {
                     e.stopPropagation();
                     onTweakApproach?.();

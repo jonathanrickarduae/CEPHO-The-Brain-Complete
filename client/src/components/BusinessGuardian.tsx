@@ -365,11 +365,11 @@ export function BusinessGuardian() {
   return (
     <div className="bg-card border border-border rounded-xl overflow-hidden">
       {/* Header */}
-      <div className="p-4 border-b border-border bg-gradient-to-r from-fuchsia-500/10 to-purple-500/10">
+      <div className="p-4 border-b border-border bg-gradient-to-r from-primary/10 to-purple-500/10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-fuchsia-500/20 rounded-lg">
-              <Shield className="w-5 h-5 text-fuchsia-400" />
+            <div className="p-2 bg-primary/10 rounded-lg">
+              <Shield className="w-5 h-5 text-primary" />
             </div>
             <div>
               <h3 className="font-semibold text-foreground">Business Guardian</h3>
@@ -719,9 +719,9 @@ export function BusinessGuardianWidget() {
   const unhealthyIntegrations = integrations.filter(i => i.status !== 'healthy').length;
 
   return (
-    <div className="p-3 bg-gradient-to-br from-fuchsia-500/10 to-purple-500/10 rounded-lg border border-fuchsia-500/20">
+    <div className="p-3 bg-gradient-to-br from-primary/10 to-purple-500/10 rounded-lg border border-primary/20">
       <div className="flex items-center gap-2 mb-2">
-        <Shield className="w-4 h-4 text-fuchsia-400" />
+        <Shield className="w-4 h-4 text-primary" />
         <span className="text-sm font-medium">Business Guardian</span>
       </div>
       <div className="grid grid-cols-3 gap-2 text-center">

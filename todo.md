@@ -5884,3 +5884,21 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 - [ ] Update RAG status colours — sunset red, warm amber, seafoam green
 - [ ] Update ProjectsHub, ProjectPortal, MorningSignal to beach theme
 - [ ] Push to GitHub
+
+## Knowledge Vault (June 2026)
+- [x] Extract and organise all documents into references/ folder
+- [x] Create VICTORIA_MASTER_CONTEXT.md with full operating intelligence
+- [x] Extract full AI Agent Master Guide PDF to references/victoria/
+- [x] Organise into victoria/, frameworks/, projects/, design/ subfolders
+- [x] Create VAULT_INDEX.md as master navigation document
+- [x] Push knowledge vault to GitHub
+
+## Beach Theme Redesign (June 2026)
+- [x] Switch fonts from Rajdhani/Space Grotesk to Nunito/Nunito Sans
+- [x] Update theme-color meta to ocean blue #0EA5E9
+- [x] Rewrite index.css with full beach design system (sand, ocean, coral, seafoam)
+- [x] Apply beach tokens to all three themes (light/dark/mix)
+- [x] Rebuild NexusDashboard with warm sand cards, Victoria briefing strip, RAG bar
+- [x] Update BrainLayout sidebar Victoria status card to beach tokens
+- [x] Replace all fuchsia/magenta/pink color references with ocean blue and coral
+- [x] Update design-system.css gradient tokens to beach palette

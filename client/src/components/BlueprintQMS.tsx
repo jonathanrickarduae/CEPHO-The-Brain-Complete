@@ -172,8 +172,8 @@ export function BlueprintQMS({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 flex items-center justify-center">
-            <GitBranch className="w-5 h-5 text-fuchsia-400" />
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-cyan-500/20 to-primary/10 flex items-center justify-center">
+            <GitBranch className="w-5 h-5 text-primary" />
           </div>
           <div>
             <h2 className="text-lg font-semibold text-white">Quality Management System</h2>
@@ -181,7 +181,7 @@ export function BlueprintQMS({
           </div>
         </div>
         {pendingChanges.length > 0 && (
-          <Badge className="bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/30">
+          <Badge className="bg-primary/10 text-primary/80 border-primary/30">
             {pendingChanges.length} pending changes
           </Badge>
         )}
@@ -198,12 +198,12 @@ export function BlueprintQMS({
           {/* Genesis Blueprint (Center) */}
           <div className="flex justify-center mb-8">
             <div className="relative">
-              <div className={`w-32 h-32 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-fuchsia-500/20 border-2 ${
+              <div className={`w-32 h-32 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-primary/10 border-2 ${
                 genesisBlueprint.status === 'approved' 
                   ? 'border-green-500/50' 
-                  : 'border-fuchsia-500/50'
+                  : 'border-primary/50'
               } flex flex-col items-center justify-center`}>
-                <Brain className="w-8 h-8 text-fuchsia-400 mb-2" />
+                <Brain className="w-8 h-8 text-primary mb-2" />
                 <p className="text-xs font-medium text-white">Genesis Blueprint</p>
                 <Badge 
                   variant="outline" 
@@ -220,7 +220,7 @@ export function BlueprintQMS({
               </div>
               
               {/* Connection Lines */}
-              <div className="absolute top-full left-1/2 w-px h-8 bg-gradient-to-b from-fuchsia-500/50 to-transparent" />
+              <div className="absolute top-full left-1/2 w-px h-8 bg-gradient-to-b from-primary/30 to-transparent" />
             </div>
           </div>
 
@@ -233,7 +233,7 @@ export function BlueprintQMS({
               return (
                 <div 
                   key={blueprint.id}
-                  className={`relative p-4 rounded-xl border transition-all cursor-pointer hover:border-fuchsia-500/50 ${
+                  className={`relative p-4 rounded-xl border transition-all cursor-pointer hover:border-primary/50 ${
                     hasImpact 
                       ? 'bg-orange-500/10 border-orange-500/30' 
                       : 'bg-white/5 border-white/10'
@@ -309,7 +309,7 @@ export function BlueprintQMS({
                 key={change.id}
                 className={`p-3 rounded-xl border transition-all cursor-pointer ${
                   selectedChanges.includes(change.id)
-                    ? 'bg-fuchsia-500/10 border-fuchsia-500/30'
+                    ? 'bg-primary/8 border-primary/30'
                     : 'bg-white/5 border-white/10 hover:border-white/20'
                 }`}
                 onClick={() => toggleChangeSelection(change.id)}
@@ -317,7 +317,7 @@ export function BlueprintQMS({
                 <div className="flex items-start gap-3">
                   <div className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 ${
                     selectedChanges.includes(change.id)
-                      ? 'bg-fuchsia-500 border-fuchsia-500'
+                      ? 'bg-primary border-primary'
                       : 'border-white/30'
                   }`}>
                     {selectedChanges.includes(change.id) && (
@@ -405,7 +405,7 @@ export function BlueprintQMS({
                           {impact.severity} impact
                         </Badge>
                         {impact.requiresReview && (
-                          <Badge variant="outline" className="text-[10px] border-fuchsia-500/30 text-fuchsia-400">
+                          <Badge variant="outline" className="text-[10px] border-primary/30 text-primary">
                             <Eye className="w-2 h-2 mr-1" />
                             Review needed
                           </Badge>
@@ -436,7 +436,7 @@ export function BlueprintQMS({
               </Button>
               <Button
                 onClick={handleApplyChanges}
-                className="bg-gradient-to-r from-cyan-500 to-fuchsia-500 hover:opacity-90"
+                className="bg-gradient-to-r from-cyan-500 to-primary hover:opacity-90"
               >
                 Apply & Cascade ({selectedChanges.length})
               </Button>

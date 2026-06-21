@@ -157,8 +157,8 @@ export function AccessibilitySettingsPanel() {
         {/* Preview */}
         <div className="p-4 bg-background rounded-xl">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-pink-500/20 flex items-center justify-center">
-              <Eye className="w-5 h-5 text-pink-400" />
+            <div className="w-10 h-10 rounded-lg bg-[oklch(0.72_0.19_45/0.1)] flex items-center justify-center">
+              <Eye className="w-5 h-5 text-[oklch(0.72_0.19_45)]" />
             </div>
             <div>
               <div className="font-medium text-white">Preview</div>

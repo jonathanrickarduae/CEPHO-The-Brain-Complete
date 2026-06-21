@@ -426,9 +426,9 @@ const getColorClasses = (color: string) => {
       gradient: "from-emerald-500/20 to-emerald-500/5",
     },
     pink: {
-      bg: "bg-pink-500/10",
+      bg: "bg-[oklch(0.72_0.19_45/0.08)]",
       border: "border-pink-500/30",
-      text: "text-pink-400",
+      text: "text-[oklch(0.72_0.19_45)]",
       gradient: "from-pink-500/20 to-pink-500/5",
     },
     amber: {

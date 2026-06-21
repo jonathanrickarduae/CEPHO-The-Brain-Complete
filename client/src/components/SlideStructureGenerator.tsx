@@ -108,7 +108,7 @@ const slideTemplates: Record<SlideType, {
     icon: DollarSign,
     defaultTitle: 'Investment Ask',
     placeholder: 'How much are you raising? What will you use it for? What milestones will it achieve?',
-    color: 'text-pink-400'
+    color: 'text-[oklch(0.72_0.19_45)]'
   },
   custom: {
     label: 'Custom',

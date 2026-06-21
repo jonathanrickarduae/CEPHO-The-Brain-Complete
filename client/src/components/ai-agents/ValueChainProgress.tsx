@@ -111,7 +111,7 @@ export function ValueChainProgress({
   return (
     <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
       {/* Header */}
-      <div className="p-4 border-b border-white/10 bg-gradient-to-r from-cyan-500/10 to-fuchsia-500/10">
+      <div className="p-4 border-b border-white/10 bg-gradient-to-r from-cyan-500/10 to-primary/10">
         <h2 className="text-lg font-semibold text-white flex items-center gap-2">
           <FileText className="w-5 h-5 text-[var(--brain-cyan)]" />
           Value Chain Progress
@@ -202,7 +202,7 @@ export function ValueChainProgress({
                         </div>
                         <div className="w-16 h-1.5 bg-white/10 rounded-full overflow-hidden">
                           <div
-                            className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-fuchsia-500"
+                            className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-primary"
                             style={{ width: `${checkProgress}%` }}
                           />
                         </div>
@@ -313,7 +313,7 @@ export function ValueChainProgress({
                             <Button
                               size="sm"
                               onClick={() => onStartPhase?.(phase.id)}
-                              className="bg-gradient-to-r from-cyan-500 to-fuchsia-500"
+                              className="bg-gradient-to-r from-cyan-500 to-primary"
                             >
                               Start Phase
                             </Button>
@@ -357,7 +357,7 @@ export function ValueChainProgress({
           {qualityGateLevels.map(level => (
             <div key={level.level} className="p-2 bg-white/5 rounded-lg">
               <div className="flex items-center gap-2 mb-1">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-r from-cyan-500 to-fuchsia-500 flex items-center justify-center text-xs font-bold">
+                <div className="w-6 h-6 rounded-full bg-gradient-to-r from-cyan-500 to-primary flex items-center justify-center text-xs font-bold">
                   {level.level}
                 </div>
                 <span className="text-xs font-medium text-white">

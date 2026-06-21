@@ -488,8 +488,8 @@ export default function PersephoneBoard() {
           border: "border-cyan-500/30",
         },
         pink: {
-          bg: "bg-pink-500/10",
-          text: "text-pink-400",
+          bg: "bg-[oklch(0.72_0.19_45/0.08)]",
+          text: "text-[oklch(0.72_0.19_45)]",
           border: "border-pink-500/30",
         },
         violet: {

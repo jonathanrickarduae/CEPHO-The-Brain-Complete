@@ -165,7 +165,7 @@ const NotificationIcon = ({ type }: { type: Notification['type'] }) => {
     case 'task_assigned':
       return <FileText className="w-4 h-4 text-purple-400" />;
     case 'digital_twin':
-      return <Brain className="w-4 h-4 text-fuchsia-400" />;
+      return <Brain className="w-4 h-4 text-primary" />;
     case 'achievement':
       return <Trophy className="w-4 h-4 text-yellow-400" />;
     default: 

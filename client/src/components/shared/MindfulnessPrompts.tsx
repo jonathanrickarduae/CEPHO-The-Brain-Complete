@@ -50,8 +50,8 @@ const EXERCISES: MindfulnessExercise[] = [
     description: "Quick reflection on what you're thankful for",
     duration: 60,
     icon: Heart,
-    color: "text-pink-400",
-    bgColor: "bg-pink-500/20",
+    color: "text-[oklch(0.72_0.19_45)]",
+    bgColor: "bg-[oklch(0.72_0.19_45/0.1)]",
     steps: [
       "Close your eyes and relax",
       "Think of 3 things you're grateful for today",

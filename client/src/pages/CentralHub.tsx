@@ -129,7 +129,7 @@ export default function CentralHub() {
               onClick={() => setActiveTab(tab.id as TabType)}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
                 activeTab === tab.id
-                  ? 'bg-gradient-to-r from-purple-500/20 to-fuchsia-500/20 text-purple-400 border border-purple-500/30'
+                  ? 'bg-gradient-to-r from-purple-500/20 to-primary/10 text-purple-400 border border-purple-500/30'
                   : 'text-foreground/70 hover:text-white hover:bg-white/5'
               }`}
             >

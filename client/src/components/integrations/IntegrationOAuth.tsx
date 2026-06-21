@@ -408,7 +408,7 @@ export function AsanaIntegrationPanel() {
     type: "asana",
     name: "Asana",
     description: "Connect Asana for project and task management",
-    icon: <CheckSquare className="w-5 h-5 text-pink-400" />,
+    icon: <CheckSquare className="w-5 h-5 text-[oklch(0.72_0.19_45)]" />,
     connected: integrations.some(
       i => i.provider === "asana" && i.status === "active"
     ),

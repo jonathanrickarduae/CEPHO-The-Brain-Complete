@@ -86,7 +86,7 @@ const SME_EXPERTS: SMEExpert[] = [
     name: "Marketing",
     role: "CMO Expert",
     icon: TrendingUp,
-    color: "text-pink-400",
+    color: "text-[oklch(0.72_0.19_45)]",
   },
   {
     id: "hr",

@@ -182,7 +182,7 @@ export function DueDiligenceChecklist({ projectId }: DueDiligenceChecklistProps)
       case 'operational': return 'bg-blue-500/20 text-blue-400';
       case 'commercial': return 'bg-orange-500/20 text-orange-400';
       case 'technical': return 'bg-cyan-500/20 text-cyan-400';
-      case 'hr': return 'bg-pink-500/20 text-pink-400';
+      case 'hr': return 'bg-[oklch(0.72_0.19_45/0.1)] text-[oklch(0.72_0.19_45)]';
       default: return 'bg-gray-500/20 text-foreground/70';
     }
   };

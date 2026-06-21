@@ -26,7 +26,7 @@ const SECTIONS = [
   { id: 7, name: "Innovation & Technology", color: "from-cyan-500 to-cyan-600" },
   { id: 8, name: "Market & Competition", color: "from-orange-500 to-orange-600" },
   { id: 9, name: "Personal Productivity", color: "from-indigo-500 to-indigo-600" },
-  { id: 10, name: "Strategic Thinking", color: "from-fuchsia-500 to-fuchsia-600" },
+  { id: 10, name: "Strategic Thinking", color: "from-primary to-primary/90" },
 ];
 
 // Full 200 questions across 10 sections
@@ -301,11 +301,11 @@ export default function QuestionnaireOnline() {
             <p className="text-foreground/70">
               You've answered all {totalQuestions} questions. Your Chief of Staff now has a comprehensive understanding of your preferences and decision-making style.
             </p>
-            <div className="p-4 rounded-lg bg-fuchsia-500/10 border border-fuchsia-500/20">
+            <div className="p-4 rounded-lg bg-primary/8 border border-primary/20">
               <p className="text-sm font-medium">COS Understanding Level</p>
-              <p className="text-4xl font-bold text-fuchsia-400">100/100</p>
+              <p className="text-4xl font-bold text-primary">100/100</p>
             </div>
-            <Button onClick={handleSave} className="w-full bg-fuchsia-600 hover:bg-fuchsia-700">
+            <Button onClick={handleSave} className="w-full bg-primary hover:bg-primary/90">
               <Save className="w-4 h-4 mr-2" />
               Save All Responses
             </Button>
@@ -321,7 +321,7 @@ export default function QuestionnaireOnline() {
         {/* Header */}
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-fuchsia-500 to-purple-600 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center">
               <Brain className="w-6 h-6 text-white" />
             </div>
             <div>
@@ -334,7 +334,7 @@ export default function QuestionnaireOnline() {
           <div className="space-y-2 mb-4">
             <div className="flex justify-between text-sm">
               <span>{totalAnswered} of {totalQuestions} answered</span>
-              <span className="text-fuchsia-400 font-medium">{progressPercentage}%</span>
+              <span className="text-primary font-medium">{progressPercentage}%</span>
             </div>
             <Progress value={progressPercentage} className="h-2" />
           </div>
@@ -357,7 +357,7 @@ export default function QuestionnaireOnline() {
                   className={cn(
                     "flex-shrink-0 px-3 py-2 rounded-lg text-xs font-medium transition-all",
                     isCurrentSection
-                      ? "bg-fuchsia-600 text-white"
+                      ? "bg-primary text-white"
                       : isCompleteSection
                       ? "bg-green-500/20 text-green-400 border border-green-500/30"
                       : "bg-card hover:bg-card/80 text-foreground/70"
@@ -381,7 +381,7 @@ export default function QuestionnaireOnline() {
         </div>
         
         {/* Question Card */}
-        <Card className="mb-6 border-fuchsia-500/20">
+        <Card className="mb-6 border-primary/20">
           <CardHeader>
             <CardTitle className="text-lg font-medium leading-relaxed">
               {currentQuestion?.text}
@@ -401,7 +401,7 @@ export default function QuestionnaireOnline() {
                     variant={responses[currentQuestion.id] === value ? "default" : "outline"}
                     className={cn(
                       "h-14 text-lg font-bold",
-                      responses[currentQuestion.id] === value && "bg-fuchsia-600 hover:bg-fuchsia-700 text-white"
+                      responses[currentQuestion.id] === value && "bg-primary hover:bg-primary/90 text-white"
                     )}
                     onClick={() => handleScaleAnswer(value)}
                   >
@@ -458,14 +458,14 @@ export default function QuestionnaireOnline() {
         </div>
         
         {/* COS Understanding */}
-        <div className="mt-6 p-4 rounded-lg bg-gradient-to-r from-fuchsia-500/10 to-purple-500/10 border border-fuchsia-500/20">
+        <div className="mt-6 p-4 rounded-lg bg-gradient-to-r from-primary/10 to-purple-500/10 border border-primary/20">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium">COS Understanding Level</p>
               <p className="text-xs text-foreground/60">Based on questionnaire completion</p>
             </div>
             <div className="text-right">
-              <p className="text-3xl font-bold text-fuchsia-400">{progressPercentage}/100</p>
+              <p className="text-3xl font-bold text-primary">{progressPercentage}/100</p>
             </div>
           </div>
         </div>

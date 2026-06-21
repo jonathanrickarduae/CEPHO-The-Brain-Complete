@@ -156,7 +156,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-semibold text-white flex items-center gap-2">
-            <Rocket className="h-5 w-5 text-fuchsia-400" />
+            <Rocket className="h-5 w-5 text-primary" />
             {startup.name}
           </CardTitle>
           <Badge
@@ -271,7 +271,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
           <Button
             variant="ghost"
             size="sm"
-            className="text-fuchsia-400 hover:text-fuchsia-300"
+            className="text-primary hover:text-primary/80"
           >
             <Edit className="h-3 w-3 mr-1" /> Edit
           </Button>
@@ -307,7 +307,7 @@ export default function StartupHealthDashboard({
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-fuchsia-400" />
+            <Sparkles className="h-5 w-5 text-primary" />
             Startup Health Dashboard
           </h2>
           <p className="text-sm text-foreground/70 mt-1">
@@ -316,7 +316,7 @@ export default function StartupHealthDashboard({
         </div>
         <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
           <DialogTrigger asChild>
-            <Button className="bg-fuchsia-500 hover:bg-fuchsia-600">
+            <Button className="bg-primary hover:bg-primary">
               <Plus className="h-4 w-4 mr-2" /> Add Startup
             </Button>
           </DialogTrigger>
@@ -369,7 +369,7 @@ export default function StartupHealthDashboard({
                 </div>
               </div>
               <Button
-                className="w-full bg-fuchsia-500 hover:bg-fuchsia-600"
+                className="w-full bg-primary hover:bg-primary"
                 onClick={() => setShowAddDialog(false)}
               >
                 Add Startup
@@ -467,7 +467,7 @@ export default function StartupHealthDashboard({
               Add your first startup to track runway, burn rate, and key metrics
             </p>
             <Button
-              className="bg-fuchsia-500 hover:bg-fuchsia-600"
+              className="bg-primary hover:bg-primary"
               onClick={() => setShowAddDialog(true)}
             >
               <Plus className="h-4 w-4 mr-2" /> Add Your First Startup

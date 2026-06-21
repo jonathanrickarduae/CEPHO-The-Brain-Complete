@@ -54,7 +54,7 @@ const EMPTY_STATE_CONFIGS: Record<EmptyStateType, EmptyStateConfig> = {
       "Documents, research, and AI-generated content will appear here.",
     actionLabel: "Upload Document",
     secondaryActionLabel: "Generate with AI",
-    color: "text-pink-400",
+    color: "text-[oklch(0.72_0.19_45)]",
     bgGradient: "from-pink-500/10 to-pink-500/5",
   },
   experts: {

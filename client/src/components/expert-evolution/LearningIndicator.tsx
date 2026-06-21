@@ -32,7 +32,7 @@ const TYPE_CONFIG = {
   vocabulary: {
     icon: MessageSquare,
     label: "Vocabulary",
-    color: "text-pink-400",
+    color: "text-[oklch(0.72_0.19_45)]",
   },
   decision: { icon: Brain, label: "Decision", color: "text-amber-400" },
   timing: { icon: Clock, label: "Timing", color: "text-green-400" },

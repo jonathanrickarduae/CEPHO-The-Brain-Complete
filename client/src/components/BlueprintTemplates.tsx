@@ -98,7 +98,7 @@ const phaseConfig: Record<ValueChainPhase, {
   },
   retention: { 
     label: 'Retention', 
-    color: 'text-pink-400 bg-pink-500/20 border-pink-500/30',
+    color: 'text-[oklch(0.72_0.19_45)] bg-[oklch(0.72_0.19_45/0.1)] border-pink-500/30',
     icon: <Heart className="w-5 h-5" />,
     description: 'Maximize customer lifetime value'
   },
@@ -396,7 +396,7 @@ function TemplateCard({ template, onUseTemplate }: TemplateCardProps) {
 
           <Button 
             onClick={() => onUseTemplate(template)}
-            className="w-full bg-gradient-to-r from-cyan-500 to-fuchsia-500 hover:opacity-90"
+            className="w-full bg-gradient-to-r from-cyan-500 to-primary hover:opacity-90"
           >
             <Plus className="w-4 h-4 mr-2" />
             Use This Template
@@ -568,7 +568,7 @@ export function BlueprintTemplatesDashboard({
               </Button>
               <Button
                 onClick={handleCreateBlueprint}
-                className="flex-1 bg-gradient-to-r from-cyan-500 to-fuchsia-500 hover:opacity-90"
+                className="flex-1 bg-gradient-to-r from-cyan-500 to-primary hover:opacity-90"
               >
                 Create Blueprint
               </Button>

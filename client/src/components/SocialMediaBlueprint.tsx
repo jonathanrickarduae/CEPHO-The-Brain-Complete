@@ -197,7 +197,7 @@ export function SocialMediaBlueprint() {
             </div>
             <div className="p-4 bg-card/50 rounded-xl border border-white/10">
               <h4 className="font-medium text-foreground mb-3 flex items-center gap-2">
-                <Hash className="w-4 h-4 text-pink-400" />
+                <Hash className="w-4 h-4 text-[oklch(0.72_0.19_45)]" />
                 Content Pillars
               </h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
@@ -309,12 +309,12 @@ export function SocialMediaBlueprint() {
                       {/* Content Types */}
                       <div>
                         <h5 className="font-medium text-foreground mb-3 flex items-center gap-2">
-                          <Video className="w-4 h-4 text-pink-400" />
+                          <Video className="w-4 h-4 text-[oklch(0.72_0.19_45)]" />
                           Recommended Content Types
                         </h5>
                         <div className="flex flex-wrap gap-2">
                           {intel.contentFormats.map((format, i: number) => (
-                            <Badge key={i} variant="outline" className="bg-pink-500/10 text-pink-400 border-pink-500/30">
+                            <Badge key={i} variant="outline" className="bg-[oklch(0.72_0.19_45/0.08)] text-[oklch(0.72_0.19_45)] border-pink-500/30">
                               {format.type}
                             </Badge>
                           ))}

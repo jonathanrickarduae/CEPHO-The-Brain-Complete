@@ -283,7 +283,7 @@ const getLessonTypeIcon = (type: LearnedLesson["type"]) => {
     case "context_rule":
       return <Target className="h-4 w-4 text-[var(--brain-cyan)]" />;
     case "communication_style":
-      return <MessageSquare className="h-4 w-4 text-pink-400" />;
+      return <MessageSquare className="h-4 w-4 text-[oklch(0.72_0.19_45)]" />;
   }
 };
 
@@ -298,7 +298,7 @@ const getPatternTypeIcon = (type: Pattern["type"]) => {
     case "decision_based":
       return <Lightbulb className="h-4 w-4 text-purple-400" />;
     case "communication_based":
-      return <MessageSquare className="h-4 w-4 text-pink-400" />;
+      return <MessageSquare className="h-4 w-4 text-[oklch(0.72_0.19_45)]" />;
   }
 };
 

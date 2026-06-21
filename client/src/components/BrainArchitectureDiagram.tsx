@@ -55,8 +55,8 @@ const ARCHITECTURE_NODES: ArchitectureNode[] = [
     name: 'Wellness AI',
     description: 'Health monitoring and burnout prevention system',
     icon: Heart,
-    color: 'text-pink-400',
-    bgColor: 'bg-pink-500/20',
+    color: 'text-[oklch(0.72_0.19_45)]',
+    bgColor: 'bg-[oklch(0.72_0.19_45/0.1)]',
     connections: ['core', 'insights'],
     features: ['Stress detection', 'Break reminders', 'Sleep tracking', 'Energy optimization']
   },
@@ -202,8 +202,8 @@ export function BrainArchitectureDiagram() {
               onClick={() => setSelectedNode(ARCHITECTURE_NODES.find(n => n.id === 'wellness') || null)}
             >
               <div className={`w-20 h-20 rounded-full ${ARCHITECTURE_NODES[3].bgColor} border-2 border-pink-500/50 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 ${hoveredNode === 'wellness' || isConnected('wellness') ? 'ring-4 ring-pink-500/30' : 'opacity-70'}`}>
-                <Heart className="w-6 h-6 text-pink-400" />
-                <span className="text-xs font-medium text-pink-400 mt-1">Wellness</span>
+                <Heart className="w-6 h-6 text-[oklch(0.72_0.19_45)]" />
+                <span className="text-xs font-medium text-[oklch(0.72_0.19_45)] mt-1">Wellness</span>
               </div>
             </div>
 

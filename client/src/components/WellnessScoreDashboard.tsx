@@ -163,7 +163,7 @@ export function WellnessScoreDashboard({ compact = false, onShare }: WellnessSco
       {/* Breakdown */}
       <div className="grid grid-cols-4 gap-3 mb-6">
         {[
-          { label: 'Mood', value: wellnessData.breakdown.mood, icon: Heart, color: 'text-pink-400' },
+          { label: 'Mood', value: wellnessData.breakdown.mood, icon: Heart, color: 'text-[oklch(0.72_0.19_45)]' },
           { label: 'Productivity', value: wellnessData.breakdown.productivity, icon: Zap, color: 'text-yellow-400' },
           { label: 'Balance', value: wellnessData.breakdown.balance, icon: Target, color: 'text-green-400' },
           { label: 'Momentum', value: wellnessData.breakdown.momentum, icon: TrendingUp, color: 'text-blue-400' },

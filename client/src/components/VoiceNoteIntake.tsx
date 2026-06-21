@@ -171,7 +171,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-r from-cyan-500 to-fuchsia-500 flex items-center justify-center mx-auto mb-4">
+          <div className="w-20 h-20 rounded-full bg-gradient-to-r from-cyan-500 to-primary flex items-center justify-center mx-auto mb-4">
             <Brain className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">Start with a Voice Note</h1>
@@ -185,7 +185,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
           <Card className="bg-white/5 border-white/10 mb-6">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
-                <Mic className="w-5 h-5 text-fuchsia-400" />
+                <Mic className="w-5 h-5 text-primary" />
                 Record or Upload Voice Note
               </CardTitle>
             </CardHeader>
@@ -199,7 +199,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                       className={`w-32 h-32 rounded-full flex items-center justify-center transition-all ${
                         isRecording 
                           ? 'bg-red-500 animate-pulse' 
-                          : 'bg-gradient-to-r from-cyan-500 to-fuchsia-500 hover:scale-105'
+                          : 'bg-gradient-to-r from-cyan-500 to-primary hover:scale-105'
                       }`}
                     >
                       {isRecording ? (
@@ -225,8 +225,8 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                     {/* Audio Player */}
                     <div className="bg-white/5 rounded-xl p-4">
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-full bg-fuchsia-500/20 flex items-center justify-center">
-                          <Volume2 className="w-6 h-6 text-fuchsia-400" />
+                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                          <Volume2 className="w-6 h-6 text-primary" />
                         </div>
                         <div className="flex-1">
                           <p className="text-white font-medium">
@@ -256,7 +256,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                       <Button
                         onClick={processAudio}
                         disabled={isProcessing}
-                        className="flex-1 bg-gradient-to-r from-cyan-500 to-fuchsia-500"
+                        className="flex-1 bg-gradient-to-r from-cyan-500 to-primary"
                       >
                         {isProcessing ? (
                           <>
@@ -401,7 +401,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                 </Button>
                 <Button
                   onClick={() => onComplete(transcriptionResult)}
-                  className="flex-1 bg-gradient-to-r from-cyan-500 to-fuchsia-500"
+                  className="flex-1 bg-gradient-to-r from-cyan-500 to-primary"
                 >
                   Continue to Wizard
                   <Sparkles className="w-4 h-4 ml-2" />
@@ -425,7 +425,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
         {/* Tips */}
         <div className="mt-8 bg-white/5 border border-white/10 rounded-xl p-6">
           <h3 className="text-white font-medium mb-4 flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-fuchsia-400" />
+            <Sparkles className="w-5 h-5 text-primary" />
             Tips for Better Results
           </h3>
           <ul className="space-y-2 text-foreground/70 text-sm">
@@ -438,7 +438,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
               Mention your goals, timeline, and target audience
             </li>
             <li className="flex items-start gap-2">
-              <Brain className="w-4 h-4 mt-0.5 text-fuchsia-400" />
+              <Brain className="w-4 h-4 mt-0.5 text-primary" />
               Include any constraints or success metrics
             </li>
             <li className="flex items-start gap-2">

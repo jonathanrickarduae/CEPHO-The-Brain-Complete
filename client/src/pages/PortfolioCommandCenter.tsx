@@ -250,7 +250,7 @@ function VentureCard({ venture }: { venture: Venture }) {
             <ul className="space-y-1">
               {venture.nextActions.slice(0, 2).map((action, idx) => (
                 <li key={idx} className="text-sm text-foreground/80 flex items-start gap-2">
-                  <ArrowRight className="h-3 w-3 mt-1 text-fuchsia-500 shrink-0" />
+                  <ArrowRight className="h-3 w-3 mt-1 text-primary shrink-0" />
                   {action}
                 </li>
               ))}
@@ -296,7 +296,7 @@ function VentureCard({ venture }: { venture: Venture }) {
               <Clock className="h-3 w-3" /> {venture.lastUpdated}
             </span>
           </div>
-          <Button variant="ghost" size="sm" className="text-fuchsia-400 hover:text-fuchsia-300">
+          <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
             View Details <ArrowRight className="h-3 w-3 ml-1" />
           </Button>
         </div>
@@ -313,8 +313,8 @@ export default function PortfolioCommandCenter() {
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-2">
-          <div className="p-2 bg-gradient-to-br from-fuchsia-500/20 to-purple-500/20 rounded-lg">
-            <Briefcase className="h-6 w-6 text-fuchsia-400" />
+          <div className="p-2 bg-gradient-to-br from-primary/10 to-purple-500/20 rounded-lg">
+            <Briefcase className="h-6 w-6 text-primary" />
           </div>
           <div>
             <h1 className="text-2xl font-bold">Portfolio Command Center</h1>
@@ -386,8 +386,8 @@ export default function PortfolioCommandCenter() {
         <Card className="bg-gray-900/50 border-gray-800">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-fuchsia-500/20 rounded-lg">
-                <Target className="h-5 w-5 text-fuchsia-400" />
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <Target className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{portfolioSummary.totalNextActions}</p>
@@ -401,19 +401,19 @@ export default function PortfolioCommandCenter() {
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="bg-gray-900/50 border border-gray-800">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-fuchsia-500/20">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-primary/10">
             <BarChart3 className="h-4 w-4 mr-2" /> Overview
           </TabsTrigger>
-          <TabsTrigger value="ventures" className="data-[state=active]:bg-fuchsia-500/20">
+          <TabsTrigger value="ventures" className="data-[state=active]:bg-primary/10">
             <Building2 className="h-4 w-4 mr-2" /> Ventures
           </TabsTrigger>
-          <TabsTrigger value="actions" className="data-[state=active]:bg-fuchsia-500/20">
+          <TabsTrigger value="actions" className="data-[state=active]:bg-primary/10">
             <Target className="h-4 w-4 mr-2" /> Actions
           </TabsTrigger>
-          <TabsTrigger value="blockers" className="data-[state=active]:bg-fuchsia-500/20">
+          <TabsTrigger value="blockers" className="data-[state=active]:bg-primary/10">
             <AlertTriangle className="h-4 w-4 mr-2" /> Blockers
           </TabsTrigger>
-          <TabsTrigger value="health" className="data-[state=active]:bg-fuchsia-500/20">
+          <TabsTrigger value="health" className="data-[state=active]:bg-primary/10">
             <Rocket className="h-4 w-4 mr-2" /> Health
           </TabsTrigger>
         </TabsList>
@@ -439,7 +439,7 @@ export default function PortfolioCommandCenter() {
           <Card className="bg-gray-900/50 border-gray-800">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <Target className="h-5 w-5 text-fuchsia-400" />
+                <Target className="h-5 w-5 text-primary" />
                 All Next Actions
               </CardTitle>
             </CardHeader>
@@ -456,7 +456,7 @@ export default function PortfolioCommandCenter() {
                         <p className="text-sm text-white">{action}</p>
                         <p className="text-xs text-foreground/60 mt-1">{venture.name}</p>
                       </div>
-                      <Button variant="ghost" size="sm" className="text-fuchsia-400">
+                      <Button variant="ghost" size="sm" className="text-primary">
                         <CheckCircle2 className="h-4 w-4" />
                       </Button>
                     </div>

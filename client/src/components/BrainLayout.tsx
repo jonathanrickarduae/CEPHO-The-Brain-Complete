@@ -188,7 +188,7 @@ function BrainLayoutContent({
 
             {/* Victoria status */}
             {!isCollapsed && (
-              <div className="mx-3 mt-auto mb-3 p-3 rounded-xl border border-primary/15 bg-gradient-to-br from-primary/5 to-[oklch(0.58_0.26_340)]/5">
+              <div className="mx-3 mt-auto mb-3 p-3 rounded-xl border border-primary/15 bg-gradient-to-br from-primary/5 to-primary/3">
                 <div className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-primary animate-pulse shrink-0" />
                   <span className="text-xs font-semibold text-primary">Victoria</span>
@@ -248,7 +248,7 @@ function BrainLayoutContent({
 
       <SidebarInset className="flex flex-col min-h-screen">
         {/* Top bar */}
-        <header className="h-14 flex items-center gap-3 px-4 border-b border-border bg-background/90 backdrop-blur-sm sticky top-0 z-20">
+        <header className="h-14 flex items-center gap-3 px-4 border-b border-border bg-card/95 backdrop-blur-sm sticky top-0 z-20 shadow-sm">
           {isMobile && <SidebarTrigger className="h-8 w-8" />}
           <div className="flex items-center gap-2">
             <AnimatedBrainLogo size="xs" intensity="subtle" color="var(--color-primary)" />

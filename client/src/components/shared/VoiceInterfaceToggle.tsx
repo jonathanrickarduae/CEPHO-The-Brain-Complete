@@ -185,7 +185,7 @@ export function VoiceInterfaceToggle() {
           variant={settings.enabled ? "default" : "ghost"}
           size="sm"
           onClick={() => updateSettings({ enabled: !settings.enabled })}
-          className={`${settings.enabled ? "bg-fuchsia-600 hover:bg-fuchsia-700" : ""}`}
+          className={`${settings.enabled ? "bg-primary hover:bg-primary/90" : ""}`}
         >
           {settings.enabled ? (
             <Mic className="w-4 h-4 mr-2" />
@@ -296,7 +296,7 @@ export function VoiceInterfaceToggle() {
       {/* Listening indicator */}
       {isListening && (
         <div className="absolute -bottom-8 left-0 right-0 text-center">
-          <span className="text-xs text-fuchsia-400 animate-pulse">
+          <span className="text-xs text-primary animate-pulse">
             Listening...
           </span>
         </div>
