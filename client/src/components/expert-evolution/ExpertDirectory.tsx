@@ -493,14 +493,14 @@ export function ExpertDirectory({ onBack }: ExpertDirectoryProps) {
                 !searchQuery &&
                 recommendations &&
                 recommendations.length > 0 && (
-                  <div className="mb-8 p-6 rounded-2xl bg-gradient-to-br from-primary/10 via-purple-500/5 to-pink-500/10 border-2 border-primary/30">
+                  <div className="mb-8 p-6 rounded-2xl bg-gradient-to-br from-fuchsia-500/10 via-purple-500/5 to-pink-500/10 border-2 border-fuchsia-500/30">
                     <div className="flex items-center justify-between mb-4">
                       <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                        <div className="p-2 rounded-xl bg-primary/10 animate-pulse">
-                          <Zap className="w-6 h-6 text-primary" />
+                        <div className="p-2 rounded-xl bg-fuchsia-500/20 animate-pulse">
+                          <Zap className="w-6 h-6 text-fuchsia-400" />
                         </div>
                         <span>Recommended For You</span>
-                        <Badge className="bg-primary/10 text-primary border-0 ml-2">
+                        <Badge className="bg-fuchsia-500/20 text-fuchsia-400 border-0 ml-2">
                           AI-Powered
                         </Badge>
                       </h2>
@@ -521,7 +521,7 @@ export function ExpertDirectory({ onBack }: ExpertDirectoryProps) {
                         return (
                           <Card
                             key={rec.expertId}
-                            className="bg-gradient-to-br from-primary/5 to-purple-500/5 border-primary/20 hover:border-primary/50 transition-all cursor-pointer group"
+                            className="bg-gradient-to-br from-fuchsia-500/5 to-purple-500/5 border-fuchsia-500/20 hover:border-fuchsia-500/50 transition-all cursor-pointer group"
                             onClick={() => {
                               if (expert) {
                                 setSelectedExpert(expert);
@@ -533,11 +533,11 @@ export function ExpertDirectory({ onBack }: ExpertDirectoryProps) {
                           >
                             <CardContent className="p-3">
                               <div className="flex items-start gap-3 mb-2">
-                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/10 to-purple-500/20 border border-primary/30 flex items-center justify-center text-xl flex-shrink-0">
+                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-fuchsia-500/20 to-purple-500/20 border border-fuchsia-500/30 flex items-center justify-center text-xl flex-shrink-0">
                                   {rec.avatar}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                  <h3 className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors truncate">
+                                  <h3 className="font-semibold text-sm text-foreground group-hover:text-fuchsia-400 transition-colors truncate">
                                     {rec.expertName}
                                   </h3>
                                   <p className="text-xs text-muted-foreground truncate">
@@ -545,7 +545,7 @@ export function ExpertDirectory({ onBack }: ExpertDirectoryProps) {
                                   </p>
                                 </div>
                               </div>
-                              <p className="text-xs text-primary/80 line-clamp-2 mb-2">
+                              <p className="text-xs text-fuchsia-400/80 line-clamp-2 mb-2">
                                 {rec.reason}
                               </p>
                               <div className="flex items-center justify-between">
@@ -555,7 +555,7 @@ export function ExpertDirectory({ onBack }: ExpertDirectoryProps) {
                                 <Button
                                   size="sm"
                                   variant="ghost"
-                                  className="text-xs text-primary hover:text-primary/80 hover:bg-primary/8 h-7 px-2"
+                                  className="text-xs text-fuchsia-400 hover:text-fuchsia-300 hover:bg-fuchsia-500/10 h-7 px-2"
                                   onClick={e => {
                                     e.stopPropagation();
                                     if (expert) {
@@ -581,7 +581,7 @@ export function ExpertDirectory({ onBack }: ExpertDirectoryProps) {
               {!selectedCategory && !searchQuery && recommendationsLoading && (
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <Loader2 className="w-5 h-5 text-primary animate-spin" />
+                    <Loader2 className="w-5 h-5 text-fuchsia-400 animate-spin" />
                     <span className="text-sm text-muted-foreground">
                       Loading recommendations...
                     </span>

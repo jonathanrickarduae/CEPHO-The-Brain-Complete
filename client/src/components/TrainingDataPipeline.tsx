@@ -233,7 +233,7 @@ export function TrainingDataPipeline() {
                 <span>Connect Notes App</span>
               </button>
               <button className="flex items-center gap-2 p-3 bg-gray-900 hover:bg-gray-850 rounded-xl text-sm text-foreground/80 transition-colors">
-                <Brain className="w-4 h-4 text-[oklch(0.72_0.19_45)]" />
+                <Brain className="w-4 h-4 text-pink-400" />
                 <span>Add Preferences</span>
               </button>
             </div>
@@ -258,12 +258,12 @@ export function TrainingDataPipeline() {
                       <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                         doc.type === 'document' ? 'bg-blue-500/20' :
                         doc.type === 'conversation' ? 'bg-purple-500/20' :
-                        'bg-[oklch(0.72_0.19_45/0.1)]'
+                        'bg-pink-500/20'
                       }`}>
                         <TypeIcon className={`w-5 h-5 ${
                           doc.type === 'document' ? 'text-blue-400' :
                           doc.type === 'conversation' ? 'text-purple-400' :
-                          'text-[oklch(0.72_0.19_45)]'
+                          'text-pink-400'
                         }`} />
                       </div>
                       <div>

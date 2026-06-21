@@ -64,7 +64,7 @@ const SME_EXPERTS: SMEExpert[] = [
   { id: "legal", name: "Legal", role: "Legal Counsel", icon: Scale, color: "text-blue-400" },
   { id: "strategy", name: "Strategy", role: "Strategy Director", icon: Target, color: "text-purple-400" },
   { id: "operations", name: "Operations", role: "COO Expert", icon: Zap, color: "text-amber-400" },
-  { id: "marketing", name: "Marketing", role: "CMO Expert", icon: TrendingUp, color: "text-[oklch(0.72_0.19_45)]" },
+  { id: "marketing", name: "Marketing", role: "CMO Expert", icon: TrendingUp, color: "text-pink-400" },
   { id: "hr", name: "People", role: "HR Director", icon: Users, color: "text-cyan-400" },
   { id: "tech", name: "Technology", role: "CTO Expert", icon: Server, color: "text-orange-400" },
   { id: "risk", name: "Risk", role: "Risk Manager", icon: Shield, color: "text-red-400" },

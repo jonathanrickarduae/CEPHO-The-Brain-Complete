@@ -59,7 +59,7 @@ export function CephoLandingPage() {
                 transition={{ duration: 0.5, ease: "easeInOut" }}
                 className="flex flex-col items-center"
               >
-                <h1 className="text-6xl md:text-7xl font-display font-bold tracking-tight text-center bg-gradient-to-r from-primary via-[oklch(0.72_0.19_45)] to-primary bg-clip-text text-transparent">
+                <h1 className="text-6xl md:text-7xl font-display font-bold tracking-tight text-center bg-gradient-to-r from-primary via-pink-400 to-primary bg-clip-text text-transparent">
                   Cepho
                 </h1>
                 <p className="text-sm text-white/40 mt-3 italic">
@@ -92,7 +92,7 @@ export function CephoLandingPage() {
             window.location.href = getLoginUrl();
           }}
           size="lg"
-          className="w-full max-w-xs mt-6 bg-primary hover:bg-primary/90 text-white shadow-[0_4px_20px_oklch(0.62_0.19_220_/_0.35)] hover:shadow-[0_6px_28px_oklch(0.62_0.19_220_/_0.5)] transition-all text-base py-6"
+          className="w-full max-w-xs mt-6 bg-primary hover:bg-primary/90 text-white shadow-[0_0_20px_rgba(255,16,240,0.3)] hover:shadow-[0_0_30px_rgba(255,16,240,0.5)] transition-all text-base py-6"
         >
           Sign in to Continue
         </Button>

@@ -60,7 +60,7 @@ export function SMEPanel({
     switch (status) {
       case 'contributing': return 'text-green-400 border-green-500/30';
       case 'thinking': return 'text-yellow-400 border-yellow-500/30';
-      case 'awaiting_response': return 'text-primary border-primary/30';
+      case 'awaiting_response': return 'text-fuchsia-400 border-fuchsia-500/30';
       default: return 'text-foreground/70 border-white/20';
     }
   };
@@ -108,14 +108,14 @@ export function SMEPanel({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Users className="w-5 h-5 text-primary" />
+          <Users className="w-5 h-5 text-fuchsia-400" />
           <h3 className="font-semibold text-white">Expert Panel</h3>
           <Badge variant="outline" className="border-white/20 text-foreground/70 text-xs">
             {activeSMEs.length} active
           </Badge>
         </div>
         {pendingContributions.length > 0 && (
-          <Badge className="bg-primary/10 text-primary/80 border-primary/30">
+          <Badge className="bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/30">
             {pendingContributions.length} pending review
           </Badge>
         )}
@@ -149,7 +149,7 @@ export function SMEPanel({
                       {sme.expert.name}
                     </p>
                     {sme.isCorporate && (
-                      <Badge variant="outline" className="text-[10px] border-primary/30 text-primary">
+                      <Badge variant="outline" className="text-[10px] border-fuchsia-500/30 text-fuchsia-400">
                         Corporate
                       </Badge>
                     )}
@@ -168,7 +168,7 @@ export function SMEPanel({
                     {getStatusLabel(sme.status)}
                   </Badge>
                   {hasUnreviewed && (
-                    <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                    <div className="w-2 h-2 rounded-full bg-fuchsia-500 animate-pulse" />
                   )}
                   {isExpanded ? (
                     <ChevronUp className="w-4 h-4 text-foreground/70" />
@@ -189,12 +189,12 @@ export function SMEPanel({
                         <div 
                           key={i}
                           className={`w-2 h-2 rounded-sm ${
-                            i < sme.weight ? 'bg-primary' : 'bg-white/10'
+                            i < sme.weight ? 'bg-fuchsia-500' : 'bg-white/10'
                           }`}
                         />
                       ))}
                     </div>
-                    <span className="text-primary">{sme.weight}/10</span>
+                    <span className="text-fuchsia-400">{sme.weight}/10</span>
                   </div>
 
                   {/* Contributions */}
@@ -292,7 +292,7 @@ export function SMEPanel({
                           [sme.expert.id]: e.target.value
                         }))}
                         placeholder="Ask for clarification..."
-                        className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-primary/50"
+                        className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-fuchsia-500/50"
                       />
                       <Button
                         size="sm"
@@ -302,7 +302,7 @@ export function SMEPanel({
                             setClarificationInput(prev => ({ ...prev, [sme.expert.id]: '' }));
                           }
                         }}
-                        className="h-7 bg-primary/10 hover:bg-primary/30 text-primary/80"
+                        className="h-7 bg-fuchsia-500/20 hover:bg-fuchsia-500/30 text-fuchsia-300"
                       >
                         <Send className="w-3 h-3" />
                       </Button>

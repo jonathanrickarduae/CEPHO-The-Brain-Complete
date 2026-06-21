@@ -49,8 +49,8 @@ const TYPE_CONFIG = {
   learning: { 
     icon: Brain, 
     label: 'Learning', 
-    color: 'text-[oklch(0.72_0.19_45)]',
-    bgColor: 'bg-[oklch(0.72_0.19_45/0.1)]',
+    color: 'text-pink-400',
+    bgColor: 'bg-pink-500/20',
   },
   decision: { 
     icon: CheckCircle2, 

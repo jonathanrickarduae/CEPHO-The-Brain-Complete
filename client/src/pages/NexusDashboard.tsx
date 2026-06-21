@@ -1,6 +1,6 @@
 import { useLocation } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { AlertCircle, ChevronRight, Sun, Inbox, Sparkles, ArrowRight, Target, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { AlertCircle, ChevronRight, Sun, Inbox, Sparkles, ArrowRight, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AnimatedBrainLogo from "@/components/AnimatedBrainLogo";
 
@@ -15,31 +15,22 @@ const projects = [
   { id: "personal", name: "Personal", initials: "ME", color: "#EC4899", status: "green" as RAGStatus, issue: null, action: "Weekly review" },
 ];
 
-const ragConfig: Record<RAGStatus, { dot: string; label: string; text: string; bg: string; border: string; icon: React.ReactNode }> = {
-  red: {
-    dot: "bg-red-500",
-    label: "Needs attention",
-    text: "text-red-600",
-    bg: "bg-red-50",
-    border: "border-red-200",
-    icon: <TrendingDown className="h-3 w-3" />,
-  },
-  amber: {
-    dot: "bg-amber-400",
-    label: "In progress",
-    text: "text-amber-600",
-    bg: "bg-amber-50",
-    border: "border-amber-200",
-    icon: <Minus className="h-3 w-3" />,
-  },
-  green: {
-    dot: "bg-emerald-500",
-    label: "On track",
-    text: "text-emerald-600",
-    bg: "bg-emerald-50",
-    border: "border-emerald-200",
-    icon: <TrendingUp className="h-3 w-3" />,
-  },
+const ragDot: Record<RAGStatus, string> = {
+  red: "bg-red-500",
+  amber: "bg-amber-400",
+  green: "bg-emerald-500",
+};
+
+const ragLabel: Record<RAGStatus, string> = {
+  red: "Needs attention",
+  amber: "In progress",
+  green: "On track",
+};
+
+const ragTextColor: Record<RAGStatus, string> = {
+  red: "text-red-600",
+  amber: "text-amber-600",
+  green: "text-emerald-600",
 };
 
 function getGreeting(name?: string) {
@@ -47,6 +38,7 @@ function getGreeting(name?: string) {
   const timeGreeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
   return `${timeGreeting}${name ? `, ${name.split(" ")[0]}` : ""}`;
 }
+
 
 function getDateString() {
   return new Date().toLocaleDateString("en-GB", {
@@ -69,149 +61,90 @@ export default function NexusDashboard() {
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
 
-      {/* Victoria morning briefing strip */}
-      <div
-        className="rounded-2xl border border-border overflow-hidden"
-        style={{
-          background: "linear-gradient(135deg, oklch(0.99 0.01 85) 0%, oklch(0.96 0.03 200 / 0.4) 100%)",
-          boxShadow: "0 2px 12px oklch(0.62 0.19 220 / 0.08), 0 1px 3px oklch(0.18 0.02 250 / 0.06)",
-        }}
-      >
-        <div className="p-5">
-          <div className="flex items-start gap-4">
-            <div className="shrink-0 mt-0.5">
-              <AnimatedBrainLogo size="sm" intensity="active" color="var(--color-primary)" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs font-bold text-primary uppercase tracking-widest">Victoria</span>
-                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-                <span className="text-xs text-muted-foreground font-medium">AI Chief of Staff</span>
-              </div>
-              <h2 className="text-xl font-bold text-foreground tracking-tight">
-                {getGreeting(firstName)}
-              </h2>
-              <p className="text-sm text-muted-foreground mt-0.5 font-medium">{getDateString()}</p>
-              <p className="text-sm text-foreground/75 mt-2 leading-relaxed">
-                {redCount > 0
-                  ? `${redCount} project${redCount > 1 ? "s" : ""} need your attention today. ${amberCount} in progress, ${greenCount} on track across the portfolio.`
-                  : `All projects are progressing well. ${amberCount} in progress, ${greenCount} on track. No critical issues to flag.`}
-              </p>
-            </div>
-            <Button
-              size="sm"
-              variant="outline"
-              className="gap-2 shrink-0 font-semibold border-primary/30 text-primary hover:bg-primary/5"
-              onClick={() => setLocation("/morning-signal")}
-            >
-              <Sun className="h-3.5 w-3.5" />
-              Signal
-            </Button>
+      {/* Victoria greeting */}
+      <div className="bg-white rounded-2xl border border-border shadow-sm p-5">
+        <div className="flex items-start gap-4">
+          <div className="shrink-0">
+            <AnimatedBrainLogo size="sm" intensity="active" color="var(--color-primary)" />
           </div>
-
-          {/* RAG summary bar */}
-          <div className="flex items-center gap-4 mt-4 pt-4 border-t border-border/60">
-            <div className="flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-red-500 shrink-0" />
-              <span className="text-xs font-semibold text-red-600">{redCount} Critical</span>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs font-semibold text-primary uppercase tracking-wide">Victoria</span>
+              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+              <span className="text-xs text-muted-foreground">AI Chief of Staff</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-amber-400 shrink-0" />
-              <span className="text-xs font-semibold text-amber-600">{amberCount} In Progress</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 shrink-0" />
-              <span className="text-xs font-semibold text-emerald-600">{greenCount} On Track</span>
-            </div>
-            <div className="ml-auto">
-              <div className="flex h-2 w-32 rounded-full overflow-hidden gap-0.5">
-                {redCount > 0 && (
-                  <div
-                    className="bg-red-400 rounded-l-full"
-                    style={{ width: `${(redCount / 6) * 100}%` }}
-                  />
-                )}
-                {amberCount > 0 && (
-                  <div
-                    className="bg-amber-400"
-                    style={{ width: `${(amberCount / 6) * 100}%` }}
-                  />
-                )}
-                {greenCount > 0 && (
-                  <div
-                    className="bg-emerald-400 rounded-r-full"
-                    style={{ width: `${(greenCount / 6) * 100}%` }}
-                  />
-                )}
-              </div>
-            </div>
+            <h2 className="text-lg font-semibold text-foreground">
+              {getGreeting(firstName)}
+            </h2>
+            <p className="text-sm text-muted-foreground mt-0.5">{getDateString()}</p>
+            <p className="text-sm text-foreground/80 mt-2">
+              {redCount > 0
+                ? `You have ${redCount} project${redCount > 1 ? "s" : ""} needing immediate attention today. ${amberCount} in progress, ${greenCount} on track.`
+                : `All projects are progressing well. ${amberCount} in progress, ${greenCount} on track.`}
+            </p>
           </div>
+          <Button
+            size="sm"
+            className="gap-2 shrink-0"
+            onClick={() => setLocation("/morning-signal")}
+          >
+            <Sun className="h-3.5 w-3.5" />
+            Morning Signal
+          </Button>
         </div>
       </div>
 
-      {/* Portfolio grid */}
+      {/* Portfolio RAG summary */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-bold text-foreground text-base">Portfolio</h3>
+          <h3 className="font-semibold text-foreground">Portfolio Status</h3>
           <button
             onClick={() => setLocation("/projects")}
-            className="text-xs text-primary hover:text-primary/80 font-semibold flex items-center gap-1 transition-colors"
+            className="text-xs text-primary hover:underline flex items-center gap-1"
           >
-            All projects <ChevronRight className="h-3 w-3" />
+            View all projects <ChevronRight className="h-3 w-3" />
           </button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
-          {projects.map((p) => {
-            const rag = ragConfig[p.status];
-            return (
-              <div
-                key={p.id}
-                className="rounded-2xl border border-border bg-card cursor-pointer group p-4 transition-all duration-200 hover:-translate-y-0.5"
-                style={{
-                  boxShadow: "0 1px 3px oklch(0.18 0.02 250 / 0.06)",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 16px oklch(0.18 0.02 250 / 0.1)";
-                  (e.currentTarget as HTMLDivElement).style.borderColor = `${p.color}40`;
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 1px 3px oklch(0.18 0.02 250 / 0.06)";
-                  (e.currentTarget as HTMLDivElement).style.borderColor = "";
-                }}
-                onClick={() => setLocation(`/projects/${p.id}`)}
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <div
-                    className="h-10 w-10 rounded-xl flex items-center justify-center text-white font-bold text-xs shrink-0"
-                    style={{ backgroundColor: p.color }}
-                  >
-                    {p.initials}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold text-foreground truncate">{p.name}</p>
-                    <div className={`flex items-center gap-1.5 mt-0.5 ${rag.text}`}>
-                      {rag.icon}
-                      <span className="text-xs font-semibold">{rag.label}</span>
-                    </div>
-                  </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground/30 group-hover:text-primary transition-colors shrink-0" />
+          {projects.map((p) => (
+            <div
+              key={p.id}
+              className="bg-white rounded-xl border border-border shadow-sm hover:shadow-md transition-all cursor-pointer group p-4"
+              onClick={() => setLocation(`/projects/${p.id}`)}
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <div
+                  className="h-9 w-9 rounded-lg flex items-center justify-center text-white font-bold text-xs shrink-0"
+                  style={{ backgroundColor: p.color }}
+                >
+                  {p.initials}
                 </div>
-
-                {p.issue && (
-                  <div className={`flex items-center gap-1.5 text-xs ${rag.text} ${rag.bg} rounded-lg px-2.5 py-1.5 mb-2 border ${rag.border}`}>
-                    <AlertCircle className="h-3 w-3 shrink-0" />
-                    <span className="font-medium">{p.issue}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors truncate">
+                    {p.name}
+                  </p>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <span className={`h-2 w-2 rounded-full ${ragDot[p.status]} inline-block shrink-0`} />
+                    <span className={`text-xs ${ragTextColor[p.status]}`}>{ragLabel[p.status]}</span>
                   </div>
-                )}
-
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <Target className="h-3 w-3 shrink-0 text-primary/50" />
-                  <span className="truncate">{p.action}</span>
                 </div>
+                <ChevronRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-primary transition-colors shrink-0" />
               </div>
-            );
-          })}
+
+              {p.issue && (
+                <div className="flex items-center gap-1.5 text-xs text-red-600 bg-red-50 rounded-lg px-2.5 py-1.5 mb-2">
+                  <AlertCircle className="h-3 w-3 shrink-0" />
+                  <span>{p.issue}</span>
+                </div>
+              )}
+
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <Target className="h-3 w-3 shrink-0" />
+                <span className="truncate">{p.action}</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -219,59 +152,38 @@ export default function NexusDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <button
           onClick={() => setLocation("/morning-signal")}
-          className="rounded-2xl border border-border bg-card p-4 text-left group transition-all duration-200 hover:-translate-y-0.5"
-          style={{ boxShadow: "0 1px 3px oklch(0.18 0.02 250 / 0.06)" }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 4px 16px oklch(0.18 0.02 250 / 0.1)"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 1px 3px oklch(0.18 0.02 250 / 0.06)"; }}
+          className="bg-white rounded-xl border border-border shadow-sm p-4 text-left hover:border-primary/40 hover:shadow-md transition-all group"
         >
-          <div className="flex items-center gap-2.5 mb-2">
-            <div className="h-8 w-8 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center shrink-0">
-              <Sun className="h-4 w-4 text-amber-500" />
-            </div>
-            <span className="text-sm font-bold text-foreground">Morning Signal</span>
+          <div className="flex items-center gap-2 mb-2">
+            <Sun className="h-4 w-4 text-amber-500" />
+            <span className="text-sm font-semibold text-foreground">Morning Signal</span>
           </div>
-          <p className="text-xs text-muted-foreground leading-relaxed">Today's briefing, priorities and actions</p>
-          <div className="flex items-center gap-1 mt-3 text-xs text-primary font-semibold">
-            Open <ArrowRight className="h-3 w-3" />
-          </div>
+          <p className="text-xs text-muted-foreground">Today's briefing, priorities and actions</p>
+          <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/40 group-hover:text-primary mt-2 transition-colors" />
         </button>
 
         <button
           onClick={() => setLocation("/inbox")}
-          className="rounded-2xl border border-border bg-card p-4 text-left group transition-all duration-200 hover:-translate-y-0.5"
-          style={{ boxShadow: "0 1px 3px oklch(0.18 0.02 250 / 0.06)" }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 4px 16px oklch(0.18 0.02 250 / 0.1)"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 1px 3px oklch(0.18 0.02 250 / 0.06)"; }}
+          className="bg-white rounded-xl border border-border shadow-sm p-4 text-left hover:border-primary/40 hover:shadow-md transition-all group"
         >
-          <div className="flex items-center gap-2.5 mb-2">
-            <div className="h-8 w-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
-              <Inbox className="h-4 w-4 text-primary" />
-            </div>
-            <span className="text-sm font-bold text-foreground">Inbox</span>
+          <div className="flex items-center gap-2 mb-2">
+            <Inbox className="h-4 w-4 text-primary" />
+            <span className="text-sm font-semibold text-foreground">Inbox</span>
           </div>
-          <p className="text-xs text-muted-foreground leading-relaxed">Emails and messages across all accounts</p>
-          <div className="flex items-center gap-1 mt-3 text-xs text-primary font-semibold">
-            Open <ArrowRight className="h-3 w-3" />
-          </div>
+          <p className="text-xs text-muted-foreground">Emails and messages across all accounts</p>
+          <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/40 group-hover:text-primary mt-2 transition-colors" />
         </button>
 
         <button
           onClick={() => setLocation("/digital-twin")}
-          className="rounded-2xl border border-border bg-card p-4 text-left group transition-all duration-200 hover:-translate-y-0.5"
-          style={{ boxShadow: "0 1px 3px oklch(0.18 0.02 250 / 0.06)" }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 4px 16px oklch(0.18 0.02 250 / 0.1)"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 1px 3px oklch(0.18 0.02 250 / 0.06)"; }}
+          className="bg-white rounded-xl border border-border shadow-sm p-4 text-left hover:border-primary/40 hover:shadow-md transition-all group"
         >
-          <div className="flex items-center gap-2.5 mb-2">
-            <div className="h-8 w-8 rounded-xl bg-violet-50 border border-violet-200 flex items-center justify-center shrink-0">
-              <Sparkles className="h-4 w-4 text-violet-500" />
-            </div>
-            <span className="text-sm font-bold text-foreground">Ask Victoria</span>
+          <div className="flex items-center gap-2 mb-2">
+            <Sparkles className="h-4 w-4 text-[oklch(0.58_0.26_340)]" />
+            <span className="text-sm font-semibold text-foreground">Ask Victoria</span>
           </div>
-          <p className="text-xs text-muted-foreground leading-relaxed">Strategic advice and task delegation</p>
-          <div className="flex items-center gap-1 mt-3 text-xs text-primary font-semibold">
-            Open <ArrowRight className="h-3 w-3" />
-          </div>
+          <p className="text-xs text-muted-foreground">Strategic advice and task delegation</p>
+          <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/40 group-hover:text-primary mt-2 transition-colors" />
         </button>
       </div>
     </div>

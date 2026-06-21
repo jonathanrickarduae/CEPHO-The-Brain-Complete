@@ -53,7 +53,7 @@ export function VictoriaPresenter({
           {/* Info */}
           <div className="flex-1 min-w-0">
             <h3 className="text-lg font-semibold text-white">Victoria</h3>
-            <p className="text-sm text-[oklch(0.78_0.18_45)]/80">AI Chief of Staff</p>
+            <p className="text-sm text-pink-300/80">AI Chief of Staff</p>
             <p className="text-xs text-white/40 mt-0.5">{briefTitle}</p>
           </div>
 
@@ -103,7 +103,7 @@ export function VictoriaPresenter({
           <div className="px-4 pb-4">
             <div className="rounded-xl bg-white/5 border border-white/10 p-3">
               {isLoadingBriefing ? (
-                <div className="flex items-center gap-2 text-xs text-[oklch(0.78_0.18_45)]/70">
+                <div className="flex items-center gap-2 text-xs text-pink-300/70">
                   <span className="inline-block w-1.5 h-1.5 rounded-full bg-pink-400 animate-ping" />
                   Victoria is preparing your briefing...
                 </div>

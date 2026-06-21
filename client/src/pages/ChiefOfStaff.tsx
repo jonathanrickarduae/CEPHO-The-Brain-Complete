@@ -320,7 +320,7 @@ export default function ChiefOfStaff() {
               onClick={() => setViewMode(tab.id as ViewMode)}
               className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors border-b-2 ${
                 viewMode === tab.id
-                  ? 'text-primary border-primary'
+                  ? 'text-fuchsia-400 border-fuchsia-400'
                   : 'text-foreground/70 border-transparent hover:text-white'
               }`}
             >
@@ -360,7 +360,7 @@ export default function ChiefOfStaff() {
                       onClick={() => setCurrentConversationId(conv.id)}
                       className={`w-full text-left p-3 rounded-lg transition-colors ${
                         currentConversationId === conv.id
-                          ? 'bg-gradient-to-br from-primary/10 to-purple-500/10 border border-primary/30'
+                          ? 'bg-gradient-to-br from-fuchsia-500/10 to-purple-500/10 border border-fuchsia-500/30'
                           : 'hover:bg-white/5'
                       }`}
                     >
@@ -390,7 +390,7 @@ export default function ChiefOfStaff() {
                   {messages.map((msg) => (
                     <div key={msg.id} className={`flex gap-3 ${msg.from === "user" ? "justify-end" : ""}`}>
                       {msg.from === "twin" && (
-                        <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-r from-primary/10 to-purple-500/20 border border-primary/30">
+                        <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-r from-fuchsia-500/20 to-purple-500/20 border border-fuchsia-500/30">
                           <Fingerprint className="w-4 h-4 text-primary" />
                         </div>
                       )}
@@ -398,7 +398,7 @@ export default function ChiefOfStaff() {
                         <div className={`px-4 py-3 rounded-2xl ${
                           msg.from === "twin" 
                             ? "bg-white/5 border border-white/10" 
-                            : "bg-gradient-to-r from-cyan-500/15 to-primary/15 border border-cyan-500/20"
+                            : "bg-gradient-to-r from-cyan-500/15 to-fuchsia-500/15 border border-cyan-500/20"
                         }`}>
                           <p className="text-sm whitespace-pre-wrap leading-relaxed"
                              dangerouslySetInnerHTML={{ 
@@ -438,8 +438,8 @@ export default function ChiefOfStaff() {
                   
                   {isTyping && (
                     <div className="flex gap-3">
-                      <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-r from-primary/10 to-purple-500/20 border border-primary/30">
-                        <Fingerprint className="w-4 h-4 text-primary" />
+                      <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-r from-fuchsia-500/20 to-purple-500/20 border border-fuchsia-500/30">
+                        <Fingerprint className="w-4 h-4 text-fuchsia-400" />
                       </div>
                       <div className="bg-white/5 border border-white/10 rounded-2xl px-4 py-3">
                         <div className="flex gap-1">
@@ -488,7 +488,7 @@ export default function ChiefOfStaff() {
                       <button
                         onClick={handleSendMessage}
                         disabled={!messageInput.trim() || isLoading}
-                        className="p-2 rounded-lg bg-gradient-to-r from-cyan-500 to-primary text-white hover:opacity-90 disabled:opacity-40 transition-all"
+                        className="p-2 rounded-lg bg-gradient-to-r from-cyan-500 to-fuchsia-500 text-white hover:opacity-90 disabled:opacity-40 transition-all"
                       >
                         <Send className="w-4 h-4" />
                       </button>
@@ -551,7 +551,7 @@ export default function ChiefOfStaff() {
                     <div
                       key={task.id}
                       onClick={() => { setSelectedTask(task); setShowTaskDetail(true); }}
-                      className="p-4 bg-white/5 border-2 border-white/10 rounded-2xl hover:border-primary/50 transition-all cursor-pointer group"
+                      className="p-4 bg-white/5 border-2 border-white/10 rounded-2xl hover:border-fuchsia-500/50 transition-all cursor-pointer group"
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
@@ -664,7 +664,7 @@ export default function ChiefOfStaff() {
                   </div>
                 </button>
 
-                <button className="w-full p-5 bg-gradient-to-br from-purple-500/10 to-primary/10 border-2 border-purple-500/30 rounded-2xl hover:border-purple-400 transition-all text-left group">
+                <button className="w-full p-5 bg-gradient-to-br from-purple-500/10 to-fuchsia-500/10 border-2 border-purple-500/30 rounded-2xl hover:border-purple-400 transition-all text-left group">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">

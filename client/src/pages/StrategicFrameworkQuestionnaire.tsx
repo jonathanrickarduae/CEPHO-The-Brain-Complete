@@ -295,7 +295,7 @@ export default function StrategicFrameworkQuestionnaire() {
                 variant="outline"
                 size="sm"
                 onClick={handleDownload}
-                className="border-pink-500/50 text-[oklch(0.72_0.19_45)] hover:bg-[oklch(0.72_0.19_45/0.1)]"
+                className="border-pink-500/50 text-pink-400 hover:bg-pink-500/20"
               >
                 <Download className="w-4 h-4 mr-2" />
                 Download
@@ -329,8 +329,8 @@ export default function StrategicFrameworkQuestionnaire() {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-[oklch(0.72_0.19_45/0.1)]">
-                      {(() => { const Icon = sectionIcon; return <Icon className="w-5 h-5 text-[oklch(0.72_0.19_45)]" />; })()}
+                    <div className="p-2 rounded-lg bg-pink-500/20">
+                      {(() => { const Icon = sectionIcon; return <Icon className="w-5 h-5 text-pink-400" />; })()}
                     </div>
                     <CardTitle className="text-lg text-white">{section}</CardTitle>
                     {sectionComplete && (

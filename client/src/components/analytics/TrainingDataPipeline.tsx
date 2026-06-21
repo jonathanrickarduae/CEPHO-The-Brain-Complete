@@ -267,7 +267,7 @@ export function TrainingDataPipeline() {
                 <span>Connect Notes App</span>
               </button>
               <button className="flex items-center gap-2 p-3 bg-background hover:bg-gray-850 rounded-xl text-sm text-foreground/80 transition-colors">
-                <Brain className="w-4 h-4 text-[oklch(0.72_0.19_45)]" />
+                <Brain className="w-4 h-4 text-pink-400" />
                 <span>Add Preferences</span>
               </button>
             </div>
@@ -295,7 +295,7 @@ export function TrainingDataPipeline() {
                             ? "bg-primary/20"
                             : doc.type === "conversation"
                               ? "bg-purple-500/20"
-                              : "bg-[oklch(0.72_0.19_45/0.1)]"
+                              : "bg-pink-500/20"
                         }`}
                       >
                         <TypeIcon
@@ -304,7 +304,7 @@ export function TrainingDataPipeline() {
                               ? "text-primary"
                               : doc.type === "conversation"
                                 ? "text-purple-400"
-                                : "text-[oklch(0.72_0.19_45)]"
+                                : "text-pink-400"
                           }`}
                         />
                       </div>

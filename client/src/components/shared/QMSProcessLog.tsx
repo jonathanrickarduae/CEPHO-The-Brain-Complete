@@ -361,7 +361,7 @@ export function QMSProcessLog() {
       case "linked":
         return "text-amber-400";
       case "cascaded":
-        return "text-[oklch(0.72_0.19_45)]";
+        return "text-pink-400";
       default:
         return "text-foreground/70";
     }
@@ -613,8 +613,8 @@ export function QMSProcessLog() {
                   </p>
                   {entry.cascadedTo && entry.cascadedTo.length > 0 && (
                     <div className="mt-2 flex items-center gap-2 text-xs">
-                      <ArrowRight className="w-3 h-3 text-[oklch(0.72_0.19_45)]" />
-                      <span className="text-[oklch(0.72_0.19_45)]">Cascaded to:</span>
+                      <ArrowRight className="w-3 h-3 text-pink-400" />
+                      <span className="text-pink-400">Cascaded to:</span>
                       {entry.cascadedTo.map(id => {
                         const doc = documents.find(d => d.id === id);
                         return doc ? (

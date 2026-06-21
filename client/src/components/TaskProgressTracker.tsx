@@ -35,7 +35,7 @@ const STAGE_CONFIG = {
 };
 
 const ASSIGNEE_CONFIG = {
-  chief_of_staff: { label: 'Chief of Staff', icon: Brain, color: 'text-primary' },
+  chief_of_staff: { label: 'Chief of Staff', icon: Brain, color: 'text-fuchsia-400' },
   ai_sme: { label: 'AI-SME', icon: Users, color: 'text-cyan-400' },
   expert_team: { label: 'Expert Team', icon: Users, color: 'text-amber-400' },
 };
@@ -125,8 +125,8 @@ export function TaskProgressTracker({ tasks = DEMO_TASKS, onTaskClick }: TaskPro
         onClick={() => setExpanded(!expanded)}
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/10 to-purple-500/20 flex items-center justify-center">
-            <Loader2 className="w-5 h-5 text-primary animate-spin" />
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-fuchsia-500/20 to-purple-500/20 flex items-center justify-center">
+            <Loader2 className="w-5 h-5 text-fuchsia-400 animate-spin" />
           </div>
           <div>
             <h3 className="font-semibold text-white">Active Tasks</h3>
@@ -218,9 +218,9 @@ export function TaskProgressTracker({ tasks = DEMO_TASKS, onTaskClick }: TaskPro
 
           {/* Chief of Staff Recommendation */}
           {totalEstimated > 5 && (
-            <div className="p-4 border-t border-border bg-gradient-to-r from-primary/10 to-transparent">
+            <div className="p-4 border-t border-border bg-gradient-to-r from-fuchsia-500/10 to-transparent">
               <div className="flex items-start gap-3">
-                <Brain className="w-5 h-5 text-primary mt-0.5" />
+                <Brain className="w-5 h-5 text-fuchsia-400 mt-0.5" />
                 <div>
                   <p className="text-sm text-white font-medium">Chief of Staff Recommendation</p>
                   <p className="text-sm text-foreground/70 mt-1">

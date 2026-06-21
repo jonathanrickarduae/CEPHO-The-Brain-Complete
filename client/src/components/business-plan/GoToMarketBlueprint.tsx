@@ -203,7 +203,7 @@ const gtmPhases: GTMPhase[] = [
     title: "Launch Plan",
     description: "Plan your market entry and launch activities",
     icon: Rocket,
-    color: "text-[oklch(0.72_0.19_45)]",
+    color: "text-pink-400",
     tasks: [
       {
         id: "l1",
@@ -386,7 +386,7 @@ export function GoToMarketBlueprint({
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-white flex items-center gap-2">
-                <Rocket className="w-6 h-6 text-[oklch(0.72_0.19_45)]" />
+                <Rocket className="w-6 h-6 text-pink-400" />
                 Go-to-Market Blueprint
               </CardTitle>
               <CardDescription className="mt-1">

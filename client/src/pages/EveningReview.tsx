@@ -722,14 +722,14 @@ export default function EveningReview() {
         </Card>
 
         {/* Strategic Focus Module */}
-        <Card className="border border-primary/20 bg-primary/5">
+        <Card className="border border-fuchsia-200 bg-fuchsia-50/30">
           <CardHeader 
-            className="cursor-pointer hover:bg-primary/8 transition-colors"
+            className="cursor-pointer hover:bg-fuchsia-100/50 transition-colors"
             onClick={() => setShowStrategicFocus(!showStrategicFocus)}
           >
             <div className="flex items-center justify-between">
               <CardTitle className="text-base flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-primary" />
+                <Sparkles className="w-5 h-5 text-fuchsia-600" />
                 Strategic Focus (Weekly Review)
               </CardTitle>
               {showStrategicFocus ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
@@ -790,7 +790,7 @@ export default function EveningReview() {
                 </p>
                 <Button 
                   size="sm" 
-                  className="bg-primary hover:bg-primary/90"
+                  className="bg-fuchsia-600 hover:bg-fuchsia-700"
                   onClick={() => {
                     toast.success("Strategic focus saved! Chief of Staff will follow up.");
                     setShowStrategicFocus(false);

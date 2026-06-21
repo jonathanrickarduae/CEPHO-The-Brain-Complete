@@ -518,7 +518,7 @@ export function GenesisBlueprintWizard({
                 onClick={() => handleAnswer(option)}
                 className={`p-4 rounded-xl border text-left transition-all ${
                   answers[currentQuestion.id] === option
-                    ? "bg-gradient-to-r from-cyan-500/20 to-primary/10 border-primary/50 text-white"
+                    ? "bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 border-fuchsia-500/50 text-white"
                     : "bg-white/5 border-white/10 text-foreground/80 hover:border-white/30"
                 }`}
               >
@@ -526,7 +526,7 @@ export function GenesisBlueprintWizard({
                   <div
                     className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                       answers[currentQuestion.id] === option
-                        ? "border-primary bg-primary"
+                        ? "border-fuchsia-500 bg-fuchsia-500"
                         : "border-white/30"
                     }`}
                   >
@@ -556,7 +556,7 @@ export function GenesisBlueprintWizard({
                 }}
                 className={`p-3 rounded-xl border text-left transition-all text-sm ${
                   selectedValues.includes(option)
-                    ? "bg-gradient-to-r from-cyan-500/20 to-primary/10 border-primary/50 text-white"
+                    ? "bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 border-fuchsia-500/50 text-white"
                     : "bg-white/5 border-white/10 text-foreground/80 hover:border-white/30"
                 }`}
               >
@@ -564,7 +564,7 @@ export function GenesisBlueprintWizard({
                   <div
                     className={`w-4 h-4 rounded border flex items-center justify-center ${
                       selectedValues.includes(option)
-                        ? "border-primary bg-primary"
+                        ? "border-fuchsia-500 bg-fuchsia-500"
                         : "border-white/30"
                     }`}
                   >
@@ -588,7 +588,7 @@ export function GenesisBlueprintWizard({
                 onClick={() => handleAnswer(option)}
                 className={`flex-1 p-4 rounded-xl border text-center transition-all ${
                   answers[currentQuestion.id] === option
-                    ? "bg-gradient-to-r from-cyan-500/20 to-primary/10 border-primary/50 text-white"
+                    ? "bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 border-fuchsia-500/50 text-white"
                     : "bg-white/5 border-white/10 text-foreground/80 hover:border-white/30"
                 }`}
               >
@@ -600,7 +600,7 @@ export function GenesisBlueprintWizard({
 
       case "upload":
         return (
-          <div className="border-2 border-dashed border-white/20 rounded-xl p-8 text-center hover:border-primary/50 transition-colors">
+          <div className="border-2 border-dashed border-white/20 rounded-xl p-8 text-center hover:border-fuchsia-500/50 transition-colors">
             <input
               type="file"
               multiple
@@ -625,7 +625,7 @@ export function GenesisBlueprintWizard({
                     key={i}
                     className="flex items-center gap-2 bg-white/5 rounded-lg p-2"
                   >
-                    <FileText className="w-4 h-4 text-primary" />
+                    <FileText className="w-4 h-4 text-fuchsia-400" />
                     <span className="text-sm text-foreground/80">
                       {file.name}
                     </span>
@@ -651,7 +651,7 @@ export function GenesisBlueprintWizard({
         <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-cyan-500 to-primary flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-cyan-500 to-fuchsia-500 flex items-center justify-center">
                 <Brain className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -690,7 +690,7 @@ export function GenesisBlueprintWizard({
                   }}
                   className={`flex items-center gap-1 md:gap-2 px-2 md:px-3 py-1.5 rounded-lg text-xs whitespace-nowrap transition-all ${
                     isActive
-                      ? "bg-gradient-to-r from-cyan-500/20 to-primary/10 text-white border border-primary/30"
+                      ? "bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 text-white border border-fuchsia-500/30"
                       : isCompleted
                         ? "bg-green-500/10 text-green-400 border border-green-500/20"
                         : "bg-white/5 text-foreground/70 border border-transparent hover:border-white/10"
@@ -716,8 +716,8 @@ export function GenesisBlueprintWizard({
             <div className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-8">
               {/* Section Header */}
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-cyan-500/20 to-primary/10 flex items-center justify-center">
-                  <SectionIcon className="w-6 h-6 text-primary" />
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 flex items-center justify-center">
+                  <SectionIcon className="w-6 h-6 text-fuchsia-400" />
                 </div>
                 <div>
                   <h2 className="text-xl font-semibold text-white">
@@ -758,7 +758,7 @@ export function GenesisBlueprintWizard({
                       disabled={
                         currentQuestion.required && !answers[currentQuestion.id]
                       }
-                      className="bg-gradient-to-r from-cyan-500 to-primary hover:opacity-90"
+                      className="bg-gradient-to-r from-cyan-500 to-fuchsia-500 hover:opacity-90"
                     >
                       {currentSection === "resources" &&
                       currentQuestionIndex === visibleQuestions.length - 1
@@ -777,7 +777,7 @@ export function GenesisBlueprintWizard({
             {/* Active SMEs */}
             <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
               <div className="flex items-center gap-2 mb-4">
-                <Users className="w-5 h-5 text-primary" />
+                <Users className="w-5 h-5 text-fuchsia-400" />
                 <h3 className="font-semibold text-foreground">
                   Active Experts
                 </h3>
@@ -843,7 +843,7 @@ export function GenesisBlueprintWizard({
                         <Badge
                           key={name}
                           variant="outline"
-                          className="border-primary/30 text-primary/80"
+                          className="border-fuchsia-500/30 text-fuchsia-300"
                         >
                           {corp.logo} {corp.name}
                         </Badge>
@@ -884,7 +884,7 @@ export function GenesisBlueprintWizard({
                         msg.type === "insight"
                           ? "bg-[var(--brain-cyan)]/10 border border-cyan-500/20 text-cyan-200"
                           : msg.type === "suggestion"
-                            ? "bg-primary/8 border border-primary/20 text-primary/80"
+                            ? "bg-fuchsia-500/10 border border-fuchsia-500/20 text-fuchsia-200"
                             : msg.type === "escalation"
                               ? "bg-yellow-500/10 border border-yellow-500/20 text-yellow-200"
                               : "bg-white/5 border border-white/10 text-foreground/80"
@@ -927,7 +927,7 @@ export function GenesisBlueprintWizard({
       {isProcessing && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-background border border-white/10 rounded-2xl p-8 max-w-md text-center">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-cyan-500 to-primary flex items-center justify-center animate-pulse">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-cyan-500 to-fuchsia-500 flex items-center justify-center animate-pulse">
               <Brain className="w-8 h-8 text-white" />
             </div>
             <h3 className="text-xl font-semibold text-white mb-2">

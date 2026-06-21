@@ -185,7 +185,7 @@ export default function WorkflowDetailPage() {
                   key={step.phaseNumber}
                   className={`bg-card rounded-lg p-6 border ${
                     step.status === "in_progress"
-                      ? "border-primary"
+                      ? "border-fuchsia-500"
                       : "border-border"
                   }`}
                 >

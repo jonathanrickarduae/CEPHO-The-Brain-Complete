@@ -90,7 +90,7 @@ const categoryConfig: Record<DocumentCategory, {
   customer_data: {
     label: 'Customer Data',
     icon: TrendingUp,
-    color: 'text-[oklch(0.72_0.19_45)]',
+    color: 'text-pink-400',
     description: 'Customer metrics, testimonials, case studies'
   },
   projections: {

@@ -38,7 +38,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   operations: "bg-green-500/10 text-green-400 border-green-500/20",
   strategy: "bg-red-500/10 text-red-400 border-red-500/20",
   workflow: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
-  learning: "bg-[oklch(0.72_0.19_45/0.08)] text-[oklch(0.72_0.19_45)] border-pink-500/20",
+  learning: "bg-pink-500/10 text-pink-400 border-pink-500/20",
 };
 
 export default function AIAgentsPage() {

@@ -204,7 +204,7 @@ const TEAM_TEMPLATES: ExpertTeamTemplate[] = [
       ].includes(r.id)
     ),
     icon: <Sparkles className="w-6 h-6" />,
-    color: "from-primary to-pink-500",
+    color: "from-fuchsia-500 to-pink-500",
   },
   {
     id: "product_launch",
@@ -326,7 +326,7 @@ export function ExpertTeamAssemblyWizard({
       case "functional":
         return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
       case "creative":
-        return "bg-primary/10 text-primary border-primary/30";
+        return "bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/30";
       case "quality":
         return "bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)] border-cyan-500/30";
     }
@@ -337,7 +337,7 @@ export function ExpertTeamAssemblyWizard({
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-r from-cyan-500 to-primary flex items-center justify-center">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-r from-cyan-500 to-fuchsia-500 flex items-center justify-center">
             <Users className="w-7 h-7 text-white" />
           </div>
           <div>
@@ -370,7 +370,7 @@ export function ExpertTeamAssemblyWizard({
                       isComplete
                         ? "bg-green-500 text-white"
                         : isActive
-                          ? "bg-primary text-white"
+                          ? "bg-fuchsia-500 text-white"
                           : "bg-white/10 text-foreground/70"
                     }`}
                   >
@@ -398,7 +398,7 @@ export function ExpertTeamAssemblyWizard({
                 Choose a Team Template
               </h2>
               {projectType && (
-                <Badge className="bg-primary/10 text-primary border-primary/30">
+                <Badge className="bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/30">
                   Suggested for: {projectType}
                 </Badge>
               )}
@@ -411,7 +411,7 @@ export function ExpertTeamAssemblyWizard({
                   onClick={() => handleTemplateSelect(template)}
                   className={`p-6 rounded-2xl text-left transition-all ${
                     template.id === suggestedTemplate.id
-                      ? `bg-gradient-to-br ${template.color}/20 border-2 border-primary/50 hover:border-primary`
+                      ? `bg-gradient-to-br ${template.color}/20 border-2 border-fuchsia-500/50 hover:border-fuchsia-500`
                       : "bg-white/5 border border-white/10 hover:border-white/30"
                   }`}
                 >
@@ -434,7 +434,7 @@ export function ExpertTeamAssemblyWizard({
                       {template.roles.length} experts
                     </Badge>
                     {template.id === suggestedTemplate.id && (
-                      <Badge className="bg-primary/10 text-primary border-primary/30">
+                      <Badge className="bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/30">
                         Recommended
                       </Badge>
                     )}
@@ -505,7 +505,7 @@ export function ExpertTeamAssemblyWizard({
                             disabled={role.required}
                             className={`p-4 rounded-xl text-left transition-all ${
                               isSelected
-                                ? "bg-primary/10 border border-primary/50"
+                                ? "bg-fuchsia-500/20 border border-fuchsia-500/50"
                                 : "bg-white/5 border border-white/10 hover:border-white/30"
                             } ${role.required ? "cursor-not-allowed" : "cursor-pointer"}`}
                           >
@@ -513,7 +513,7 @@ export function ExpertTeamAssemblyWizard({
                               <div
                                 className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                                   isSelected
-                                    ? "bg-primary/30 text-primary"
+                                    ? "bg-fuchsia-500/30 text-fuchsia-400"
                                     : "bg-white/10 text-foreground/70"
                                 }`}
                               >
@@ -535,7 +535,7 @@ export function ExpertTeamAssemblyWizard({
                                 </p>
                               </div>
                               {isSelected && (
-                                <Check className="w-5 h-5 text-primary flex-shrink-0" />
+                                <Check className="w-5 h-5 text-fuchsia-400 flex-shrink-0" />
                               )}
                             </div>
                           </button>
@@ -557,7 +557,7 @@ export function ExpertTeamAssemblyWizard({
               </Button>
               <Button
                 onClick={handleContinueToReview}
-                className="bg-gradient-to-r from-cyan-500 to-primary"
+                className="bg-gradient-to-r from-cyan-500 to-fuchsia-500"
               >
                 Continue to Review
                 <ChevronRight className="w-4 h-4 ml-2" />
@@ -584,7 +584,7 @@ export function ExpertTeamAssemblyWizard({
                         className="bg-white/5 rounded-xl p-4"
                       >
                         <div className="flex items-center gap-3 mb-2">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-cyan-500 to-primary flex items-center justify-center">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-cyan-500 to-fuchsia-500 flex items-center justify-center">
                             {role?.icon}
                           </div>
                           <div>
@@ -608,9 +608,9 @@ export function ExpertTeamAssemblyWizard({
               </CardContent>
             </Card>
 
-            <div className="bg-gradient-to-r from-cyan-500/10 to-primary/10 border border-primary/30 rounded-xl p-6">
+            <div className="bg-gradient-to-r from-cyan-500/10 to-fuchsia-500/10 border border-fuchsia-500/30 rounded-xl p-6">
               <div className="flex items-start gap-4">
-                <Sparkles className="w-6 h-6 text-primary flex-shrink-0" />
+                <Sparkles className="w-6 h-6 text-fuchsia-400 flex-shrink-0" />
                 <div>
                   <h3 className="font-medium text-white mb-1">Team Ready</h3>
                   <p className="text-foreground/70 text-sm">
@@ -633,7 +633,7 @@ export function ExpertTeamAssemblyWizard({
               </Button>
               <Button
                 onClick={() => onComplete(selectedExperts)}
-                className="bg-gradient-to-r from-cyan-500 to-primary"
+                className="bg-gradient-to-r from-cyan-500 to-fuchsia-500"
               >
                 Confirm Team & Continue
                 <Check className="w-4 h-4 ml-2" />

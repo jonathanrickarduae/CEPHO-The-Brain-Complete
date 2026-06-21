@@ -65,7 +65,7 @@ export default function AITeam() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-primary bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent">
             AI Expert Team
           </h1>
           <p className="text-foreground/70 mt-1">287 AI Experts (250 Core + 25 Left Field + 5 Celebrity + 7 Corporate)</p>
@@ -74,13 +74,13 @@ export default function AITeam() {
           <div className="flex items-center gap-2 bg-white/5 rounded-lg p-1">
             <button
               onClick={() => setViewMode('grid')}
-              className={`p-2 rounded ${viewMode === 'grid' ? 'bg-primary/10 text-primary' : 'text-foreground/70'}`}
+              className={`p-2 rounded ${viewMode === 'grid' ? 'bg-fuchsia-500/20 text-fuchsia-400' : 'text-foreground/70'}`}
             >
               <Grid3X3 className="w-4 h-4" />
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`p-2 rounded ${viewMode === 'list' ? 'bg-primary/10 text-primary' : 'text-foreground/70'}`}
+              className={`p-2 rounded ${viewMode === 'list' ? 'bg-fuchsia-500/20 text-fuchsia-400' : 'text-foreground/70'}`}
             >
               <List className="w-4 h-4" />
             </button>
@@ -101,13 +101,13 @@ export default function AITeam() {
             </div>
           </div>
         </div>
-        <div className="bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 rounded-xl p-4">
+        <div className="bg-gradient-to-br from-fuchsia-500/10 to-fuchsia-500/5 border border-fuchsia-500/20 rounded-xl p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 rounded-lg">
-              <Building2 className="w-5 h-5 text-primary" />
+            <div className="p-2 bg-fuchsia-500/20 rounded-lg">
+              <Building2 className="w-5 h-5 text-fuchsia-400" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-primary">{corporatePartners.length}</p>
+              <p className="text-2xl font-bold text-fuchsia-400">{corporatePartners.length}</p>
               <p className="text-xs text-foreground/70">Corporate Partners</p>
             </div>
           </div>
@@ -138,15 +138,15 @@ export default function AITeam() {
 
       <Tabs defaultValue="individuals" className="space-y-6">
         <TabsList className="bg-white/5 border border-white/10">
-          <TabsTrigger value="individuals" className="data-[state=active]:bg-primary/10">
+          <TabsTrigger value="individuals" className="data-[state=active]:bg-fuchsia-500/20">
             <Users className="w-4 h-4 mr-2" />
             Individual Experts ({allExperts.length})
           </TabsTrigger>
-          <TabsTrigger value="corporate" className="data-[state=active]:bg-primary/10">
+          <TabsTrigger value="corporate" className="data-[state=active]:bg-fuchsia-500/20">
             <Building2 className="w-4 h-4 mr-2" />
             Corporate Partners ({corporatePartners.length})
           </TabsTrigger>
-          <TabsTrigger value="performance" className="data-[state=active]:bg-primary/10">
+          <TabsTrigger value="performance" className="data-[state=active]:bg-fuchsia-500/20">
             <TrendingUp className="w-4 h-4 mr-2" />
             Performance Review
           </TabsTrigger>
@@ -185,8 +185,8 @@ export default function AITeam() {
                 onClick={() => setSelectedExpert(expert)}
                 className={`cursor-pointer transition-all hover:scale-[1.02] ${
                   viewMode === 'grid' 
-                    ? 'bg-white/5 border border-white/10 rounded-xl p-4 hover:border-primary/50'
-                    : 'bg-white/5 border border-white/10 rounded-xl p-4 flex items-center gap-4 hover:border-primary/50'
+                    ? 'bg-white/5 border border-white/10 rounded-xl p-4 hover:border-fuchsia-500/50'
+                    : 'bg-white/5 border border-white/10 rounded-xl p-4 flex items-center gap-4 hover:border-fuchsia-500/50'
                 }`}
               >
                 <div className={viewMode === 'grid' ? 'text-center' : 'flex items-center gap-4 flex-1'}>
@@ -227,7 +227,7 @@ export default function AITeam() {
               <div
                 key={partner.id}
                 onClick={() => setSelectedCorporate(partner)}
-                className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-xl p-6 cursor-pointer hover:border-primary/50 transition-all"
+                className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-xl p-6 cursor-pointer hover:border-fuchsia-500/50 transition-all"
               >
                 <div className="flex items-start gap-4">
                   <div className="text-5xl">{partner.logo}</div>
@@ -249,7 +249,7 @@ export default function AITeam() {
                 </div>
                 <div className="mt-4 flex items-center justify-between text-sm">
                   <span className="text-foreground/70">{partner.projectsCompleted} projects completed</span>
-                  <Button size="sm" variant="outline" className="border-primary/50 text-primary hover:bg-primary/8">
+                  <Button size="sm" variant="outline" className="border-fuchsia-500/50 text-fuchsia-400 hover:bg-fuchsia-500/10">
                     Start Project
                   </Button>
                 </div>
@@ -311,8 +311,8 @@ export default function AITeam() {
           </div>
 
           {/* Chief of Staff Assessment */}
-          <div className="bg-gradient-to-br from-primary/10 to-cyan-500/10 border border-primary/20 rounded-xl p-6">
-            <h3 className="text-lg font-semibold text-primary flex items-center gap-2 mb-4">
+          <div className="bg-gradient-to-br from-fuchsia-500/10 to-cyan-500/10 border border-fuchsia-500/20 rounded-xl p-6">
+            <h3 className="text-lg font-semibold text-fuchsia-400 flex items-center gap-2 mb-4">
               <Brain className="w-5 h-5" />
               Chief of Staff Team Assessment
             </h3>
@@ -339,7 +339,7 @@ export default function AITeam() {
             </div>
             <div className="mt-4 p-4 bg-black/20 rounded-lg">
               <p className="text-sm text-foreground/80">
-                <span className="text-primary font-medium">Chief of Staff Assessment:</span> Your team is performing well overall. 
+                <span className="text-fuchsia-400 font-medium">Chief of Staff Assessment:</span> Your team is performing well overall. 
                 {needsReview.length > 0 && ` ${needsReview.length} experts need attention - consider sending them for overnight training.`}
                 {' '}Top performers are excelling in Investment & Finance and Technology categories.
               </p>
@@ -390,7 +390,7 @@ export default function AITeam() {
                 <h3 className="text-sm font-medium text-foreground/70 mb-2">Composite Influences</h3>
                 <div className="flex flex-wrap gap-2">
                   {selectedExpert.compositeOf.map(influence => (
-                    <Badge key={influence} variant="secondary" className="bg-primary/8 text-primary/80">
+                    <Badge key={influence} variant="secondary" className="bg-fuchsia-500/10 text-fuchsia-300">
                       {influence}
                     </Badge>
                   ))}
@@ -436,7 +436,7 @@ export default function AITeam() {
                   <p className="text-xs text-foreground/70">Projects</p>
                 </div>
                 <div className="bg-white/5 rounded-lg p-3 text-center">
-                  <p className="text-2xl font-bold text-primary">{selectedExpert.insightsGenerated}</p>
+                  <p className="text-2xl font-bold text-fuchsia-400">{selectedExpert.insightsGenerated}</p>
                   <p className="text-xs text-foreground/70">Insights</p>
                 </div>
                 <div className="bg-white/5 rounded-lg p-3 text-center">
@@ -470,7 +470,7 @@ export default function AITeam() {
               <div className="flex gap-3">
                 <Button 
                   onClick={() => handleStartProject(selectedExpert)}
-                  className="flex-1 bg-gradient-to-r from-cyan-500 to-primary hover:opacity-90"
+                  className="flex-1 bg-gradient-to-r from-cyan-500 to-fuchsia-500 hover:opacity-90"
                 >
                   <Zap className="w-4 h-4 mr-2" />
                   Start Project
@@ -545,7 +545,7 @@ export default function AITeam() {
                 <h3 className="text-sm font-medium text-foreground/70 mb-2">Frameworks</h3>
                 <div className="flex flex-wrap gap-2">
                   {selectedCorporate.frameworks.map(f => (
-                    <Badge key={f} variant="secondary" className="bg-primary/8 text-primary/80">
+                    <Badge key={f} variant="secondary" className="bg-fuchsia-500/10 text-fuchsia-300">
                       {f}
                     </Badge>
                   ))}
@@ -553,11 +553,11 @@ export default function AITeam() {
               </div>
 
               <div className="flex gap-3">
-                <Button className="flex-1 bg-gradient-to-r from-cyan-500 to-primary hover:opacity-90">
+                <Button className="flex-1 bg-gradient-to-r from-cyan-500 to-fuchsia-500 hover:opacity-90">
                   <Zap className="w-4 h-4 mr-2" />
                   Start Project with {selectedCorporate.name}
                 </Button>
-                <Button variant="outline" className="border-primary/50 text-primary hover:bg-primary/8">
+                <Button variant="outline" className="border-fuchsia-500/50 text-fuchsia-400 hover:bg-fuchsia-500/10">
                   <MessageSquare className="w-4 h-4 mr-2" />
                   Compare vs My Team
                 </Button>

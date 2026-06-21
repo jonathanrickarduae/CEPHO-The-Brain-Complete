@@ -83,7 +83,7 @@ export function InstallPrompt() {
         </button>
 
         <div className="flex items-start gap-3">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-violet-600 flex items-center justify-center flex-shrink-0">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-fuchsia-500 to-violet-600 flex items-center justify-center flex-shrink-0">
             <Smartphone className="w-6 h-6 text-white" />
           </div>
           
@@ -101,7 +101,7 @@ export function InstallPrompt() {
         {!isIOS && deferredPrompt && (
           <Button
             onClick={handleInstall}
-            className="w-full mt-3 bg-gradient-to-r from-primary to-violet-600 hover:from-primary/90 hover:to-violet-700 text-white text-sm"
+            className="w-full mt-3 bg-gradient-to-r from-fuchsia-500 to-violet-600 hover:from-fuchsia-600 hover:to-violet-700 text-white text-sm"
           >
             <Download className="w-4 h-4 mr-2" />
             Install App

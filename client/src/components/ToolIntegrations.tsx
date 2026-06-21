@@ -51,7 +51,7 @@ const phaseConfig: Record<ValueChainPhase, { label: string; color: string; icon:
   development: { label: 'Development', color: 'text-orange-400 bg-orange-500/20', icon: '🔧' },
   go_to_market: { label: 'Go-to-Market', color: 'text-green-400 bg-green-500/20', icon: '🎯' },
   operations: { label: 'Operations', color: 'text-cyan-400 bg-cyan-500/20', icon: '⚙️' },
-  retention: { label: 'Retention', color: 'text-[oklch(0.72_0.19_45)] bg-[oklch(0.72_0.19_45/0.1)]', icon: '💎' },
+  retention: { label: 'Retention', color: 'text-pink-400 bg-pink-500/20', icon: '💎' },
   exit: { label: 'Exit', color: 'text-yellow-400 bg-yellow-500/20', icon: '🏆' },
 };
 
@@ -110,7 +110,7 @@ export const toolIntegrations: ToolIntegration[] = [
     id: 'toggl',
     name: 'Toggl Track',
     description: 'Time tracking and analytics',
-    icon: <Clock className="w-5 h-5 text-[oklch(0.72_0.19_45)]" />,
+    icon: <Clock className="w-5 h-5 text-pink-400" />,
     category: 'project_management',
     phases: ['operations'],
     status: 'disconnected',
@@ -453,7 +453,7 @@ export function ToolCard({
               size="sm"
               onClick={onConnect}
               disabled={isConnecting}
-              className="h-8 bg-gradient-to-r from-cyan-500 to-primary hover:opacity-90"
+              className="h-8 bg-gradient-to-r from-cyan-500 to-fuchsia-500 hover:opacity-90"
             >
               {isConnecting ? (
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />

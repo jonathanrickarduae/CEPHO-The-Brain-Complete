@@ -313,7 +313,7 @@ export function ChiefOfStaffKPIReport() {
           variant="outline"
           onClick={handleExport}
           disabled={isExporting}
-          className="border-pink-500/30 text-[oklch(0.72_0.19_45)] hover:bg-[oklch(0.72_0.19_45/0.08)]"
+          className="border-pink-500/30 text-pink-400 hover:bg-pink-500/10"
         >
           {isExporting ? (
             <Loader2 className="h-4 w-4 mr-2 animate-spin" />

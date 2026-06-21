@@ -324,7 +324,7 @@ export function IdeaScoringDashboard({
             <Button
               onClick={() => onComplete(approvedIdeas)}
               disabled={pendingIdeas.length > 0}
-              className="bg-gradient-to-r from-cyan-500 to-primary"
+              className="bg-gradient-to-r from-cyan-500 to-fuchsia-500"
             >
               Complete Review
               <Check className="w-4 h-4 ml-2" />
@@ -382,8 +382,8 @@ export function IdeaScoringDashboard({
           <Card className="bg-white/5 border-white/10">
             <CardContent className="pt-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-primary" />
+                <div className="w-10 h-10 rounded-lg bg-fuchsia-500/20 flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-fuchsia-400" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white">
@@ -459,8 +459,8 @@ export function IdeaScoringDashboard({
               return (
                 <Card
                   key={idea.id}
-                  className={`bg-white/5 border-white/10 cursor-pointer transition-all hover:border-primary/50 ${
-                    selectedIdea?.id === idea.id ? "border-primary" : ""
+                  className={`bg-white/5 border-white/10 cursor-pointer transition-all hover:border-fuchsia-500/50 ${
+                    selectedIdea?.id === idea.id ? "border-fuchsia-500" : ""
                   }`}
                   onClick={() => setSelectedIdea(idea)}
                 >
@@ -621,7 +621,7 @@ export function IdeaScoringDashboard({
                             onClick={() => setUserScore(n)}
                             className={`w-8 h-8 rounded-lg text-xs font-medium transition-all ${
                               userScore >= n
-                                ? "bg-primary text-white"
+                                ? "bg-fuchsia-500 text-white"
                                 : "bg-white/5 text-foreground/70 hover:bg-white/10"
                             }`}
                           >
@@ -638,7 +638,7 @@ export function IdeaScoringDashboard({
                       />
                       <Button
                         onClick={submitScore}
-                        className="w-full mt-2 bg-primary/10 text-primary hover:bg-primary/30"
+                        className="w-full mt-2 bg-fuchsia-500/20 text-fuchsia-400 hover:bg-fuchsia-500/30"
                       >
                         Submit Score
                       </Button>

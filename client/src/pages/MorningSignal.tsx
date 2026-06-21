@@ -436,7 +436,7 @@ export default function MorningSignal() {
               size="sm"
               onClick={handleDownloadPdf}
               disabled={isGeneratingPdf}
-              className="border-pink-500/30 text-[oklch(0.72_0.19_45)] hover:bg-[oklch(0.72_0.19_45/0.08)]"
+              className="border-pink-500/30 text-pink-400 hover:bg-pink-500/10"
             >
               {isGeneratingPdf ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -463,7 +463,7 @@ export default function MorningSignal() {
             <Button
               size="sm"
               variant="outline"
-              className="border-pink-500/30 text-[oklch(0.72_0.19_45)] hover:bg-[oklch(0.72_0.19_45/0.08)] text-xs"
+              className="border-pink-500/30 text-pink-400 hover:bg-pink-500/10 text-xs"
               onClick={() => {
                 setIsLoadingVictoriaBriefing(true);
                 victoriaBriefingMutation.mutate({
@@ -518,7 +518,7 @@ export default function MorningSignal() {
             <Card className="border-pink-500/30">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-[oklch(0.72_0.19_45)]" />
+                  <Calendar className="h-4 w-4 text-pink-400" />
                   Today's Calendar {briefingData.connections.calendar ? `— ${briefingData.calendarEvents.length} events` : '— Not connected'}
                 </CardTitle>
               </CardHeader>

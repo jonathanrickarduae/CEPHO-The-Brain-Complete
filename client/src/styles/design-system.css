@@ -7,12 +7,12 @@
 
 /* Primary gradient - magenta to purple */
 .gradient-primary {
-  background: linear-gradient(135deg, oklch(0.62 0.19 220) 0%, oklch(0.55 0.2 240) 100%);
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, #a855f7 100%);
 }
 
 /* Accent gradient - cyan to blue */
 .gradient-accent {
-  background: linear-gradient(135deg, oklch(0.68 0.17 162) 0%, oklch(0.62 0.19 220) 100%);
+  background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%);
 }
 
 /* Success gradient */
@@ -206,7 +206,7 @@
 
 /* Gradient text */
 .text-gradient {
-  background: linear-gradient(135deg, oklch(0.62 0.19 220) 0%, oklch(0.55 0.2 240) 100%);
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, #a855f7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

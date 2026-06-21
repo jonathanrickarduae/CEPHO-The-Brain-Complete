@@ -386,7 +386,7 @@ export function ValidationEngine({ projectId, projectName, content, onValidation
           <Button
             onClick={runValidation}
             disabled={isValidating}
-            className="bg-gradient-to-r from-cyan-500 to-primary"
+            className="bg-gradient-to-r from-cyan-500 to-fuchsia-500"
           >
             {isValidating ? (
               <>
@@ -419,7 +419,7 @@ export function ValidationEngine({ projectId, projectName, content, onValidation
             <Button variant="outline" onClick={() => setReport(null)}>
               Re-validate
             </Button>
-            <Button className="bg-gradient-to-r from-cyan-500 to-primary">
+            <Button className="bg-gradient-to-r from-cyan-500 to-fuchsia-500">
               <CheckCircle className="w-4 h-4 mr-2" />
               Approve & Continue
             </Button>

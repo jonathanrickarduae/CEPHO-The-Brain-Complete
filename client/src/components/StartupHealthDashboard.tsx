@@ -160,7 +160,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-semibold text-white flex items-center gap-2">
-            <Rocket className="h-5 w-5 text-primary" />
+            <Rocket className="h-5 w-5 text-fuchsia-400" />
             {startup.name}
           </CardTitle>
           <Badge 
@@ -267,7 +267,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
           <span className="text-xs text-foreground/60 flex items-center gap-1">
             <Clock className="h-3 w-3" /> Updated {startup.lastUpdated}
           </span>
-          <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
+          <Button variant="ghost" size="sm" className="text-fuchsia-400 hover:text-fuchsia-300">
             <Edit className="h-3 w-3 mr-1" /> Edit
           </Button>
         </div>
@@ -299,7 +299,7 @@ export default function StartupHealthDashboard({ projectId, projectName }: Start
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
+            <Sparkles className="h-5 w-5 text-fuchsia-400" />
             Startup Health Dashboard
           </h2>
           <p className="text-sm text-foreground/70 mt-1">
@@ -308,7 +308,7 @@ export default function StartupHealthDashboard({ projectId, projectName }: Start
         </div>
         <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
           <DialogTrigger asChild>
-            <Button className="bg-primary hover:bg-primary">
+            <Button className="bg-fuchsia-500 hover:bg-fuchsia-600">
               <Plus className="h-4 w-4 mr-2" /> Add Startup
             </Button>
           </DialogTrigger>
@@ -341,7 +341,7 @@ export default function StartupHealthDashboard({ projectId, projectName }: Start
                   <Input type="number" placeholder="18" className="bg-gray-800 border-gray-700" />
                 </div>
               </div>
-              <Button className="w-full bg-primary hover:bg-primary" onClick={() => setShowAddDialog(false)}>
+              <Button className="w-full bg-fuchsia-500 hover:bg-fuchsia-600" onClick={() => setShowAddDialog(false)}>
                 Add Startup
               </Button>
             </div>
@@ -425,7 +425,7 @@ export default function StartupHealthDashboard({ projectId, projectName }: Start
               Add your first startup to track runway, burn rate, and key metrics
             </p>
             <Button 
-              className="bg-primary hover:bg-primary"
+              className="bg-fuchsia-500 hover:bg-fuchsia-600"
               onClick={() => setShowAddDialog(true)}
             >
               <Plus className="h-4 w-4 mr-2" /> Add Your First Startup

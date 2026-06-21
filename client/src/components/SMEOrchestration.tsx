@@ -273,9 +273,9 @@ export function SMEOrchestration({
 
       {/* Synthesis Section */}
       {synthesisReady && (
-        <div className="p-4 bg-gradient-to-r from-primary/10 to-purple-500/10">
+        <div className="p-4 bg-gradient-to-r from-fuchsia-500/10 to-purple-500/10">
           <div className="flex items-start gap-3 mb-4">
-            <Brain className="w-6 h-6 text-primary mt-1" />
+            <Brain className="w-6 h-6 text-fuchsia-400 mt-1" />
             <div>
               <h4 className="font-semibold text-white mb-2">Chief of Staff Synthesis</h4>
               <div className="text-sm text-foreground/80 space-y-2">
@@ -299,7 +299,7 @@ export function SMEOrchestration({
           </div>
 
           <div className="flex items-center gap-3">
-            <Button className="bg-primary hover:bg-primary/90" onClick={onAcceptSynthesis}>
+            <Button className="bg-fuchsia-600 hover:bg-fuchsia-700" onClick={onAcceptSynthesis}>
               <CheckCircle2 className="w-4 h-4 mr-2" />
               Accept Synthesis
             </Button>

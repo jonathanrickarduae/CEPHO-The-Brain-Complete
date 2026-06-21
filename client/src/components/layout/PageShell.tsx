@@ -31,7 +31,7 @@ interface PageShellProps {
   title: string;
   /** Optional subtitle / breadcrumb */
   subtitle?: string;
-  /** Accent colour class for the icon background, e.g. "bg-[oklch(0.72_0.19_45/0.1)] text-[oklch(0.72_0.19_45)]" */
+  /** Accent colour class for the icon background, e.g. "bg-pink-500/20 text-pink-400" */
   iconClass?: string;
   /** Right-side action buttons rendered in the header */
   actions?: React.ReactNode;

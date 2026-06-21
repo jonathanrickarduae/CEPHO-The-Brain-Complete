@@ -147,7 +147,7 @@ export default function Library() {
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-primary" />
+              <MessageSquare className="w-5 h-5 text-fuchsia-400" />
               {selectedConsultation.name}
             </DialogTitle>
           </DialogHeader>
@@ -272,7 +272,7 @@ export default function Library() {
                 <Button 
                   variant="ghost" 
                   size="icon"
-                  className="hover:bg-[oklch(0.72_0.19_45/0.1)] hover:text-[oklch(0.72_0.19_45)]"
+                  className="hover:bg-pink-500/20 hover:text-pink-400"
                   onClick={() => toast.info(`Preview: ${doc.name}`, { description: 'Document preview coming soon' })}
                 >
                   <Eye className="w-4 h-4" />
@@ -322,7 +322,7 @@ export default function Library() {
         icon={BookOpen} 
         title="Library"
         subtitle="All your project files and consultations"
-        iconColor="text-[oklch(0.72_0.19_45)]"
+        iconColor="text-pink-400"
       >
         <div className="flex items-center gap-2 md:gap-3 flex-wrap justify-end">
           {activeTab === 'projects' ? (
@@ -344,13 +344,13 @@ export default function Library() {
               <div className="hidden sm:flex items-center bg-white/5 border border-white/20 rounded-lg p-1">
                 <button 
                   onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-[oklch(0.72_0.19_45/0.1)] text-[oklch(0.72_0.19_45)]' : 'text-foreground/70 hover:text-white'}`}
+                  className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-pink-500/20 text-pink-400' : 'text-foreground/70 hover:text-white'}`}
                 >
                   <LayoutGrid className="w-4 h-4" />
                 </button>
                 <button 
                   onClick={() => setViewMode('list')}
-                  className={`p-2 rounded transition-colors ${viewMode === 'list' ? 'bg-[oklch(0.72_0.19_45/0.1)] text-[oklch(0.72_0.19_45)]' : 'text-foreground/70 hover:text-white'}`}
+                  className={`p-2 rounded transition-colors ${viewMode === 'list' ? 'bg-pink-500/20 text-pink-400' : 'text-foreground/70 hover:text-white'}`}
                 >
                   <List className="w-4 h-4" />
                 </button>
@@ -403,7 +403,7 @@ export default function Library() {
             variant={activeTab === 'consultations' ? 'default' : 'outline'}
             size="sm"
             onClick={() => setActiveTab('consultations')}
-            className={activeTab === 'consultations' ? 'bg-gradient-to-r from-primary to-purple-500' : ''}
+            className={activeTab === 'consultations' ? 'bg-gradient-to-r from-fuchsia-500 to-purple-500' : ''}
           >
             <MessageSquare className="w-4 h-4 mr-2" />
             Expert Consultations
@@ -427,14 +427,14 @@ export default function Library() {
                 <div className="text-sm text-foreground/70">Projects</div>
               </div>
               <div className="bg-gradient-to-br from-pink-500/10 to-rose-500/10 border-2 border-pink-500/30 rounded-2xl p-4">
-                <div className="text-3xl font-bold text-[oklch(0.72_0.19_45)]">{totalFiles}</div>
+                <div className="text-3xl font-bold text-pink-400">{totalFiles}</div>
                 <div className="text-sm text-foreground/70">Total Files</div>
               </div>
               <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-2 border-blue-500/30 rounded-2xl p-4">
                 <div className="text-3xl font-bold text-blue-400">{projects.reduce((acc, p) => acc + p.documents, 0)}</div>
                 <div className="text-sm text-foreground/70">Documents</div>
               </div>
-              <div className="bg-gradient-to-br from-purple-500/10 to-primary/10 border-2 border-purple-500/30 rounded-2xl p-4">
+              <div className="bg-gradient-to-br from-purple-500/10 to-fuchsia-500/10 border-2 border-purple-500/30 rounded-2xl p-4">
                 <div className="text-3xl font-bold text-purple-400">{projects.reduce((acc, p) => acc + p.images, 0)}</div>
                 <div className="text-sm text-foreground/70">Images</div>
               </div>
@@ -564,7 +564,7 @@ export default function Library() {
                   URL.revokeObjectURL(url);
                   toast.success('Exported consultations to CSV');
                 }}
-                className="border-primary/50 text-primary hover:bg-primary/8"
+                className="border-fuchsia-500/50 text-fuchsia-400 hover:bg-fuchsia-500/10"
                 disabled={consultationsLoading || !consultations?.length}
               >
                 <Download className="w-4 h-4 mr-2" />
@@ -574,8 +574,8 @@ export default function Library() {
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 mb-6">
-              <div className="bg-gradient-to-br from-primary/10 to-purple-500/10 border-2 border-primary/30 rounded-2xl p-4">
-                <div className="text-3xl font-bold text-primary">
+              <div className="bg-gradient-to-br from-fuchsia-500/10 to-purple-500/10 border-2 border-fuchsia-500/30 rounded-2xl p-4">
+                <div className="text-3xl font-bold text-fuchsia-400">
                   {consultationsLoading ? '...' : consultations?.length || 0}
                 </div>
                 <div className="text-sm text-foreground/70">Saved Consultations</div>
@@ -626,13 +626,13 @@ export default function Library() {
                   <div
                     key={consultation.id}
                     onClick={() => setSelectedConsultation(consultation)}
-                    className="flex items-center gap-4 bg-white/5 border-2 border-white/10 rounded-2xl p-4 hover:border-primary/50 transition-all cursor-pointer group"
+                    className="flex items-center gap-4 bg-white/5 border-2 border-white/10 rounded-2xl p-4 hover:border-fuchsia-500/50 transition-all cursor-pointer group"
                   >
-                    <div className="p-3 bg-gradient-to-br from-primary/10 to-purple-500/20 rounded-lg">
-                      <MessageSquare className="w-5 h-5 text-primary" />
+                    <div className="p-3 bg-gradient-to-br from-fuchsia-500/20 to-purple-500/20 rounded-lg">
+                      <MessageSquare className="w-5 h-5 text-fuchsia-400" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-foreground group-hover:text-primary transition-colors truncate">
+                      <h3 className="font-medium text-foreground group-hover:text-fuchsia-400 transition-colors truncate">
                         {consultation.name}
                       </h3>
                       <div className="flex items-center gap-3 text-sm text-muted-foreground">
@@ -649,7 +649,7 @@ export default function Library() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-primary hover:text-primary/80 hover:bg-primary/8"
+                      className="text-fuchsia-400 hover:text-fuchsia-300 hover:bg-fuchsia-500/10"
                       onClick={(e) => {
                         e.stopPropagation();
                         setSelectedConsultation(consultation);

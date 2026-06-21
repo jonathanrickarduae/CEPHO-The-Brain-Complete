@@ -323,7 +323,7 @@ ${tier.examples.map(e => `- ${e}`).join('\n')}
             {[
               { step: 'Identify', color: 'bg-blue-500/20 text-blue-400' },
               { step: 'Qualify', color: 'bg-purple-500/20 text-purple-400' },
-              { step: 'Engage', color: 'bg-[oklch(0.72_0.19_45/0.1)] text-[oklch(0.72_0.19_45)]' },
+              { step: 'Engage', color: 'bg-pink-500/20 text-pink-400' },
               { step: 'Agreement', color: 'bg-amber-500/20 text-amber-400' },
               { step: 'Onboard', color: 'bg-cyan-500/20 text-cyan-400' },
               { step: 'Activate', color: 'bg-green-500/20 text-green-400' },

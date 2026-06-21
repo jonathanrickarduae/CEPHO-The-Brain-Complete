@@ -68,7 +68,7 @@ const CATEGORIES: Record<
   question: {
     label: "Question",
     icon: <Sparkles className="w-3.5 h-3.5" />,
-    color: "text-[oklch(0.72_0.19_45)] bg-[oklch(0.72_0.19_45/0.1)]",
+    color: "text-pink-400 bg-pink-500/20",
   },
   follow_up: {
     label: "Follow Up",

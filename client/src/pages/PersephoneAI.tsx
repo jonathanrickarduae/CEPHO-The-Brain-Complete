@@ -225,7 +225,7 @@ export default function PersephoneAI() {
 
     return (
       <Card 
-        className="bg-black/40 border-white/10 hover:border-primary/50 transition-all cursor-pointer"
+        className="bg-black/40 border-white/10 hover:border-fuchsia-500/50 transition-all cursor-pointer"
         onClick={() => toggleAdvisor(advisor.id)}
       >
         <CardHeader className="pb-2">
@@ -247,7 +247,7 @@ export default function PersephoneAI() {
           </div>
         </CardHeader>
         <CardContent>
-          <Badge className="bg-primary/10 text-primary border-primary/30 mb-3">
+          <Badge className="bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/30 mb-3">
             {advisor.focusArea}
           </Badge>
           
@@ -296,11 +296,11 @@ export default function PersephoneAI() {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-fuchsia-500 to-purple-600 flex items-center justify-center">
               <Brain className="w-8 h-8 text-white" />
             </div>
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-[oklch(0.62_0.19_220)] bg-clip-text text-transparent mb-2">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-transparent mb-2">
             Persephone-AI
           </h1>
           <p className="text-xl text-gray-400 mb-4">The AI Genius Board</p>
@@ -314,15 +314,15 @@ export default function PersephoneAI() {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
           <TabsList className="bg-black/40 border border-white/10">
-            <TabsTrigger value="board" className="data-[state=active]:bg-primary/10">
+            <TabsTrigger value="board" className="data-[state=active]:bg-fuchsia-500/20">
               <Users className="w-4 h-4 mr-2" />
               The Board
             </TabsTrigger>
-            <TabsTrigger value="insights" className="data-[state=active]:bg-primary/10">
+            <TabsTrigger value="insights" className="data-[state=active]:bg-fuchsia-500/20">
               <Lightbulb className="w-4 h-4 mr-2" />
               Key Insights
             </TabsTrigger>
-            <TabsTrigger value="repository" className="data-[state=active]:bg-primary/10">
+            <TabsTrigger value="repository" className="data-[state=active]:bg-fuchsia-500/20">
               <FileText className="w-4 h-4 mr-2" />
               Knowledge Repository
             </TabsTrigger>
@@ -401,7 +401,7 @@ export default function PersephoneAI() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-4 bg-white/5 rounded-lg">
                     <h4 className="text-white font-medium mb-2 flex items-center gap-2">
-                      <BookOpen className="w-4 h-4 text-primary" />
+                      <BookOpen className="w-4 h-4 text-fuchsia-400" />
                       Books & Publications
                     </h4>
                     <p className="text-gray-400 text-sm">Authored works, research papers, and published articles</p>

@@ -114,7 +114,7 @@ export default function ProjectGenesisPage() {
           {/* Header - Mobile responsive */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
             <div className="flex items-center gap-3 md:gap-4">
-              <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-r from-cyan-500 to-primary flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-r from-cyan-500 to-fuchsia-500 flex items-center justify-center shrink-0">
                 <Rocket className="w-6 h-6 md:w-7 md:h-7 text-white" />
               </div>
               <div>
@@ -153,7 +153,7 @@ export default function ProjectGenesisPage() {
               <Button
                 size="sm"
                 onClick={() => setViewMode('new_project')}
-                className="bg-gradient-to-r from-cyan-500 to-primary hover:opacity-90"
+                className="bg-gradient-to-r from-cyan-500 to-fuchsia-500 hover:opacity-90"
               >
                 <Plus className="w-4 h-4 md:mr-2" />
                 <span className="hidden sm:inline">New Project</span>
@@ -165,7 +165,7 @@ export default function ProjectGenesisPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
             <button
               onClick={() => setViewMode('voice_intake')}
-              className="p-4 md:p-6 bg-gradient-to-br from-cyan-500/10 to-primary/10 border-2 border-cyan-500/50 rounded-2xl text-left hover:border-cyan-500 transition-all group"
+              className="p-4 md:p-6 bg-gradient-to-br from-cyan-500/10 to-fuchsia-500/10 border-2 border-cyan-500/50 rounded-2xl text-left hover:border-cyan-500 transition-all group"
             >
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-3 md:mb-4 group-hover:scale-110 transition-transform">
                 <svg className="w-5 h-5 md:w-6 md:h-6 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -181,10 +181,10 @@ export default function ProjectGenesisPage() {
 
             <button
               onClick={() => setViewMode('new_project')}
-              className="p-4 md:p-6 bg-gradient-to-br from-primary/10 to-purple-500/10 border border-primary/30 rounded-2xl text-left hover:border-primary/50 transition-all group"
+              className="p-4 md:p-6 bg-gradient-to-br from-fuchsia-500/10 to-purple-500/10 border border-fuchsia-500/30 rounded-2xl text-left hover:border-fuchsia-500/50 transition-all group"
             >
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3 md:mb-4 group-hover:scale-110 transition-transform">
-                <Brain className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-fuchsia-500/20 flex items-center justify-center mb-3 md:mb-4 group-hover:scale-110 transition-transform">
+                <Brain className="w-5 h-5 md:w-6 md:h-6 text-fuchsia-400" />
               </div>
               <h3 className="text-sm md:text-lg font-semibold text-white mb-1">Genesis Blueprint</h3>
               <p className="text-xs md:text-sm text-foreground/70 hidden sm:block">
@@ -226,7 +226,7 @@ export default function ProjectGenesisPage() {
               onClick={() => setViewMode('social_media')}
               className="p-4 bg-gradient-to-br from-pink-500/10 to-purple-500/10 border border-pink-500/30 rounded-xl text-left hover:border-pink-500/50 transition-all group"
             >
-              <Share2 className="w-6 h-6 text-[oklch(0.72_0.19_45)] mb-2 group-hover:scale-110 transition-transform" />
+              <Share2 className="w-6 h-6 text-pink-400 mb-2 group-hover:scale-110 transition-transform" />
               <h4 className="font-medium text-white text-sm">Social Media Blueprint</h4>
               <p className="text-xs text-foreground/70 mt-1">Platform strategy & content</p>
             </button>
@@ -287,8 +287,8 @@ export default function ProjectGenesisPage() {
                     >
                       {/* Top row - Project info */}
                       <div className="flex items-center gap-4 mb-3">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-cyan-500/20 to-primary/10 flex items-center justify-center shrink-0">
-                          <Rocket className="w-6 h-6 text-primary" />
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 flex items-center justify-center shrink-0">
+                          <Rocket className="w-6 h-6 text-fuchsia-400" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
@@ -332,7 +332,7 @@ export default function ProjectGenesisPage() {
                 </p>
                 <Button
                   onClick={() => setViewMode('new_project')}
-                  className="bg-gradient-to-r from-cyan-500 to-primary"
+                  className="bg-gradient-to-r from-cyan-500 to-fuchsia-500"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Create First Project

@@ -270,7 +270,7 @@ export default function LandingPage() {
 
                 <Button
                   type="submit"
-                  className="w-full h-11 bg-gradient-to-r from-purple-500/90 via-primary/90 to-purple-600/90 hover:from-purple-500 hover:via-primary hover:to-purple-600 text-white font-medium text-base rounded-lg transition-all duration-300 shadow-md shadow-purple-500/30 hover:shadow-purple-500/40"
+                  className="w-full h-11 bg-gradient-to-r from-purple-500/90 via-fuchsia-500/90 to-purple-600/90 hover:from-purple-500 hover:via-fuchsia-500 hover:to-purple-600 text-white font-medium text-base rounded-lg transition-all duration-300 shadow-md shadow-purple-500/30 hover:shadow-purple-500/40"
                   disabled={isLoading}
                 >
                   {isLoading ? (

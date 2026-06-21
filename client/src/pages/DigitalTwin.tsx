@@ -242,7 +242,7 @@ export default function DigitalTwin() {
             {/* Enhanced Typing/Thinking indicator */}
             {isTyping && (
               <div className="flex gap-3 items-start">
-                <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-br from-primary/30 to-primary/30 border border-primary/40 animate-pulse">
+                <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-br from-primary/30 to-fuchsia-500/30 border border-primary/40 animate-pulse">
                   <Fingerprint className="w-4 h-4 text-primary" />
                 </div>
                 <div className="bg-card/60 border border-primary/20 rounded-2xl px-4 py-3 shadow-lg shadow-primary/5">
@@ -433,7 +433,7 @@ export default function DigitalTwin() {
               onClick={() => setRightPanelTab('guardian')}
               className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
                 rightPanelTab === 'guardian' 
-                  ? 'text-primary border-b-2 border-primary flex items-center justify-center gap-2' 
+                  ? 'text-fuchsia-400 border-b-2 border-fuchsia-400 flex items-center justify-center gap-2' 
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >

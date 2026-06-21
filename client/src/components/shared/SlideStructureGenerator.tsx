@@ -115,7 +115,7 @@ const slideTemplates: Record<
     defaultTitle: "Investment Ask",
     placeholder:
       "How much are you raising? What will you use it for? What milestones will it achieve?",
-    color: "text-[oklch(0.72_0.19_45)]",
+    color: "text-pink-400",
   },
   custom: {
     label: "Custom",

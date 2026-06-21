@@ -347,7 +347,7 @@ export function VoiceCommands({ onCommand, className }: VoiceCommandsProps) {
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-gradient-to-r from-pink-500/10 to-rose-500/10">
         <div className="flex items-center gap-2">
-          <Mic className="w-5 h-5 text-[oklch(0.72_0.19_45)]" />
+          <Mic className="w-5 h-5 text-pink-400" />
           <h3 className="font-medium text-foreground">Voice Commands</h3>
         </div>
         <div className="flex items-center gap-2">
@@ -389,7 +389,7 @@ export function VoiceCommands({ onCommand, className }: VoiceCommandsProps) {
         {/* Status */}
         <div className="mt-4 text-center">
           {isListening ? (
-            <div className="flex items-center gap-2 text-[oklch(0.72_0.19_45)]">
+            <div className="flex items-center gap-2 text-pink-400">
               <Loader2 className="w-4 h-4 animate-spin" />
               <span>Listening...</span>
             </div>
@@ -419,7 +419,7 @@ export function VoiceCommands({ onCommand, className }: VoiceCommandsProps) {
         {/* Speaking Indicator */}
         {isSpeaking && (
           <div className="mt-4 flex items-center gap-2">
-            <Volume2 className="w-4 h-4 text-[oklch(0.72_0.19_45)] animate-pulse" />
+            <Volume2 className="w-4 h-4 text-pink-400 animate-pulse" />
             <span className="text-sm text-muted-foreground">Speaking...</span>
             <Button
               variant="ghost"

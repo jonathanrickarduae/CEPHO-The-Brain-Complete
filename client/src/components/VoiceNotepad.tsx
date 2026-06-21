@@ -26,7 +26,7 @@ const CATEGORIES: Record<NoteCategory, { label: string; icon: React.ReactNode; c
   idea: { label: 'Idea', icon: <Lightbulb className="w-3.5 h-3.5" />, color: 'text-yellow-400 bg-yellow-500/20' },
   reminder: { label: 'Reminder', icon: <Clock className="w-3.5 h-3.5" />, color: 'text-purple-400 bg-purple-500/20' },
   observation: { label: 'Observation', icon: <Brain className="w-3.5 h-3.5" />, color: 'text-green-400 bg-green-500/20' },
-  question: { label: 'Question', icon: <Sparkles className="w-3.5 h-3.5" />, color: 'text-[oklch(0.72_0.19_45)] bg-[oklch(0.72_0.19_45/0.1)]' },
+  question: { label: 'Question', icon: <Sparkles className="w-3.5 h-3.5" />, color: 'text-pink-400 bg-pink-500/20' },
   follow_up: { label: 'Follow Up', icon: <Calendar className="w-3.5 h-3.5" />, color: 'text-orange-400 bg-orange-500/20' },
 };
 

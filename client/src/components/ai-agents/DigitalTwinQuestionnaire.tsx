@@ -360,7 +360,7 @@ export function DigitalTwinQuestionnaire({
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-fuchsia-500 to-purple-600 flex items-center justify-center">
             <Brain className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -377,7 +377,7 @@ export function DigitalTwinQuestionnaire({
             <span>
               Question {currentIndex + 1} of {QUESTIONS.length}
             </span>
-            <span className="text-primary">
+            <span className="text-fuchsia-400">
               {completionPercentage}% Complete
             </span>
           </div>
@@ -393,7 +393,7 @@ export function DigitalTwinQuestionnaire({
       </div>
 
       {/* Question Card */}
-      <Card className="mb-6 border-primary/20">
+      <Card className="mb-6 border-fuchsia-500/20">
         <CardHeader>
           <CardTitle className="text-lg font-medium leading-relaxed">
             {currentQuestion.text}
@@ -418,7 +418,7 @@ export function DigitalTwinQuestionnaire({
               />
               <div className="flex justify-between text-sm text-muted-foreground">
                 <span>{currentQuestion.scaleLabels?.low}</span>
-                <span className="text-2xl font-bold text-primary">
+                <span className="text-2xl font-bold text-fuchsia-400">
                   {currentValue}
                 </span>
                 <span>{currentQuestion.scaleLabels?.high}</span>
@@ -433,7 +433,7 @@ export function DigitalTwinQuestionnaire({
                 className={cn(
                   "flex-1 h-16 text-lg",
                   responses[currentQuestion.id] === true &&
-                    "bg-primary hover:bg-primary/90"
+                    "bg-fuchsia-600 hover:bg-fuchsia-700"
                 )}
                 onClick={() => handleBooleanAnswer(true)}
               >
@@ -448,7 +448,7 @@ export function DigitalTwinQuestionnaire({
                 className={cn(
                   "flex-1 h-16 text-lg",
                   responses[currentQuestion.id] === false &&
-                    "bg-primary hover:bg-primary/90"
+                    "bg-fuchsia-600 hover:bg-fuchsia-700"
                 )}
                 onClick={() => handleBooleanAnswer(false)}
               >
@@ -473,7 +473,7 @@ export function DigitalTwinQuestionnaire({
         {currentQuestion.type === "scale" && (
           <Button
             onClick={handleNext}
-            className="bg-primary hover:bg-primary/90"
+            className="bg-fuchsia-600 hover:bg-fuchsia-700"
           >
             {currentIndex === QUESTIONS.length - 1 ? (
               <>
@@ -491,7 +491,7 @@ export function DigitalTwinQuestionnaire({
       </div>
 
       {/* COS Understanding indicator */}
-      <div className="mt-8 p-4 rounded-lg bg-gradient-to-r from-primary/10 to-purple-500/10 border border-primary/20">
+      <div className="mt-8 p-4 rounded-lg bg-gradient-to-r from-fuchsia-500/10 to-purple-500/10 border border-fuchsia-500/20">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium">COS Understanding Level</p>
@@ -500,7 +500,7 @@ export function DigitalTwinQuestionnaire({
             </p>
           </div>
           <div className="text-right">
-            <p className="text-2xl font-bold text-primary">
+            <p className="text-2xl font-bold text-fuchsia-400">
               {completionPercentage}/100
             </p>
           </div>
