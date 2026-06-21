@@ -5875,3 +5875,12 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 - [x] Rebrand "Chief of Staff" → "Victoria" throughout all pages and labels
 - [ ] Remove/hide all non-core pages from navigation (routes kept, just hidden)
 - [x] Update index.css with new light theme palette
+
+## Beach Theme Redesign
+- [ ] Apply warm sand palette (#FDF8F0 bg, #0EA5E9 ocean blue, #F97316 coral, #10B981 seafoam)
+- [ ] Update index.css with beach design tokens and Nunito/DM Sans typography
+- [ ] Rebuild Nexus dashboard — Victoria briefing at top, wide project grid, morning actions
+- [ ] Update BrainLayout sidebar with beach theme and warm shadows
+- [ ] Update RAG status colours — sunset red, warm amber, seafoam green
+- [ ] Update ProjectsHub, ProjectPortal, MorningSignal to beach theme
+- [ ] Push to GitHub
