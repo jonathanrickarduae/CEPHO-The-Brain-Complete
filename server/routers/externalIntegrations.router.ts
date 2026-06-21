@@ -476,11 +476,10 @@ export const synthesiaRouter = router({
         test: z.boolean().default(true),
         input: z.array(
           z.object({
-            avatarId: z.string().optional(),
-            script: z.string().min(1),
+            avatar: z.string(),
+            scriptText: z.string().min(1),
             voiceId: z.string().optional(),
-            backgroundId: z.string().optional(),
-            backgroundColor: z.string().optional(),
+            background: z.string().optional(),
           })
         ),
       })
@@ -489,6 +488,7 @@ export const synthesiaRouter = router({
       const { synthesiaService } = await import(
         "../services/synthesia.service"
       );
+      // Fields already match the v2 schema — pass through directly.
       return synthesiaService.createVideo(input);
     }),
 });
