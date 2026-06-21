@@ -37,6 +37,7 @@ import {
   GitBranch,
   FolderLock,
   Bot,
+  Cpu,
   PanelLeft,
   Plus,
 } from "lucide-react";
@@ -83,6 +84,7 @@ const navGroups: NavGroup[] = [
     label: "Intelligence",
     items: [
       { icon: Bot, label: "Victoria AI", mobileLabel: "Victoria", path: "/victoria" },
+      { icon: Cpu, label: "AI Agents", mobileLabel: "Agents", path: "/agents" },
       { icon: Users, label: "AI SME Workflow", mobileLabel: "SMEs", path: "/sme" },
       { icon: FlaskConical, label: "Innovation Hub", mobileLabel: "Innovation", path: "/innovation" },
       { icon: TrendingUp, label: "Financial Pulse", mobileLabel: "Finance", path: "/financial" },

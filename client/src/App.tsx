@@ -29,6 +29,7 @@ const VaultPage = lazy(() => import("@/pages/VaultPage"));
 const DocumentLibraryPage = lazy(() => import("@/pages/DocumentLibraryPage"));
 const VictoriaChat = lazy(() => import("@/pages/VictoriaChat"));
 
+const AIAgentsPage = lazy(() => import("@/pages/AIAgentsPage"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
 function PageLoader() {
@@ -58,6 +59,7 @@ function Router() {
           <Route path="/vault" component={VaultPage} />
           <Route path="/documents" component={DocumentLibraryPage} />
           <Route path="/victoria" component={VictoriaChat} />
+          <Route path="/agents" component={AIAgentsPage} />
           {/* Settings */}
           <Route path="/settings" component={SettingsPage} />
           <Route component={NotFound} />

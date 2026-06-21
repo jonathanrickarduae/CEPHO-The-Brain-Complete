@@ -234,3 +234,155 @@ export const settings = pgTable("settings", {
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 export type Settings = typeof settings.$inferSelect;
+
+// ─── Additional tables required by sub-routers ────────────────────────────────
+
+export const activityFeed = pgTable("activity_feed", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id"),
+  type: varchar("type", { length: 100 }).notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
+  metadata: text("metadata"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const agentInsights = pgTable("agent_insights", {
+  id: serial("id").primaryKey(),
+  agentId: varchar("agent_id", { length: 100 }).notNull(),
+  agentName: varchar("agent_name", { length: 255 }).notNull(),
+  insight: text("insight").notNull(),
+  category: varchar("category", { length: 100 }),
+  confidence: integer("confidence").default(80),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const agentImprovements = pgTable("agent_improvements", {
+  id: serial("id").primaryKey(),
+  agentId: varchar("agent_id", { length: 100 }).notNull(),
+  suggestion: text("suggestion").notNull(),
+  status: varchar("status", { length: 50 }).default("pending"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const agentDailyReports = pgTable("agent_daily_reports", {
+  id: serial("id").primaryKey(),
+  agentId: varchar("agent_id", { length: 100 }).notNull(),
+  reportDate: timestamp("report_date").defaultNow(),
+  summary: text("summary").notNull(),
+  tasksCompleted: integer("tasks_completed").default(0),
+  insights: text("insights"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const agentPerformanceMetrics = pgTable("agent_performance_metrics", {
+  id: serial("id").primaryKey(),
+  agentId: varchar("agent_id", { length: 100 }).notNull(),
+  metricDate: timestamp("metric_date").defaultNow(),
+  tasksCompleted: integer("tasks_completed").default(0),
+  avgResponseTime: integer("avg_response_time"),
+  successRate: integer("success_rate").default(100),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const aiUsageLogs = pgTable("ai_usage_logs", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id"),
+  model: varchar("model", { length: 100 }),
+  promptTokens: integer("prompt_tokens").default(0),
+  completionTokens: integer("completion_tokens").default(0),
+  totalTokens: integer("total_tokens").default(0),
+  costUsd: text("cost_usd"),
+  feature: varchar("feature", { length: 100 }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const notifications = pgTable("notifications", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id"),
+  title: text("title").notNull(),
+  message: text("message").notNull(),
+  type: varchar("type", { length: 50 }).default("info"),
+  read: boolean("read").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const projectGenesis = pgTable("project_genesis", {
+  id: serial("id").primaryKey(),
+  projectId: integer("project_id"),
+  stage: varchar("stage", { length: 100 }).default("concept"),
+  recommendation: varchar("recommendation", { length: 50 }),
+  viabilityScore: integer("viability_score"),
+  marketAnalysis: text("market_analysis"),
+  businessModel: text("business_model"),
+  teamAssessment: text("team_assessment"),
+  riskAnalysis: text("risk_analysis"),
+  executionPlan: text("execution_plan"),
+  summary: text("summary"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const projectGenesisPhases = pgTable("project_genesis_phases", {
+  id: serial("id").primaryKey(),
+  genesisId: integer("genesis_id"),
+  phase: varchar("phase", { length: 100 }).notNull(),
+  status: varchar("status", { length: 50 }).default("pending"),
+  analysis: text("analysis"),
+  score: integer("score"),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const innovationIdeas = pgTable("innovation_ideas", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description"),
+  category: varchar("category", { length: 100 }),
+  status: varchar("status", { length: 50 }).default("idea"),
+  submittedBy: integer("submitted_by"),
+  aiScore: integer("ai_score"),
+  aiAnalysis: text("ai_analysis"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const ideaAssessments = pgTable("idea_assessments", {
+  id: serial("id").primaryKey(),
+  ideaId: integer("idea_id"),
+  marketPotential: integer("market_potential"),
+  feasibility: integer("feasibility"),
+  strategicFit: integer("strategic_fit"),
+  overallScore: integer("overall_score"),
+  recommendation: text("recommendation"),
+  assessedAt: timestamp("assessed_at").defaultNow(),
+});
+
+export const investmentScenarios = pgTable("investment_scenarios", {
+  id: serial("id").primaryKey(),
+  ideaId: integer("idea_id"),
+  scenarioName: varchar("scenario_name", { length: 255 }),
+  investmentAmount: text("investment_amount"),
+  projectedReturn: text("projected_return"),
+  timeframe: varchar("timeframe", { length: 100 }),
+  assumptions: text("assumptions"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const smeReviewTriggers = pgTable("sme_review_triggers", {
+  id: serial("id").primaryKey(),
+  ideaId: integer("idea_id"),
+  smeDomain: varchar("sme_domain", { length: 255 }),
+  triggerReason: text("trigger_reason"),
+  status: varchar("status", { length: 50 }).default("pending"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const victoriaActions = pgTable("victoria_actions", {
+  id: serial("id").primaryKey(),
+  actionType: varchar("action_type", { length: 100 }).notNull(),
+  description: text("description"),
+  status: varchar("status", { length: 50 }).default("pending"),
+  result: text("result"),
+  createdAt: timestamp("created_at").defaultNow(),
+});

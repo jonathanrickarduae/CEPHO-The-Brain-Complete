@@ -6,6 +6,19 @@ import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
+// Synchronous db proxy — used by sub-routers that import { db } from "../db"
+// The proxy defers to the lazy singleton so it works without an explicit init call.
+export const db = new Proxy({} as ReturnType<typeof drizzle>, {
+  get(_target, prop) {
+    if (!_db && process.env.DATABASE_URL) {
+      const client = postgres(process.env.DATABASE_URL, { ssl: 'require', max: 10 });
+      _db = drizzle(client);
+    }
+    if (!_db) throw new Error("Database not available");
+    return (_db as ReturnType<typeof drizzle>)[prop as keyof ReturnType<typeof drizzle>];
+  },
+});
+
 // Lazily create the drizzle instance so local tooling can run without a DB.
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
