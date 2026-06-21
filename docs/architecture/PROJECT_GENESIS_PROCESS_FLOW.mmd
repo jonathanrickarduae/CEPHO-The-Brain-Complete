@@ -1,0 +1,37 @@
+
+graph TD
+    A[Strategic Forming] --> B{Persephone Board Review - Strategy};
+    B --> C[Development Sprints];
+    C --> D{Mid-Project Review};
+    D --> E{Persephone Board Review - Mid-Project};
+    E --> F[Final Development];
+    F --> G{Final Review & Commercialization};
+    G --> H{Persephone Board Review - Commercialization};
+    H --> I[Market Launch];
+
+    subgraph Project Genesis
+        A;
+        B;
+        C;
+        D;
+        E;
+        F;
+        G;
+        H;
+        I;
+    end
+
+    subgraph AI Agents
+        A -- Project Genesis Agent --> A;
+        B -- Persephone Board Agent --> B;
+        C -- Project Genesis Agent --> C;
+        D -- Project Genesis Agent --> D;
+        E -- Persephone Board Agent --> E;
+        F -- Project Genesis Agent --> F;
+        G -- COS Agent --> G;
+        H -- Persephone Board Agent --> H;
+    end
+
+    style A fill:#cde4ff
+    style I fill:#cde4ff
+

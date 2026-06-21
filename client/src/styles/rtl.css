@@ -1,0 +1,125 @@
+/**
+ * RTL (Right-to-Left) layout support for Arabic language
+ *
+ * Applied when <html class="rtl"> is set by the useI18n hook.
+ * Uses CSS logical properties where possible for maintainability.
+ */
+
+/* ── Base direction ─────────────────────────────────────────── */
+html.rtl,
+html[dir="rtl"] {
+  direction: rtl;
+  font-family:
+    "Noto Sans Arabic",
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+/* ── Text alignment ─────────────────────────────────────────── */
+html.rtl body,
+html[dir="rtl"] body {
+  text-align: right;
+}
+
+/* ── Sidebar / navigation ───────────────────────────────────── */
+html.rtl [data-sidebar="sidebar"] {
+  border-right: none;
+  border-left: 1px solid hsl(var(--sidebar-border));
+}
+
+/* ── Page header ────────────────────────────────────────────── */
+html.rtl .sticky.top-0 .flex.items-center.gap-3 {
+  flex-direction: row-reverse;
+}
+
+/* ── Form inputs ────────────────────────────────────────────── */
+html.rtl input,
+html.rtl textarea,
+html.rtl select {
+  text-align: right;
+}
+
+/* ── Flex row reversal for common patterns ──────────────────── */
+html.rtl .flex-row-rtl {
+  flex-direction: row-reverse;
+}
+
+/* ── Margin/padding logical overrides ──────────────────────── */
+html.rtl .ml-auto {
+  margin-left: unset;
+  margin-right: auto;
+}
+
+html.rtl .mr-auto {
+  margin-right: unset;
+  margin-left: auto;
+}
+
+/* ── Icon + text pairs ──────────────────────────────────────── */
+html.rtl .icon-text-pair {
+  flex-direction: row-reverse;
+}
+
+/* ── Breadcrumbs / navigation arrows ───────────────────────── */
+html.rtl .chevron-right {
+  transform: scaleX(-1);
+}
+
+/* ── Scrollbar position ─────────────────────────────────────── */
+html.rtl * {
+  scrollbar-width: thin;
+}
+
+/* ── Toast notifications ────────────────────────────────────── */
+html.rtl [data-sonner-toaster] {
+  right: unset;
+  left: 1rem;
+}
+
+/* ── Dropdown menus ─────────────────────────────────────────── */
+html.rtl [role="menu"],
+html.rtl [role="listbox"] {
+  text-align: right;
+}
+
+/* ── Table cells ────────────────────────────────────────────── */
+html.rtl th,
+html.rtl td {
+  text-align: right;
+}
+
+/* ── Badge / tag alignment ──────────────────────────────────── */
+html.rtl .ml-1 {
+  margin-left: unset;
+  margin-right: 0.25rem;
+}
+
+html.rtl .ml-2 {
+  margin-left: unset;
+  margin-right: 0.5rem;
+}
+
+html.rtl .mr-2 {
+  margin-right: unset;
+  margin-left: 0.5rem;
+}
+
+/* ── Sidebar collapse animation ────────────────────────────── */
+html.rtl [data-sidebar="sidebar"][data-collapsible="icon"] {
+  transform-origin: right center;
+}
+
+/* ── Active nav indicator bar ───────────────────────────────── */
+html.rtl .absolute.left-0.top-0.bottom-0.w-1 {
+  left: unset;
+  right: 0;
+  border-radius: 0.25rem 0 0 0.25rem;
+}
+
+/* ── Search input icon ──────────────────────────────────────── */
+html.rtl .search-icon-left {
+  left: unset;
+  right: 0.75rem;
+}
