@@ -1,366 +1,292 @@
+// ProjectPortal — Live data from tRPC
 import { useLocation, useParams } from "wouter";
-import { ArrowLeft, AlertCircle, Clock, CheckCircle2, Plus, FileText, MessageSquare, Target, MoreHorizontal, Sparkles } from "lucide-react";
+import {
+  ArrowLeft,
+  Plus,
+  FileText,
+  Target,
+  Loader2,
+  Trash2,
+  CheckSquare,
+  BookOpen,
+  FolderOpen,
+  Bot,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { toast } from "sonner";
+import { format } from "date-fns";
 
-type RAGStatus = "red" | "amber" | "green";
-
-const projectData: Record<string, {
-  name: string;
-  description: string;
-  status: RAGStatus;
-  accentColor: string;
-  initials: string;
-  overview: string;
-  tasks: { id: string; title: string; done: boolean; priority: "high" | "medium" | "low"; due?: string }[];
-  documents: { name: string; type: string; updated: string }[];
-  decisions: { date: string; decision: string; rationale: string }[];
-}> = {
-  celadon: {
-    name: "Celadon",
-    description: "Pharmacy operations & growth",
-    status: "amber",
-    accentColor: "#10B981",
-    initials: "CE",
-    overview: "Celadon manages pharmacy operations including prescription fulfilment and geographic expansion. Current focus is on licence renewal and operational efficiency.",
-    tasks: [
-      { id: "1", title: "Follow up on licence renewal application", done: false, priority: "high", due: "Today" },
-      { id: "2", title: "Review Q3 operational report", done: false, priority: "medium", due: "This week" },
-      { id: "3", title: "Prepare board update presentation", done: true, priority: "medium" },
-      { id: "4", title: "Confirm shipping partner contract", done: false, priority: "high", due: "Tomorrow" },
-    ],
-    documents: [
-      { name: "Licence Application 2026", type: "PDF", updated: "2 days ago" },
-      { name: "Q2 Operations Report", type: "DOC", updated: "1 week ago" },
-      { name: "Shipping Partner Agreement", type: "PDF", updated: "3 days ago" },
-    ],
-    decisions: [
-      { date: "Jun 10", decision: "Proceed with northern expansion", rationale: "Market analysis shows 40% growth opportunity" },
-      { date: "May 28", decision: "Switch to new shipping partner", rationale: "Cost reduction of 18% with improved SLA" },
-    ],
-  },
-  celanova: {
-    name: "Celanova",
-    description: "Healthcare innovation",
-    status: "green",
-    accentColor: "#8B5CF6",
-    initials: "CN",
-    overview: "Celanova is focused on healthcare innovation, developing new product lines and strategic partnerships. Currently on track with Q3 milestones.",
-    tasks: [
-      { id: "1", title: "Review Q3 product roadmap", done: false, priority: "medium", due: "This week" },
-      { id: "2", title: "Partnership meeting with MedTech Co", done: false, priority: "high", due: "Tomorrow" },
-      { id: "3", title: "Complete regulatory submission", done: true, priority: "high" },
-    ],
-    documents: [
-      { name: "Product Roadmap Q3 2026", type: "DOC", updated: "Yesterday" },
-      { name: "Regulatory Submission Pack", type: "PDF", updated: "1 week ago" },
-    ],
-    decisions: [
-      { date: "Jun 15", decision: "Prioritise MedTech partnership", rationale: "Accelerates go-to-market by 6 months" },
-    ],
-  },
-  perfect: {
-    name: "Perfect",
-    description: "PMO client engagement",
-    status: "red",
-    accentColor: "#F59E0B",
-    initials: "PF",
-    overview: "PMO engagement with 3 deliverables currently overdue. Immediate escalation required to get back on track.",
-    tasks: [
-      { id: "1", title: "Escalate delayed Phase 2 deliverables", done: false, priority: "high", due: "Today" },
-      { id: "2", title: "Client status call — reschedule", done: false, priority: "high", due: "Today" },
-      { id: "3", title: "Update project plan with revised dates", done: false, priority: "high", due: "Tomorrow" },
-      { id: "4", title: "Risk register review", done: false, priority: "medium", due: "This week" },
-    ],
-    documents: [
-      { name: "Project Plan v4", type: "DOC", updated: "3 days ago" },
-      { name: "Risk Register", type: "XLS", updated: "1 week ago" },
-      { name: "Client Brief", type: "PDF", updated: "2 weeks ago" },
-    ],
-    decisions: [
-      { date: "Jun 18", decision: "Extend Phase 2 deadline by 2 weeks", rationale: "Resource constraints from client side" },
-    ],
-  },
-  olmack: {
-    name: "Olmack",
-    description: "Telecoms business",
-    status: "green",
-    accentColor: "#3B82F6",
-    initials: "OL",
-    overview: "Olmack telecoms is performing well. Monthly review preparation is the current priority.",
-    tasks: [
-      { id: "1", title: "Monthly review preparation", done: false, priority: "medium", due: "This week" },
-      { id: "2", title: "Network upgrade sign-off", done: true, priority: "high" },
-      { id: "3", title: "Customer satisfaction survey review", done: true, priority: "medium" },
-    ],
-    documents: [
-      { name: "Monthly Review Pack — June", type: "DOC", updated: "Today" },
-      { name: "Network Upgrade Proposal", type: "PDF", updated: "1 week ago" },
-    ],
-    decisions: [
-      { date: "Jun 12", decision: "Proceed with network upgrade", rationale: "Capacity planning requires 30% increase" },
-    ],
-  },
-  boundless: {
-    name: "Boundless",
-    description: "Energy business",
-    status: "amber",
-    accentColor: "#EF4444",
-    initials: "BL",
-    overview: "Boundless energy business requires supplier contract review. Mid-term outlook positive with new contracts in pipeline.",
-    tasks: [
-      { id: "1", title: "Review supplier contract terms", done: false, priority: "high", due: "This week" },
-      { id: "2", title: "Pipeline review — new contracts", done: false, priority: "medium", due: "This week" },
-      { id: "3", title: "Q2 financial close", done: true, priority: "high" },
-    ],
-    documents: [
-      { name: "Supplier Contract 2026", type: "PDF", updated: "2 days ago" },
-      { name: "Pipeline Tracker", type: "XLS", updated: "Yesterday" },
-    ],
-    decisions: [
-      { date: "Jun 14", decision: "Renegotiate supplier terms", rationale: "Market rates have shifted 12% since last agreement" },
-    ],
-  },
-  personal: {
-    name: "Personal",
-    description: "Personal workspace & goals",
-    status: "green",
-    accentColor: "#EC4899",
-    initials: "ME",
-    overview: "Personal workspace for goals, learning, and life management.",
-    tasks: [
-      { id: "1", title: "Weekly personal review", done: false, priority: "medium", due: "Sunday" },
-      { id: "2", title: "Read AI Agent Master Guide", done: false, priority: "medium" },
-      { id: "3", title: "Gym — 3x this week", done: true, priority: "low" },
-    ],
-    documents: [
-      { name: "Personal Goals 2026", type: "DOC", updated: "1 week ago" },
-    ],
-    decisions: [],
-  },
+const STATUS_COLORS: Record<string, string> = {
+  active: "bg-emerald-100 text-emerald-700 border-emerald-200",
+  planning: "bg-blue-100 text-blue-700 border-blue-200",
+  on_hold: "bg-amber-100 text-amber-700 border-amber-200",
+  completed: "bg-gray-100 text-gray-600 border-gray-200",
+  cancelled: "bg-red-100 text-red-700 border-red-200",
 };
 
-const ragConfig: Record<RAGStatus, { label: string; color: string; dotColor: string }> = {
-  red: { label: "Needs Attention", color: "text-red-600", dotColor: "bg-red-500" },
-  amber: { label: "In Progress", color: "text-amber-600", dotColor: "bg-amber-400" },
-  green: { label: "On Track", color: "text-emerald-600", dotColor: "bg-emerald-500" },
-};
-
-const priorityConfig = {
-  high: { label: "High", className: "bg-red-50 text-red-700 border-red-200" },
-  medium: { label: "Medium", className: "bg-amber-50 text-amber-700 border-amber-200" },
-  low: { label: "Low", className: "bg-muted text-muted-foreground border-border" },
-};
-
-const docTypeColors: Record<string, string> = {
-  PDF: "bg-red-50 text-red-700",
-  DOC: "bg-blue-50 text-blue-700",
-  XLS: "bg-emerald-50 text-emerald-700",
+const PRIORITY_COLORS: Record<string, string> = {
+  critical: "bg-red-100 text-red-700 border-red-200",
+  high: "bg-orange-100 text-orange-700 border-orange-200",
+  medium: "bg-amber-100 text-amber-700 border-amber-200",
+  low: "bg-gray-100 text-gray-500 border-gray-200",
 };
 
 export default function ProjectPortal() {
   const params = useParams<{ id: string }>();
   const [, setLocation] = useLocation();
-  const projectId = params.id;
-  const project = projectData[projectId];
+  const projectId = parseInt(params.id ?? "0", 10);
 
-  const [tasks, setTasks] = useState(project?.tasks ?? []);
+  const { data: project, isLoading: projectLoading } = trpc.projects.get.useQuery(
+    { id: projectId },
+    { enabled: !!projectId }
+  );
+  const { data: tasksData = [], refetch: refetchTasks } = trpc.tasks.getAll.useQuery(
+    { projectId },
+    { enabled: !!projectId }
+  );
+  const { data: decisionsData = [], refetch: refetchDecisions } = trpc.decisions.getAll.useQuery(
+    { projectId },
+    { enabled: !!projectId }
+  );
+  const { data: docsData = [], refetch: refetchDocs } = trpc.documents.getAll.useQuery(
+    { projectId },
+    { enabled: !!projectId }
+  );
+
+  const createTask = trpc.tasks.create.useMutation({ onSuccess: () => { refetchTasks(); toast.success("Task created"); setShowNewTask(false); setNewTask({ title: "", description: "", priority: "medium", dueDate: "", assignee: "" }); } });
+  const updateTaskStatus = trpc.tasks.updateStatus.useMutation({ onSuccess: () => refetchTasks() });
+  const deleteTask = trpc.tasks.delete.useMutation({ onSuccess: () => { refetchTasks(); toast.success("Task deleted"); } });
+  const createDecision = trpc.decisions.create.useMutation({ onSuccess: () => { refetchDecisions(); toast.success("Decision logged"); setShowNewDecision(false); setNewDecision({ title: "", context: "", rationale: "", impact: "medium" }); } });
+
+  const [showNewTask, setShowNewTask] = useState(false);
+  const [showNewDecision, setShowNewDecision] = useState(false);
+  const [newTask, setNewTask] = useState({ title: "", description: "", priority: "medium" as "low" | "medium" | "high" | "critical", dueDate: "", assignee: "" });
+  const [newDecision, setNewDecision] = useState({ title: "", context: "", rationale: "", impact: "medium" as "low" | "medium" | "high" | "critical" });
+
+  if (projectLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   if (!project) {
     return (
       <div className="p-6 text-center">
-        <p className="text-muted-foreground">Project not found.</p>
-        <Button variant="outline" className="mt-4" onClick={() => setLocation("/projects")}>
+        <p className="text-muted-foreground mb-4">Project not found.</p>
+        <Button variant="outline" onClick={() => setLocation("/projects")}>
+          <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Projects
         </Button>
       </div>
     );
   }
 
-  const rag = ragConfig[project.status];
-  const completedTasks = tasks.filter((t) => t.done).length;
-  const progress = tasks.length > 0 ? (completedTasks / tasks.length) * 100 : 0;
-
-  const toggleTask = (id: string) => {
-    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t)));
-  };
+  const activeTasks = (tasksData as any[]).filter(t => t.status !== "done" && t.status !== "completed");
+  const doneTasks = (tasksData as any[]).filter(t => t.status === "done" || t.status === "completed");
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
-      {/* Back button */}
-      <button
-        onClick={() => setLocation("/projects")}
-        className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-5"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        All Projects
-      </button>
-
-      {/* Project header */}
-      <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden mb-6">
-        <div className="h-1.5 w-full" style={{ backgroundColor: project.accentColor }} />
-        <div className="p-5 flex items-start justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div
-              className="h-14 w-14 rounded-xl flex items-center justify-center text-white font-bold text-lg shrink-0"
-              style={{ backgroundColor: project.accentColor }}
-            >
-              {project.initials}
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-foreground">{project.name}</h1>
-              <p className="text-sm text-muted-foreground">{project.description}</p>
-              <div className="flex items-center gap-2 mt-2">
-                <span className={`h-2 w-2 rounded-full ${rag.dotColor} inline-block`} />
-                <span className={`text-xs font-medium ${rag.color}`}>{rag.label}</span>
-                <span className="text-xs text-muted-foreground">·</span>
-                <span className="text-xs text-muted-foreground">{completedTasks}/{tasks.length} tasks complete</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Progress ring placeholder */}
-          <div className="text-right shrink-0">
-            <div className="text-2xl font-bold text-foreground">{Math.round(progress)}%</div>
-            <div className="text-xs text-muted-foreground">complete</div>
-          </div>
+    <div className="flex flex-col h-full bg-background">
+      <div className="border-b border-border bg-white px-4 py-3 flex items-center gap-3">
+        <button onClick={() => setLocation("/projects")} className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-muted active:scale-95 transition-all">
+          <ArrowLeft className="h-4 w-4 text-muted-foreground" />
+        </button>
+        <div className="flex-1 min-w-0">
+          <h1 className="font-semibold text-foreground text-base truncate">{project.name}</h1>
+          {project.description && <p className="text-xs text-muted-foreground truncate">{project.description}</p>}
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <Badge className={`text-[10px] border ${STATUS_COLORS[project.status] ?? STATUS_COLORS.active}`}>{project.status}</Badge>
         </div>
       </div>
 
-      {/* Tabs */}
-      <Tabs defaultValue="tasks">
-        <TabsList className="mb-4">
-          <TabsTrigger value="tasks">Tasks</TabsTrigger>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="documents">Documents</TabsTrigger>
-          <TabsTrigger value="decisions">Decisions</TabsTrigger>
-          <TabsTrigger value="victoria">Ask Victoria</TabsTrigger>
+      <div className="flex items-center gap-0 border-b border-border bg-white/60 px-4 py-2">
+        <div className="flex items-center gap-1.5 flex-1 justify-center">
+          <CheckSquare className="h-3.5 w-3.5 text-muted-foreground" />
+          <span className="text-xs text-muted-foreground">{activeTasks.length} tasks</span>
+        </div>
+        <div className="w-px h-4 bg-border" />
+        <div className="flex items-center gap-1.5 flex-1 justify-center">
+          <BookOpen className="h-3.5 w-3.5 text-muted-foreground" />
+          <span className="text-xs text-muted-foreground">{(decisionsData as any[]).length} decisions</span>
+        </div>
+        <div className="w-px h-4 bg-border" />
+        <div className="flex items-center gap-1.5 flex-1 justify-center">
+          <FolderOpen className="h-3.5 w-3.5 text-muted-foreground" />
+          <span className="text-xs text-muted-foreground">{(docsData as any[]).length} docs</span>
+        </div>
+        {project.progress != null && (
+          <>
+            <div className="w-px h-4 bg-border" />
+            <div className="flex items-center gap-1.5 flex-1 justify-center">
+              <Target className="h-3.5 w-3.5 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground">{project.progress}%</span>
+            </div>
+          </>
+        )}
+      </div>
+
+      <Tabs defaultValue="tasks" className="flex-1 flex flex-col overflow-hidden">
+        <TabsList className="grid grid-cols-4 mx-4 mt-3 h-9 shrink-0">
+          <TabsTrigger value="tasks" className="text-xs">Tasks</TabsTrigger>
+          <TabsTrigger value="decisions" className="text-xs">Decisions</TabsTrigger>
+          <TabsTrigger value="docs" className="text-xs">Docs</TabsTrigger>
+          <TabsTrigger value="victoria" className="text-xs">Victoria</TabsTrigger>
         </TabsList>
 
-        {/* Tasks */}
-        <TabsContent value="tasks">
-          <div className="bg-white rounded-2xl border border-border shadow-sm p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-semibold text-foreground">Action List</h2>
-              <Button size="sm" variant="outline" className="gap-1.5 h-8 text-xs">
-                <Plus className="h-3.5 w-3.5" />
-                Add Task
-              </Button>
+        <TabsContent value="tasks" className="flex-1 overflow-y-auto px-4 py-3 space-y-2">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">{activeTasks.length} active</p>
+            <Button size="sm" onClick={() => setShowNewTask(true)} className="h-7 px-3 text-xs bg-[oklch(0.78_0.18_195)] hover:bg-[oklch(0.68_0.18_195)] text-white">
+              <Plus className="h-3 w-3 mr-1" />Add Task
+            </Button>
+          </div>
+          {activeTasks.length === 0 && (
+            <div className="text-center py-8 text-muted-foreground">
+              <CheckSquare className="h-8 w-8 mx-auto mb-2 opacity-30" />
+              <p className="text-sm">No active tasks</p>
             </div>
-            <div className="space-y-2">
-              {tasks.map((task) => (
-                <div
-                  key={task.id}
-                  className={`flex items-start gap-3 p-3 rounded-xl border transition-colors ${
-                    task.done ? "bg-muted/30 border-border/50" : "bg-white border-border hover:border-primary/30"
-                  }`}
-                >
-                  <Checkbox
-                    checked={task.done}
-                    onCheckedChange={() => toggleTask(task.id)}
-                    className="mt-0.5 shrink-0"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className={`text-sm ${task.done ? "line-through text-muted-foreground" : "text-foreground"}`}>
-                      {task.title}
-                    </p>
-                    {task.due && !task.done && (
-                      <p className="text-xs text-muted-foreground mt-0.5">Due: {task.due}</p>
-                    )}
-                  </div>
-                  <Badge
-                    variant="outline"
-                    className={`text-[10px] h-5 shrink-0 ${priorityConfig[task.priority].className}`}
-                  >
-                    {priorityConfig[task.priority].label}
-                  </Badge>
+          )}
+          {activeTasks.map((task: any) => (
+            <div key={task.id} className="flex items-start gap-3 p-3 rounded-xl border border-border bg-white">
+              <Checkbox checked={false} onCheckedChange={() => updateTaskStatus.mutate({ id: task.id, status: "done" })} className="mt-0.5 shrink-0" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground">{task.title}</p>
+                {task.description && <p className="text-xs text-muted-foreground mt-0.5">{task.description}</p>}
+                <div className="flex items-center gap-2 mt-1.5">
+                  {task.priority && <Badge className={`text-[10px] border ${PRIORITY_COLORS[task.priority] ?? PRIORITY_COLORS.medium}`}>{task.priority}</Badge>}
+                  {task.dueDate && <span className="text-[11px] text-muted-foreground">{format(new Date(task.dueDate), "d MMM")}</span>}
+                  {task.assignee && <span className="text-[11px] text-muted-foreground truncate">{task.assignee}</span>}
+                </div>
+              </div>
+              <button onClick={() => deleteTask.mutate({ id: task.id })} className="h-7 w-7 flex items-center justify-center rounded-lg hover:bg-red-50 hover:text-red-500 text-muted-foreground transition-colors shrink-0">
+                <Trash2 className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          ))}
+          {doneTasks.length > 0 && (
+            <div className="space-y-2 opacity-50 mt-4">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground px-1">Completed ({doneTasks.length})</p>
+              {doneTasks.map((task: any) => (
+                <div key={task.id} className="flex items-center gap-3 p-3 rounded-xl border border-border bg-white">
+                  <Checkbox checked={true} onCheckedChange={() => updateTaskStatus.mutate({ id: task.id, status: "todo" })} className="shrink-0" />
+                  <p className="text-sm text-muted-foreground line-through flex-1">{task.title}</p>
                 </div>
               ))}
             </div>
-          </div>
+          )}
         </TabsContent>
 
-        {/* Overview */}
-        <TabsContent value="overview">
-          <div className="bg-white rounded-2xl border border-border shadow-sm p-5">
-            <h2 className="font-semibold text-foreground mb-3">Project Overview</h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">{project.overview}</p>
+        <TabsContent value="decisions" className="flex-1 overflow-y-auto px-4 py-3 space-y-2">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">{(decisionsData as any[]).length} logged</p>
+            <Button size="sm" onClick={() => setShowNewDecision(true)} className="h-7 px-3 text-xs bg-[oklch(0.78_0.18_195)] hover:bg-[oklch(0.68_0.18_195)] text-white">
+              <Plus className="h-3 w-3 mr-1" />Log Decision
+            </Button>
           </div>
+          {(decisionsData as any[]).length === 0 && (
+            <div className="text-center py-8 text-muted-foreground">
+              <BookOpen className="h-8 w-8 mx-auto mb-2 opacity-30" />
+              <p className="text-sm">No decisions logged yet</p>
+            </div>
+          )}
+          {(decisionsData as any[]).map((d: any) => (
+            <div key={d.id} className="p-3 rounded-xl border border-border bg-white">
+              <div className="flex items-start justify-between gap-2">
+                <p className="text-sm font-medium text-foreground">{d.title}</p>
+                <Badge className={`text-[10px] border shrink-0 ${PRIORITY_COLORS[d.impact] ?? PRIORITY_COLORS.medium}`}>{d.impact}</Badge>
+              </div>
+              {d.context && <p className="text-xs text-muted-foreground mt-1">{d.context}</p>}
+              {d.rationale && <p className="text-xs text-muted-foreground mt-1 italic">"{d.rationale}"</p>}
+              <p className="text-[10px] text-muted-foreground/60 mt-1.5">{d.createdAt ? format(new Date(d.createdAt), "d MMM yyyy") : ""}</p>
+            </div>
+          ))}
         </TabsContent>
 
-        {/* Documents */}
-        <TabsContent value="documents">
-          <div className="bg-white rounded-2xl border border-border shadow-sm p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-semibold text-foreground">Documents</h2>
-              <Button size="sm" variant="outline" className="gap-1.5 h-8 text-xs">
-                <Plus className="h-3.5 w-3.5" />
-                Upload
-              </Button>
-            </div>
-            <div className="space-y-2">
-              {project.documents.map((doc, i) => (
-                <div key={i} className="flex items-center gap-3 p-3 rounded-xl border border-border hover:border-primary/30 transition-colors cursor-pointer">
-                  <FileText className="h-4 w-4 text-muted-foreground shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-foreground truncate">{doc.name}</p>
-                    <p className="text-xs text-muted-foreground">Updated {doc.updated}</p>
-                  </div>
-                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${docTypeColors[doc.type] ?? "bg-muted text-muted-foreground"}`}>
-                    {doc.type}
-                  </span>
-                </div>
-              ))}
-              {project.documents.length === 0 && (
-                <p className="text-sm text-muted-foreground text-center py-6">No documents yet.</p>
-              )}
-            </div>
+        <TabsContent value="docs" className="flex-1 overflow-y-auto px-4 py-3 space-y-2">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">{(docsData as any[]).length} documents</p>
           </div>
+          {(docsData as any[]).length === 0 && (
+            <div className="text-center py-8 text-muted-foreground">
+              <FolderOpen className="h-8 w-8 mx-auto mb-2 opacity-30" />
+              <p className="text-sm">No documents uploaded</p>
+              <p className="text-xs mt-1">Upload from the Document Library</p>
+            </div>
+          )}
+          {(docsData as any[]).map((doc: any) => (
+            <div key={doc.id} className="flex items-center gap-3 p-3 rounded-xl border border-border bg-white">
+              <div className="h-8 w-8 rounded-lg bg-muted flex items-center justify-center shrink-0">
+                <FileText className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground truncate">{doc.name}</p>
+                <p className="text-xs text-muted-foreground">{doc.fileType} · {doc.createdAt ? format(new Date(doc.createdAt), "d MMM") : ""}</p>
+              </div>
+              {doc.storageUrl && <a href={doc.storageUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-[oklch(0.78_0.18_195)] hover:underline shrink-0">View</a>}
+            </div>
+          ))}
         </TabsContent>
 
-        {/* Decisions */}
-        <TabsContent value="decisions">
-          <div className="bg-white rounded-2xl border border-border shadow-sm p-5">
-            <h2 className="font-semibold text-foreground mb-4">Decision Log</h2>
-            <div className="space-y-3">
-              {project.decisions.map((d, i) => (
-                <div key={i} className="p-4 rounded-xl border border-border">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xs text-muted-foreground">{d.date}</span>
-                  </div>
-                  <p className="text-sm font-medium text-foreground">{d.decision}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{d.rationale}</p>
-                </div>
-              ))}
-              {project.decisions.length === 0 && (
-                <p className="text-sm text-muted-foreground text-center py-6">No decisions logged yet.</p>
-              )}
+        <TabsContent value="victoria" className="flex-1 overflow-y-auto px-4 py-3">
+          <div className="flex flex-col items-center justify-center h-full gap-4 text-center py-8">
+            <div className="h-12 w-12 rounded-full bg-[oklch(0.78_0.18_195)]/10 flex items-center justify-center">
+              <Bot className="h-6 w-6 text-[oklch(0.78_0.18_195)]" />
             </div>
-          </div>
-        </TabsContent>
-
-        {/* Ask Victoria */}
-        <TabsContent value="victoria">
-          <div className="bg-white rounded-2xl border border-border shadow-sm p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <Sparkles className="h-4 w-4 text-primary" />
-              <h2 className="font-semibold text-foreground">Ask Victoria</h2>
+            <div>
+              <p className="text-sm font-medium text-foreground">Ask Victoria about {project.name}</p>
+              <p className="text-xs text-muted-foreground mt-1">Strategic advice, risk analysis, prioritisation</p>
             </div>
-            <div className="bg-muted/40 rounded-xl p-4 text-center">
-              <p className="text-sm text-muted-foreground">
-                Victoria can analyse this project, suggest next actions, draft emails, and more.
-              </p>
-              <Button className="mt-4 gap-2" size="sm">
-                <Sparkles className="h-3.5 w-3.5" />
-                Start conversation
-              </Button>
-            </div>
+            <Button onClick={() => setLocation("/victoria")} className="bg-[oklch(0.78_0.18_195)] hover:bg-[oklch(0.68_0.18_195)] text-white">Open Victoria</Button>
           </div>
         </TabsContent>
       </Tabs>
+
+      <Dialog open={showNewTask} onOpenChange={setShowNewTask}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader><DialogTitle>New Task</DialogTitle></DialogHeader>
+          <div className="space-y-3 py-2">
+            <div className="space-y-1"><Label className="text-xs">Title *</Label><Input value={newTask.title} onChange={e => setNewTask(p => ({ ...p, title: e.target.value }))} placeholder="Task title" /></div>
+            <div className="space-y-1"><Label className="text-xs">Description</Label><Input value={newTask.description} onChange={e => setNewTask(p => ({ ...p, description: e.target.value }))} placeholder="Optional" /></div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1"><Label className="text-xs">Priority</Label><Select value={newTask.priority} onValueChange={v => setNewTask(p => ({ ...p, priority: v as any }))}><SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger><SelectContent>{["low","medium","high","critical"].map(p => <SelectItem key={p} value={p} className="capitalize">{p}</SelectItem>)}</SelectContent></Select></div>
+              <div className="space-y-1"><Label className="text-xs">Due Date</Label><Input type="date" value={newTask.dueDate} onChange={e => setNewTask(p => ({ ...p, dueDate: e.target.value }))} className="text-sm h-9" /></div>
+            </div>
+            <div className="space-y-1"><Label className="text-xs">Assigned To</Label><Input value={newTask.assignee} onChange={e => setNewTask(p => ({ ...p, assignee: e.target.value }))} placeholder="Name or team" /></div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowNewTask(false)}>Cancel</Button>
+            <Button onClick={() => { if (!newTask.title.trim()) return; createTask.mutate({ ...newTask, projectId }); }} disabled={!newTask.title.trim() || createTask.isPending} className="bg-[oklch(0.78_0.18_195)] text-white hover:bg-[oklch(0.68_0.18_195)]">{createTask.isPending ? "Creating..." : "Create"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showNewDecision} onOpenChange={setShowNewDecision}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader><DialogTitle>Log Decision</DialogTitle></DialogHeader>
+          <div className="space-y-3 py-2">
+            <div className="space-y-1"><Label className="text-xs">Decision *</Label><Input value={newDecision.title} onChange={e => setNewDecision(p => ({ ...p, title: e.target.value }))} placeholder="What was decided?" /></div>
+            <div className="space-y-1"><Label className="text-xs">Context</Label><Textarea value={newDecision.context} onChange={e => setNewDecision(p => ({ ...p, context: e.target.value }))} placeholder="Background" rows={2} className="text-sm resize-none" /></div>
+            <div className="space-y-1"><Label className="text-xs">Rationale</Label><Textarea value={newDecision.rationale} onChange={e => setNewDecision(p => ({ ...p, rationale: e.target.value }))} placeholder="Why?" rows={2} className="text-sm resize-none" /></div>
+            <div className="space-y-1"><Label className="text-xs">Impact</Label><Select value={newDecision.impact} onValueChange={v => setNewDecision(p => ({ ...p, impact: v as any }))}><SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger><SelectContent>{["low","medium","high","critical"].map(i => <SelectItem key={i} value={i} className="capitalize">{i}</SelectItem>)}</SelectContent></Select></div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowNewDecision(false)}>Cancel</Button>
+            <Button onClick={() => { if (!newDecision.title.trim()) return; createDecision.mutate({ ...newDecision, projectId }); }} disabled={!newDecision.title.trim() || createDecision.isPending} className="bg-[oklch(0.78_0.18_195)] text-white hover:bg-[oklch(0.68_0.18_195)]">{createDecision.isPending ? "Saving..." : "Log Decision"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

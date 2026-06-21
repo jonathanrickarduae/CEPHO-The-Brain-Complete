@@ -240,10 +240,16 @@ export type Settings = typeof settings.$inferSelect;
 export const activityFeed = pgTable("activity_feed", {
   id: serial("id").primaryKey(),
   userId: integer("user_id"),
-  type: varchar("type", { length: 100 }).notNull(),
-  title: text("title").notNull(),
+  type: varchar("type", { length: 100 }).notNull().default("activity"),
+  title: text("title").notNull().default(""),
   description: text("description"),
   metadata: text("metadata"),
+  actorType: varchar("actor_type", { length: 64 }),
+  actorName: varchar("actor_name", { length: 128 }),
+  action: varchar("action", { length: 100 }),
+  targetType: varchar("target_type", { length: 100 }),
+  targetId: integer("target_id"),
+  targetName: varchar("target_name", { length: 256 }),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -282,6 +288,16 @@ export const agentPerformanceMetrics = pgTable("agent_performance_metrics", {
   tasksCompleted: integer("tasks_completed").default(0),
   avgResponseTime: integer("avg_response_time"),
   successRate: integer("success_rate").default(100),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const agentRatings = pgTable("agent_ratings", {
+  id: serial("id").primaryKey(),
+  agentId: varchar("agent_id", { length: 100 }).notNull(),
+  userId: integer("user_id"),
+  rating: integer("rating").default(5),
+  feedback: text("feedback"),
+  taskDescription: text("task_description"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

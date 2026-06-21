@@ -3,6 +3,7 @@ import { projectsRouter } from "./routers/projects.router";
 import { projectGenesisRouter } from "./routers/projectGenesis.router";
 import { innovationRouter } from "./routers/innovation.router";
 import { agentEngineRouter } from "./routers/agentEngine.router";
+import { aiAgentsMonitoringRouter } from "./routers/aiAgentsMonitoring.router";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
@@ -546,6 +547,7 @@ export const appRouter = router({
   genesis: projectGenesisRouter,
   innovation: innovationRouter,
   agents: agentEngineRouter,
+  aiAgentsMonitoring: aiAgentsMonitoringRouter,
 });
 
 export type AppRouter = typeof appRouter;
