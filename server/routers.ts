@@ -151,7 +151,7 @@ const financialRouter = router({
         burnMonthlyGbp: input.burnMonthlyGbp ?? 0,
         revenueMonthlyGbp: input.revenueMonthlyGbp ?? 0,
         notes: input.notes ?? "",
-      }).onDuplicateKeyUpdate({
+      }).onConflictDoUpdate({ target: financialData.companySlug,
         set: {
           cashGbp: input.cashGbp ?? 0,
           burnMonthlyGbp: input.burnMonthlyGbp ?? 0,

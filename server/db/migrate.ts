@@ -15,7 +15,7 @@ async function runMigrations() {
   }
 
   // Create migration client with single connection
-  const migrationClient = postgres(connectionString, { max: 1 });
+  const migrationClient = postgres(connectionString, { max: 1, ssl: 'require' });
   const db = drizzle(migrationClient, { schema });
 
   try {

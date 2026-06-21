@@ -1,190 +1,204 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import {
+  integer,
+  pgEnum,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  varchar,
+  boolean,
+} from "drizzle-orm/pg-core";
 
-/**
- * Core user table backing auth flow.
- * Extend this file with additional tables as your product grows.
- * Columns use camelCase to match both database fields and generated types.
- */
-export const users = mysqlTable("users", {
-  /**
-   * Surrogate primary key. Auto-incremented numeric value managed by the database.
-   * Use this for relations between tables.
-   */
-  id: int("id").autoincrement().primaryKey(),
-  /** Manus OAuth identifier (openId) returned from the OAuth callback. Unique per user. */
+// ─── Enums ────────────────────────────────────────────────────────────────────
+export const roleEnum = pgEnum("role", ["user", "admin"]);
+export const priorityEnum = pgEnum("priority", ["low", "medium", "high", "critical"]);
+export const taskStatusEnum = pgEnum("task_status", ["todo", "in_progress", "done", "blocked"]);
+export const decisionStatusEnum = pgEnum("decision_status", ["active", "superseded", "reversed"]);
+export const impactEnum = pgEnum("impact", ["low", "medium", "high", "critical"]);
+export const projectStatusEnum = pgEnum("project_status", ["red", "amber", "green"]);
+export const genesisStageEnum = pgEnum("genesis_stage", ["concept", "market", "model", "team", "risk", "execution", "complete"]);
+export const genesisRecommendationEnum = pgEnum("genesis_recommendation", ["proceed", "pivot", "pause", "stop"]);
+export const innovationCategoryEnum = pgEnum("innovation_category", ["product", "process", "market", "technology", "partnership", "other"]);
+export const innovationStatusEnum = pgEnum("innovation_status", ["idea", "exploring", "testing", "adopted", "archived"]);
+export const learningSourceEnum = pgEnum("learning_source", ["victoria", "sme", "genesis", "project", "user"]);
+export const victoriaStyleEnum = pgEnum("victoria_style", ["direct", "detailed", "brief"]);
+
+// ─── Users ────────────────────────────────────────────────────────────────────
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
   openId: varchar("openId", { length: 64 }).notNull().unique(),
   name: text("name"),
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
-  role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
+  role: roleEnum("role").default("user").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
 });
-
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
 // ─── Projects ────────────────────────────────────────────────────────────────
-export const projects = mysqlTable("projects", {
-  id: int("id").autoincrement().primaryKey(),
+export const projects = pgTable("projects", {
+  id: serial("id").primaryKey(),
   slug: varchar("slug", { length: 64 }).notNull().unique(),
   name: varchar("name", { length: 128 }).notNull(),
   description: text("description"),
-  status: mysqlEnum("status", ["red", "amber", "green"]).default("green").notNull(),
+  status: projectStatusEnum("status").default("green").notNull(),
   accentColor: varchar("accentColor", { length: 16 }).default("#00D4FF").notNull(),
   initials: varchar("initials", { length: 4 }).notNull(),
   overview: text("overview"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 export type Project = typeof projects.$inferSelect;
+export type InsertProject = typeof projects.$inferInsert;
 
 // ─── Project Genesis Assessments ─────────────────────────────────────────────
-export const genesisAssessments = mysqlTable("genesis_assessments", {
-  id: int("id").autoincrement().primaryKey(),
+export const genesisAssessments = pgTable("genesis_assessments", {
+  id: serial("id").primaryKey(),
   ideaTitle: varchar("ideaTitle", { length: 256 }).notNull(),
   ideaSummary: text("ideaSummary").notNull(),
-  stage: mysqlEnum("stage", ["concept", "market", "model", "team", "risk", "execution", "complete"]).default("concept").notNull(),
+  stage: genesisStageEnum("stage").default("concept").notNull(),
   answers: text("answers").default("{}").notNull(),
   aiAnalysis: text("aiAnalysis").default("{}").notNull(),
-  overallScore: int("overallScore"),
-  recommendation: mysqlEnum("recommendation", ["proceed", "pivot", "pause", "stop"]),
-  convertedToProjectId: int("convertedToProjectId"),
+  overallScore: integer("overallScore"),
+  recommendation: genesisRecommendationEnum("recommendation"),
+  convertedToProjectId: integer("convertedToProjectId"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 export type GenesisAssessment = typeof genesisAssessments.$inferSelect;
 
 // ─── Innovation Hub ───────────────────────────────────────────────────────────
-export const innovations = mysqlTable("innovations", {
-  id: int("id").autoincrement().primaryKey(),
+export const innovations = pgTable("innovations", {
+  id: serial("id").primaryKey(),
   title: varchar("title", { length: 256 }).notNull(),
   description: text("description"),
-  category: mysqlEnum("category", ["product", "process", "market", "technology", "partnership", "other"]).default("other").notNull(),
-  status: mysqlEnum("status", ["idea", "exploring", "testing", "adopted", "archived"]).default("idea").notNull(),
-  linkedProjectId: int("linkedProjectId"),
+  category: innovationCategoryEnum("category").default("other").notNull(),
+  status: innovationStatusEnum("status").default("idea").notNull(),
+  linkedProjectId: integer("linkedProjectId"),
   aiInsight: text("aiInsight"),
   tags: text("tags").default("[]").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 export type Innovation = typeof innovations.$inferSelect;
 
 // ─── AI SMEs ─────────────────────────────────────────────────────────────────
-export const aiSmes = mysqlTable("ai_smes", {
-  id: int("id").autoincrement().primaryKey(),
+export const aiSmes = pgTable("ai_smes", {
+  id: serial("id").primaryKey(),
   name: varchar("name", { length: 128 }).notNull(),
   title: varchar("title", { length: 256 }).notNull(),
   domain: varchar("domain", { length: 64 }).notNull(),
   subDomain: varchar("subDomain", { length: 128 }),
   expertise: text("expertise").default("[]").notNull(),
   systemPrompt: text("systemPrompt").notNull(),
-  isActive: int("isActive").default(1).notNull(),
-  consultCount: int("consultCount").default(0).notNull(),
-  avgRating: int("avgRating"),
+  isActive: boolean("isActive").default(true).notNull(),
+  consultCount: integer("consultCount").default(0).notNull(),
+  avgRating: integer("avgRating"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 export type AiSme = typeof aiSmes.$inferSelect;
 
 // ─── Consultations ────────────────────────────────────────────────────────────
-export const consultations = mysqlTable("consultations", {
-  id: int("id").autoincrement().primaryKey(),
-  smeId: int("smeId").notNull(),
+export const consultations = pgTable("consultations", {
+  id: serial("id").primaryKey(),
+  smeId: integer("smeId").notNull(),
   smeName: varchar("smeName", { length: 128 }).notNull(),
-  projectId: int("projectId"),
+  projectId: integer("projectId"),
   messages: text("messages").default("[]").notNull(),
-  rating: int("rating"),
+  rating: integer("rating"),
   feedback: text("feedback"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 export type Consultation = typeof consultations.$inferSelect;
 
 // ─── Documents ───────────────────────────────────────────────────────────────
-export const documents = mysqlTable("documents", {
-  id: int("id").autoincrement().primaryKey(),
-  projectId: int("projectId"),
+export const documents = pgTable("documents", {
+  id: serial("id").primaryKey(),
+  projectId: integer("projectId"),
   name: varchar("name", { length: 256 }).notNull(),
   fileType: varchar("fileType", { length: 16 }).notNull(),
-  fileSize: int("fileSize"),
+  fileSize: integer("fileSize"),
   storageKey: varchar("storageKey", { length: 512 }).notNull(),
   storageUrl: text("storageUrl"),
-  isConfidential: int("isConfidential").default(0).notNull(),
+  isConfidential: boolean("isConfidential").default(false).notNull(),
   uploadedBy: varchar("uploadedBy", { length: 64 }),
   tags: text("tags").default("[]").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 export type Document = typeof documents.$inferSelect;
 
 // ─── The Vault — Constant Learning ───────────────────────────────────────────
-export const learningEntries = mysqlTable("learning_entries", {
-  id: int("id").autoincrement().primaryKey(),
-  source: mysqlEnum("source", ["victoria", "sme", "genesis", "project", "user"]).notNull(),
+export const learningEntries = pgTable("learning_entries", {
+  id: serial("id").primaryKey(),
+  source: learningSourceEnum("source").notNull(),
   sourceId: varchar("sourceId", { length: 64 }),
   category: varchar("category", { length: 64 }).notNull(),
   insight: text("insight").notNull(),
   context: text("context").default("{}").notNull(),
-  confidence: int("confidence").default(50).notNull(),
-  appliedCount: int("appliedCount").default(0).notNull(),
-  isVerified: int("isVerified").default(0).notNull(),
+  confidence: integer("confidence").default(50).notNull(),
+  appliedCount: integer("appliedCount").default(0).notNull(),
+  isVerified: boolean("isVerified").default(false).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 export type LearningEntry = typeof learningEntries.$inferSelect;
 
 // ─── Victoria Conversations ───────────────────────────────────────────────────
-export const victoriaConversations = mysqlTable("victoria_conversations", {
-  id: int("id").autoincrement().primaryKey(),
-  projectId: int("projectId"),
+export const victoriaConversations = pgTable("victoria_conversations", {
+  id: serial("id").primaryKey(),
+  projectId: integer("projectId"),
   context: varchar("context", { length: 64 }).default("general").notNull(),
   messages: text("messages").default("[]").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 export type VictoriaConversation = typeof victoriaConversations.$inferSelect;
 
 // ─── Tasks ───────────────────────────────────────────────────────────────────
-export const tasks = mysqlTable("tasks", {
-  id: int("id").autoincrement().primaryKey(),
+export const tasks = pgTable("tasks", {
+  id: serial("id").primaryKey(),
   title: varchar("title", { length: 256 }).notNull(),
   description: text("description").default(""),
-  projectId: int("projectId"),
+  projectId: integer("projectId"),
   assignee: varchar("assignee", { length: 128 }).default(""),
   dueDate: timestamp("dueDate"),
-  priority: mysqlEnum("priority", ["low", "medium", "high", "critical"]).default("medium").notNull(),
-  status: mysqlEnum("status", ["todo", "in_progress", "done", "blocked"]).default("todo").notNull(),
+  priority: priorityEnum("priority").default("medium").notNull(),
+  status: taskStatusEnum("status").default("todo").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 export type Task = typeof tasks.$inferSelect;
 
 // ─── Decisions ────────────────────────────────────────────────────────────────
-export const decisions = mysqlTable("decisions", {
-  id: int("id").autoincrement().primaryKey(),
+export const decisions = pgTable("decisions", {
+  id: serial("id").primaryKey(),
   title: varchar("title", { length: 256 }).notNull(),
   context: text("context").default(""),
   rationale: text("rationale").default(""),
   outcome: text("outcome").default(""),
-  projectId: int("projectId"),
-  impact: mysqlEnum("impact", ["low", "medium", "high", "critical"]).default("medium").notNull(),
-  status: mysqlEnum("status", ["active", "superseded", "reversed"]).default("active").notNull(),
+  projectId: integer("projectId"),
+  impact: impactEnum("impact").default("medium").notNull(),
+  status: decisionStatusEnum("status").default("active").notNull(),
   madeBy: varchar("madeBy", { length: 128 }).default("Jonathan"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 export type Decision = typeof decisions.$inferSelect;
 
 // ─── Calendar Events ──────────────────────────────────────────────────────────
-export const calendarEvents = mysqlTable("calendar_events", {
-  id: int("id").autoincrement().primaryKey(),
+export const calendarEvents = pgTable("calendar_events", {
+  id: serial("id").primaryKey(),
   title: varchar("title", { length: 256 }).notNull(),
   startTime: timestamp("startTime").notNull(),
   endTime: timestamp("endTime").notNull(),
   projectSlug: varchar("projectSlug", { length: 64 }).default(""),
   location: varchar("location", { length: 256 }).default(""),
   notes: text("notes").default(""),
-  isAllDay: int("isAllDay").default(0).notNull(),
+  isAllDay: boolean("isAllDay").default(false).notNull(),
   source: varchar("source", { length: 32 }).default("manual").notNull(),
   externalId: varchar("externalId", { length: 256 }),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -192,31 +206,31 @@ export const calendarEvents = mysqlTable("calendar_events", {
 export type CalendarEvent = typeof calendarEvents.$inferSelect;
 
 // ─── Financial Data ───────────────────────────────────────────────────────────
-export const financialData = mysqlTable("financial_data", {
-  id: int("id").autoincrement().primaryKey(),
+export const financialData = pgTable("financial_data", {
+  id: serial("id").primaryKey(),
   companySlug: varchar("companySlug", { length: 64 }).notNull().unique(),
   companyName: varchar("companyName", { length: 128 }).notNull(),
-  cashGbp: int("cashGbp").default(0).notNull(),
-  burnMonthlyGbp: int("burnMonthlyGbp").default(0).notNull(),
-  revenueMonthlyGbp: int("revenueMonthlyGbp").default(0).notNull(),
+  cashGbp: integer("cashGbp").default(0).notNull(),
+  burnMonthlyGbp: integer("burnMonthlyGbp").default(0).notNull(),
+  revenueMonthlyGbp: integer("revenueMonthlyGbp").default(0).notNull(),
   notes: text("notes").default(""),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 export type FinancialData = typeof financialData.$inferSelect;
 
 // ─── Settings ─────────────────────────────────────────────────────────────────
-export const settings = mysqlTable("settings", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull().unique(),
-  victoriaStyle: mysqlEnum("victoriaStyle", ["direct", "detailed", "brief"]).default("direct").notNull(),
-  victoriaAutobrief: int("victoriaAutobrief").default(1).notNull(),
-  notificationsEmail: int("notificationsEmail").default(1).notNull(),
-  notificationsPush: int("notificationsPush").default(1).notNull(),
-  googleCalendarConnected: int("googleCalendarConnected").default(0).notNull(),
-  outlookConnected: int("outlookConnected").default(0).notNull(),
-  gmailConnected: int("gmailConnected").default(0).notNull(),
+export const settings = pgTable("settings", {
+  id: serial("id").primaryKey(),
+  userId: integer("userId").notNull().unique(),
+  victoriaStyle: victoriaStyleEnum("victoriaStyle").default("direct").notNull(),
+  victoriaAutobrief: boolean("victoriaAutobrief").default(true).notNull(),
+  notificationsEmail: boolean("notificationsEmail").default(true).notNull(),
+  notificationsPush: boolean("notificationsPush").default(true).notNull(),
+  googleCalendarConnected: boolean("googleCalendarConnected").default(false).notNull(),
+  outlookConnected: boolean("outlookConnected").default(false).notNull(),
+  gmailConnected: boolean("gmailConnected").default(false).notNull(),
   timezone: varchar("timezone", { length: 64 }).default("Europe/London").notNull(),
   currency: varchar("currency", { length: 8 }).default("GBP").notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 export type Settings = typeof settings.$inferSelect;
