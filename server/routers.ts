@@ -4,6 +4,35 @@ import { projectGenesisRouter } from "./routers/projectGenesis.router";
 import { innovationRouter } from "./routers/innovation.router";
 import { agentEngineRouter } from "./routers/agentEngine.router";
 import { aiAgentsMonitoringRouter } from "./routers/aiAgentsMonitoring.router";
+import { adminRouter } from "./routers/admin.router";
+import { aiCostTrackingRouter } from "./routers/aiCostTracking.router";
+import { analyticsRouter } from "./routers/analytics.router";
+import { autonomousExecutionRouter } from "./routers/autonomousExecution.router";
+import { brandKitRouter } from "./routers/brandKit.router";
+import { briefingPersonalisationRouter } from "./routers/briefingPersonalisation.router";
+import { cephoScoreRouter } from "./routers/cephoScore.router";
+import { chiefOfStaffRouter } from "./routers/chiefOfStaff.router";
+import { dataIngestionRouter } from "./routers/dataIngestion.router";
+import { digitalTwinRouter } from "./routers/digitalTwin.router";
+import { documentLibraryRouter } from "./routers/documentLibrary.router";
+import { emailAccountsRouter } from "./routers/emailAccounts.router";
+import { emailIntelligenceRouter } from "./routers/emailIntelligence.router";
+import { eveningReviewRouter } from "./routers/eveningReview.router";
+import { expertChatRouter } from "./routers/expertChat.router";
+import { expertConsultationRouter } from "./routers/expertConsultation.router";
+import { expertRecommendationRouter } from "./routers/expertRecommendation.router";
+import { integrationsRouter } from "./routers/integrations.router";
+import { kpiOkrRouter } from "./routers/kpiOkr.router";
+import { meetingIntelligenceRouter } from "./routers/meetingIntelligence.router";
+import { notificationsRouter } from "./routers/notifications.router";
+import { questionnaireRouter } from "./routers/questionnaire.router";
+import { subscriptionTrackerRouter } from "./routers/subscriptionTracker.router";
+import { twoFactorRouter } from "./routers/twoFactor.router";
+import { voiceNotesRouter } from "./routers/voiceNotes.router";
+import { workflowsRouter } from "./routers/workflows.router";
+import { smeTeamRouter } from "./routers/smeTeam.router";
+import { qaRouter } from "./routers/qa.router";
+import { libraryRouter } from "./routers/library.router";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
@@ -548,6 +577,35 @@ export const appRouter = router({
   innovation: innovationRouter,
   agents: agentEngineRouter,
   aiAgentsMonitoring: aiAgentsMonitoringRouter,
+  admin: adminRouter,
+  aiCostTracking: aiCostTrackingRouter,
+  analytics: analyticsRouter,
+  autonomousExecution: autonomousExecutionRouter,
+  brandKit: brandKitRouter,
+  briefingPersonalisation: briefingPersonalisationRouter,
+  cephoScore: cephoScoreRouter,
+  chiefOfStaff: chiefOfStaffRouter,
+  dataIngestion: dataIngestionRouter,
+  digitalTwin: digitalTwinRouter,
+  documentLibrary: documentLibraryRouter,
+  emailAccounts: emailAccountsRouter,
+  emailIntelligence: emailIntelligenceRouter,
+  eveningReview: eveningReviewRouter,
+  expertChat: expertChatRouter,
+  expertConsultation: expertConsultationRouter,
+  expertRecommendation: expertRecommendationRouter,
+  integrations: integrationsRouter,
+  kpiOkr: kpiOkrRouter,
+  meetingIntelligence: meetingIntelligenceRouter,
+  notifications: notificationsRouter,
+  questionnaire: questionnaireRouter,
+  subscriptionTracker: subscriptionTrackerRouter,
+  twoFactor: twoFactorRouter,
+  voiceNotes: voiceNotesRouter,
+  workflows: workflowsRouter,
+  smeTeam: smeTeamRouter,
+  qa: qaRouter,
+  library: libraryRouter,
 });
 
 export type AppRouter = typeof appRouter;

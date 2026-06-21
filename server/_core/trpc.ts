@@ -26,6 +26,8 @@ const requireUser = t.middleware(async opts => {
 });
 
 export const protectedProcedure = t.procedure.use(requireUser);
+// aiProcedure is an alias for protectedProcedure used in AI-heavy routers
+export const aiProcedure = protectedProcedure;
 
 export const adminProcedure = t.procedure.use(
   t.middleware(async opts => {
