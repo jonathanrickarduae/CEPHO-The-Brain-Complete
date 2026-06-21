@@ -1,270 +1,190 @@
-import { useState, useRef } from "react";
 import { useLocation } from "wouter";
-import { 
-  Sun, Users, Lock, Mic, MicOff, Send, 
-  Fingerprint, FolderKanban, BookOpen, Brain, LayoutDashboard,
-  ChevronRight, AlertCircle
-} from "lucide-react";
-import { PageHeader } from "@/components/PageHeader";
-import { LearningBadge } from "@/components/LearningIndicator";
-import { useVoiceInput } from "@/hooks/useVoiceInput";
-import { toast } from "sonner";
-import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { AlertCircle, ChevronRight, Sun, Inbox, Sparkles, ArrowRight, Target } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import AnimatedBrainLogo from "@/components/AnimatedBrainLogo";
 
-// Notification badge component
-function NotificationBadge({ count, urgent = false }: { count: number; urgent?: boolean }) {
-  if (count === 0) return null;
-  return (
-    <div className={`absolute top-2 right-2 min-w-[20px] h-5 px-1.5 rounded-full flex items-center justify-center text-xs font-bold text-white ${
-      urgent ? 'bg-red-500 animate-pulse' : 'bg-primary'
-    }`}>
-      {count > 99 ? '99+' : count}
-    </div>
-  );
+type RAGStatus = "red" | "amber" | "green";
+
+const projects = [
+  { id: "celadon", name: "Celadon", initials: "CE", color: "#10B981", status: "amber" as RAGStatus, issue: "Licence renewal pending", action: "Follow up on licence" },
+  { id: "celanova", name: "Celanova", initials: "CN", color: "#8B5CF6", status: "green" as RAGStatus, issue: null, action: "Review Q3 roadmap" },
+  { id: "perfect", name: "Perfect", initials: "PF", color: "#F59E0B", status: "red" as RAGStatus, issue: "3 deliverables overdue", action: "Escalate deliverables" },
+  { id: "olmack", name: "Olmack", initials: "OL", color: "#3B82F6", status: "green" as RAGStatus, issue: null, action: "Monthly review prep" },
+  { id: "boundless", name: "Boundless", initials: "BL", color: "#EF4444", status: "amber" as RAGStatus, issue: "Supplier contract review", action: "Review contract terms" },
+  { id: "personal", name: "Personal", initials: "ME", color: "#EC4899", status: "green" as RAGStatus, issue: null, action: "Weekly review" },
+];
+
+const ragDot: Record<RAGStatus, string> = {
+  red: "bg-red-500",
+  amber: "bg-amber-400",
+  green: "bg-emerald-500",
+};
+
+const ragLabel: Record<RAGStatus, string> = {
+  red: "Needs attention",
+  amber: "In progress",
+  green: "On track",
+};
+
+const ragTextColor: Record<RAGStatus, string> = {
+  red: "text-red-600",
+  amber: "text-amber-600",
+  green: "text-emerald-600",
+};
+
+function getGreeting(name?: string) {
+  const hour = new Date().getHours();
+  const timeGreeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  return `${timeGreeting}${name ? `, ${name.split(" ")[0]}` : ""}`;
+}
+
+
+function getDateString() {
+  return new Date().toLocaleDateString("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 }
 
 export default function NexusDashboard() {
   const [, setLocation] = useLocation();
-  const [inputValue, setInputValue] = useState("");
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-  
-  // Voice input
-  const { 
-    isListening, 
-    transcript, 
-    startListening, 
-    stopListening, 
-    isSupported: voiceSupported 
-  } = useVoiceInput({
-    onResult: (text) => setInputValue(prev => prev + text),
-    continuous: false,
-  });
+  const { user } = useAuth();
+  const firstName = user?.name ?? undefined;
 
-  const toggleRecording = () => {
-    if (isListening) {
-      stopListening();
-    } else {
-      if (!voiceSupported) {
-        toast.error("Voice input not supported");
-        return;
-      }
-      startListening();
-      toast.info("Listening...");
-    }
-  };
-
-  const handleSubmit = () => {
-    if (inputValue.trim()) {
-      setLocation(`/digital-twin?message=${encodeURIComponent(inputValue)}`);
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit();
-    }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputValue(e.target.value);
-    e.target.style.height = 'auto';
-    e.target.style.height = Math.min(e.target.scrollHeight, 100) + 'px';
-  };
-
-  // Navigation buttons - Ordered by workflow priority:
-  // Signal → Chief of Staff → AI SMEs → Workflow → Project Genesis → Library → Vault
-  const buttons = [
-    { 
-      id: 1, 
-      label: "THE SIGNAL", 
-      sub: "Morning Briefing", 
-      icon: Sun, 
-      gradient: "from-amber-500/20 to-orange-500/20",
-      border: "border-amber-500/50 hover:border-amber-400",
-      iconBg: "bg-amber-500/30",
-      iconColor: "text-amber-400",
-      path: "/daily-brief",
-      badge: <NotificationBadge count={3} /> // Unread briefings
-    },
-    { 
-      id: 2, 
-      label: "CHIEF OF STAFF", 
-      sub: "Level 2: Learning", 
-      icon: Fingerprint, 
-      gradient: "from-fuchsia-500/20 to-purple-500/20",
-      border: "border-fuchsia-500/50 hover:border-fuchsia-400",
-      iconBg: "bg-fuchsia-500/30",
-      iconColor: "text-fuchsia-400",
-      path: "/digital-twin",
-      badge: <LearningBadge className="absolute top-2 right-2" />
-    },
-    { 
-      id: 3, 
-      label: "AI-SMEs", 
-      sub: "287 Experts Ready", 
-      icon: Users, 
-      gradient: "from-cyan-500/20 to-blue-500/20",
-      border: "border-cyan-500/50 hover:border-cyan-400",
-      iconBg: "bg-cyan-500/30",
-      iconColor: "text-cyan-400",
-      path: "/ai-experts",
-      badge: <NotificationBadge count={5} /> // New recommendations
-    },
-    { 
-      id: 4, 
-      label: "WORKFLOW", 
-      sub: "6 Active Projects", 
-      icon: FolderKanban, 
-      gradient: "from-emerald-500/20 to-green-500/20",
-      border: "border-emerald-500/50 hover:border-emerald-400",
-      iconBg: "bg-emerald-500/30",
-      iconColor: "text-emerald-400",
-      path: "/workflow",
-      badge: <NotificationBadge count={2} urgent /> // Urgent deadlines
-    },
-    { 
-      id: 5, 
-      label: "LIBRARY", 
-      sub: "Knowledge Base", 
-      icon: BookOpen, 
-      gradient: "from-pink-500/20 to-rose-500/20",
-      border: "border-pink-500/50 hover:border-pink-400",
-      iconBg: "bg-pink-500/30",
-      iconColor: "text-pink-400",
-      path: "/library",
-      badge: <NotificationBadge count={1} /> // New documents
-    },
-    { 
-      id: 6, 
-      label: "THE VAULT", 
-      sub: "Secure Storage", 
-      icon: Lock, 
-      gradient: "from-slate-500/20 to-gray-500/20",
-      border: "border-slate-500/50 hover:border-slate-400",
-      iconBg: "bg-slate-500/30",
-      iconColor: "text-slate-400",
-      path: "/vault"
-    },
-  ];
+  const redCount = projects.filter((p) => p.status === "red").length;
+  const amberCount = projects.filter((p) => p.status === "amber").length;
+  const greenCount = projects.filter((p) => p.status === "green").length;
 
   return (
-    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background">
-      {/* Header */}
-      <PageHeader 
-        icon={LayoutDashboard} 
-        title="The Nexus"
-        iconColor="text-cyan-400"
-      >
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-xs text-foreground/70 font-mono">ONLINE</span>
-        </div>
-      </PageHeader>
+    <div className="p-6 max-w-6xl mx-auto space-y-6">
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col p-4 sm:p-6 overflow-hidden">
-        {/* Title with Animated Brain */}
-        <div className="text-center mb-4 sm:mb-6">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            {/* Animated Neuron Brain - Cyan/Neon Green, No Circle */}
-            <div className="relative w-12 h-12 sm:w-14 sm:h-14">
-              <Brain className="w-12 h-12 sm:w-14 sm:h-14 text-cyan-400" style={{ filter: 'drop-shadow(0 0 8px rgba(34, 211, 238, 0.5))' }} />
-              {/* Subtle neural glow particles */}
-              <div className="absolute -top-1 left-1/2 w-1 h-1 rounded-full bg-cyan-400/60" style={{ animation: 'pulse 3s ease-in-out infinite' }} />
-              <div className="absolute top-1/4 -right-1 w-1 h-1 rounded-full bg-emerald-400/60" style={{ animation: 'pulse 3.5s ease-in-out infinite', animationDelay: '0.5s' }} />
-              <div className="absolute bottom-1/4 -right-1 w-1 h-1 rounded-full bg-cyan-400/60" style={{ animation: 'pulse 4s ease-in-out infinite', animationDelay: '1s' }} />
-              <div className="absolute -bottom-1 left-1/2 w-1 h-1 rounded-full bg-emerald-400/60" style={{ animation: 'pulse 3.2s ease-in-out infinite', animationDelay: '1.5s' }} />
-              <div className="absolute bottom-1/4 -left-1 w-1 h-1 rounded-full bg-cyan-400/60" style={{ animation: 'pulse 3.8s ease-in-out infinite', animationDelay: '0.8s' }} />
-              <div className="absolute top-1/4 -left-1 w-1 h-1 rounded-full bg-emerald-400/60" style={{ animation: 'pulse 3.3s ease-in-out infinite', animationDelay: '1.2s' }} />
-            </div>
+      {/* Victoria greeting */}
+      <div className="bg-white rounded-2xl border border-border shadow-sm p-5">
+        <div className="flex items-start gap-4">
+          <div className="shrink-0">
+            <AnimatedBrainLogo size="sm" intensity="active" color="var(--color-primary)" />
           </div>
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-display font-bold tracking-tight text-white mt-2">
-            GETTING YOU TO 100
-          </h1>
-          <p className="text-sm sm:text-base text-foreground/70 mt-1">Your headspace, reclaimed</p>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs font-semibold text-primary uppercase tracking-wide">Victoria</span>
+              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+              <span className="text-xs text-muted-foreground">AI Chief of Staff</span>
+            </div>
+            <h2 className="text-lg font-semibold text-foreground">
+              {getGreeting(firstName)}
+            </h2>
+            <p className="text-sm text-muted-foreground mt-0.5">{getDateString()}</p>
+            <p className="text-sm text-foreground/80 mt-2">
+              {redCount > 0
+                ? `You have ${redCount} project${redCount > 1 ? "s" : ""} needing immediate attention today. ${amberCount} in progress, ${greenCount} on track.`
+                : `All projects are progressing well. ${amberCount} in progress, ${greenCount} on track.`}
+            </p>
+          </div>
+          <Button
+            size="sm"
+            className="gap-2 shrink-0"
+            onClick={() => setLocation("/morning-signal")}
+          >
+            <Sun className="h-3.5 w-3.5" />
+            Morning Signal
+          </Button>
+        </div>
+      </div>
+
+      {/* Portfolio RAG summary */}
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="font-semibold text-foreground">Portfolio Status</h3>
+          <button
+            onClick={() => setLocation("/projects")}
+            className="text-xs text-primary hover:underline flex items-center gap-1"
+          >
+            View all projects <ChevronRight className="h-3 w-3" />
+          </button>
         </div>
 
-        {/* 6-Button Grid - Project Genesis Style */}
-        <div className="flex-1 grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-w-5xl mx-auto w-full auto-rows-fr min-h-0">
-          {buttons.map((btn) => (
-            <button 
-              key={btn.id}
-              onClick={() => setLocation(btn.path)}
-              className={`group relative p-4 sm:p-5 rounded-2xl bg-gradient-to-br ${btn.gradient} border-2 ${btn.border} transition-all duration-300 cursor-pointer overflow-hidden text-left hover:scale-[1.03] hover:shadow-xl hover:shadow-primary/10 active:scale-[0.98]`}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+          {projects.map((p) => (
+            <div
+              key={p.id}
+              className="bg-white rounded-xl border border-border shadow-sm hover:shadow-md transition-all cursor-pointer group p-4"
+              onClick={() => setLocation(`/projects/${p.id}`)}
             >
-              {btn.badge}
-              
-              {/* Hover glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
-              {/* Icon Container */}
-              <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl ${btn.iconBg} flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
-                <btn.icon className={`w-6 h-6 sm:w-7 sm:h-7 ${btn.iconColor} group-hover:animate-pulse`} />
+              <div className="flex items-center gap-3 mb-3">
+                <div
+                  className="h-9 w-9 rounded-lg flex items-center justify-center text-white font-bold text-xs shrink-0"
+                  style={{ backgroundColor: p.color }}
+                >
+                  {p.initials}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors truncate">
+                    {p.name}
+                  </p>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <span className={`h-2 w-2 rounded-full ${ragDot[p.status]} inline-block shrink-0`} />
+                    <span className={`text-xs ${ragTextColor[p.status]}`}>{ragLabel[p.status]}</span>
+                  </div>
+                </div>
+                <ChevronRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-primary transition-colors shrink-0" />
               </div>
 
-              {/* Content */}
-              <div className="relative z-10">
-                <h3 className="font-bold text-sm sm:text-base md:text-lg tracking-tight mb-1 text-white group-hover:text-primary transition-colors">
-                  {btn.label}
-                </h3>
-                <p className="text-xs sm:text-sm text-foreground/60 group-hover:text-foreground/80 transition-colors">
-                  {btn.sub}
-                </p>
-              </div>
+              {p.issue && (
+                <div className="flex items-center gap-1.5 text-xs text-red-600 bg-red-50 rounded-lg px-2.5 py-1.5 mb-2">
+                  <AlertCircle className="h-3 w-3 shrink-0" />
+                  <span>{p.issue}</span>
+                </div>
+              )}
 
-              {/* Hover Arrow with slide animation */}
-              <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-                <ChevronRight className={`w-5 h-5 ${btn.iconColor}`} />
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <Target className="h-3 w-3 shrink-0" />
+                <span className="truncate">{p.action}</span>
               </div>
-            </button>
+            </div>
           ))}
         </div>
       </div>
 
-      {/* Voice Input - Fixed at bottom (Manus style) */}
-      <div className="shrink-0 border-t border-border bg-card/90 backdrop-blur-xl px-4 py-3">
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-white/5 border border-white/20 rounded-2xl overflow-hidden">
-            <textarea
-              ref={inputRef}
-              value={inputValue}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-              placeholder="Message Chief of Staff..."
-              rows={1}
-              className="w-full px-4 py-3 bg-transparent resize-none focus:outline-none text-sm text-white placeholder:text-foreground/50"
-              style={{ minHeight: '44px', maxHeight: '100px' }}
-            />
-            <div className="flex items-center justify-between px-3 py-2 border-t border-white/10">
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={toggleRecording}
-                  className={`p-2 rounded-lg transition-colors ${
-                    isListening 
-                      ? "text-red-400 bg-red-500/20 animate-pulse" 
-                      : "text-foreground/70 hover:text-white hover:bg-white/10"
-                  }`}
-                >
-                  {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                </button>
-              </div>
-              <button
-                onClick={handleSubmit}
-                disabled={!inputValue.trim()}
-                className="p-2 rounded-lg bg-gradient-to-r from-cyan-500 to-fuchsia-500 text-white hover:opacity-90 disabled:opacity-40 transition-all"
-              >
-                <Send className="w-4 h-4" />
-              </button>
-            </div>
+      {/* Quick actions */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <button
+          onClick={() => setLocation("/morning-signal")}
+          className="bg-white rounded-xl border border-border shadow-sm p-4 text-left hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <Sun className="h-4 w-4 text-amber-500" />
+            <span className="text-sm font-semibold text-foreground">Morning Signal</span>
           </div>
-          {isListening && (
-            <div className="mt-2 flex items-center gap-2 text-xs text-red-400">
-              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-              Listening... {transcript && `"${transcript}"`}
-            </div>
-          )}
-        </div>
+          <p className="text-xs text-muted-foreground">Today's briefing, priorities and actions</p>
+          <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/40 group-hover:text-primary mt-2 transition-colors" />
+        </button>
+
+        <button
+          onClick={() => setLocation("/inbox")}
+          className="bg-white rounded-xl border border-border shadow-sm p-4 text-left hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <Inbox className="h-4 w-4 text-primary" />
+            <span className="text-sm font-semibold text-foreground">Inbox</span>
+          </div>
+          <p className="text-xs text-muted-foreground">Emails and messages across all accounts</p>
+          <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/40 group-hover:text-primary mt-2 transition-colors" />
+        </button>
+
+        <button
+          onClick={() => setLocation("/digital-twin")}
+          className="bg-white rounded-xl border border-border shadow-sm p-4 text-left hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <Sparkles className="h-4 w-4 text-[oklch(0.58_0.26_340)]" />
+            <span className="text-sm font-semibold text-foreground">Ask Victoria</span>
+          </div>
+          <p className="text-xs text-muted-foreground">Strategic advice and task delegation</p>
+          <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/40 group-hover:text-primary mt-2 transition-colors" />
+        </button>
       </div>
     </div>
   );

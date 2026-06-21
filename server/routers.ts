@@ -890,6 +890,33 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
         await updateInboxItem(id, data);
         return { success: true };
       }),
+
+    syncGmail: protectedProcedure
+      .mutation(async ({ ctx }) => {
+        try {
+          const { getValidAccessToken, fetchGmailMessages } = await import('./services/googleOAuthService');
+          const accessToken = await getValidAccessToken(ctx.user.id, 'gmail');
+          if (!accessToken) return { imported: 0, message: 'Gmail not connected. Connect Gmail in Settings → Integrations.' };
+          const emails = await fetchGmailMessages(accessToken, { maxResults: 20, hoursBack: 24 });
+          let imported = 0;
+          for (const email of emails) {
+            await createInboxItem({
+              userId: ctx.user.id,
+              source: 'email',
+              type: 'email',
+              title: email.subject || '(no subject)',
+              preview: email.snippet || '',
+              sender: email.from || '',
+              priority: 'medium',
+              status: 'unread',
+            });
+            imported++;
+          }
+          return { imported, message: imported > 0 ? `Imported ${imported} emails from Gmail` : 'No new emails to import' };
+        } catch (error: any) {
+          return { imported: 0, message: `Sync failed: ${error.message}` };
+        }
+      }),
   }),
 
   // Audit Log API
@@ -3642,6 +3669,110 @@ ${transcript}
     getItems: protectedProcedure.query(async ({ ctx }) => {
       return getPendingSignalItems(ctx.user.id);
     }),
+
+    // Get real-time morning briefing: calendar + Gmail + projects
+    getBriefing: protectedProcedure.query(async ({ ctx }) => {
+      const { getValidAccessToken, fetchGmailMessages } = await import('./services/googleOAuthService');
+      const { getCalendarIntegration } = await import('./services/calendarSyncService');
+
+      // Check connection status
+      const gmailToken = await getValidAccessToken(ctx.user.id, 'gmail');
+      const googleCalToken = await getValidAccessToken(ctx.user.id, 'google_calendar');
+      const calIntegration = await getCalendarIntegration(ctx.user.id, 'google');
+
+      // Fetch Gmail messages (unread from last 24h)
+      let emails: any[] = [];
+      let gmailConnected = false;
+      if (gmailToken) {
+        gmailConnected = true;
+        try {
+          emails = await fetchGmailMessages(gmailToken, { maxResults: 15, unreadOnly: true, hoursBack: 24 });
+        } catch (err) {
+          console.error('[MorningSignal] Gmail fetch error:', err);
+        }
+      }
+
+      // Fetch today's calendar events
+      let calendarEvents: any[] = [];
+      let calendarConnected = false;
+      if (googleCalToken || calIntegration) {
+        calendarConnected = true;
+        try {
+          const { getCachedEvents } = await import('./services/calendarSyncService');
+          const now2 = new Date();
+          const startOfDay = new Date(now2); startOfDay.setHours(0, 0, 0, 0);
+          const endOfDay = new Date(now2); endOfDay.setHours(23, 59, 59, 999);
+          calendarEvents = await getCachedEvents(ctx.user.id, startOfDay, endOfDay);
+        } catch (err) {
+          console.error('[MorningSignal] Calendar fetch error:', err);
+        }
+      }
+
+      // Fetch projects with status
+      const projects = await getProjects(ctx.user.id, { limit: 10 });
+
+      // Fetch pending signal items
+      const signalItems = await getPendingSignalItems(ctx.user.id);
+
+      const now = new Date();
+      const hour = now.getHours();
+      const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+
+      return {
+        greeting,
+        date: now.toISOString(),
+        userName: ctx.user.name?.split(' ')[0] || 'there',
+        connections: {
+          gmail: gmailConnected,
+          calendar: calendarConnected,
+        },
+        emails: emails.slice(0, 10),
+        calendarEvents: calendarEvents.slice(0, 8),
+        projects: projects.map((p: any) => ({
+          id: p.id,
+          name: p.name,
+          status: p.status,
+          progress: p.progress || 0,
+          priority: p.priority,
+          blockerDescription: p.blockerDescription,
+        })),
+        signalItems: signalItems.slice(0, 10),
+        generatedAt: now.toISOString(),
+      };
+    }),
+    // Generate Victoria's AI morning briefing text
+    generateVictoriaBriefing: protectedProcedure
+      .input(z.object({
+        projects: z.array(z.object({
+          name: z.string(),
+          status: z.string(),
+          progress: z.number(),
+          priority: z.string(),
+          blockerDescription: z.string().nullable().optional(),
+        })).optional(),
+        calendarEventCount: z.number().optional(),
+        emailCount: z.number().optional(),
+        userName: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const userName = input.userName || ctx.user.name?.split(' ')[0] || 'there';
+        const projects = input.projects || [];
+        const blockedProjects = projects.filter(p => p.status === 'blocked' || (p.blockerDescription && p.blockerDescription.length > 0));
+        const criticalProjects = projects.filter(p => p.priority === 'critical');
+        const projectSummary = projects.length > 0
+          ? projects.map(p => `- ${p.name}: ${p.status} (${p.progress}% complete, ${p.priority} priority)${p.blockerDescription ? ` — BLOCKER: ${p.blockerDescription}` : ''}`).join('\n')
+          : 'No active projects.';
+        const systemPrompt = `You are Victoria, the AI Chief of Staff for ${userName}. You are precise, professional, and direct. You give concise, actionable morning briefings — no fluff, no greetings, just the key intelligence the executive needs to start their day. Maximum 4 sentences.`;
+        const userPrompt = `Generate a morning briefing for ${userName}. Today: ${projects.length} projects, ${input.calendarEventCount || 0} calendar events, ${input.emailCount || 0} unread emails. Projects:\n${projectSummary}\n${blockedProjects.length > 0 ? `Blockers: ${blockedProjects.map(p => p.name).join(', ')}. ` : ''}${criticalProjects.length > 0 ? `Critical: ${criticalProjects.map(p => p.name).join(', ')}.` : ''} Be direct and specific.`;
+        try {
+          const result = await invokeLLM({ messages: [{ role: 'system' as const, content: systemPrompt }, { role: 'user' as const, content: userPrompt }] });
+          const text = result?.choices?.[0]?.message?.content || `Good morning, ${userName}. Your briefing is ready.`;
+          return { text: typeof text === 'string' ? text : String(text) };
+        } catch (err) {
+          console.error('[Victoria] Briefing error:', err);
+          return { text: `Good morning, ${userName}. You have ${projects.length} active projects${blockedProjects.length > 0 ? `, with ${blockedProjects.length} requiring immediate attention` : ''}. ${input.calendarEventCount || 0} meetings today.` };
+        }
+      }),
   }),
 
   // Calendar Sync API

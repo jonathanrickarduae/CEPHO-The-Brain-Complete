@@ -5863,3 +5863,15 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 - [x] Add simulation mode toggle to integrations (tRPC router added)
 - [x] Wire simulation data to Project Genesis consumption points (useSimulationContext hook created)
 - [x] Test end-to-end Project Genesis flow with simulation data (26 tests passing)
+
+## Phase 1.5 Reboot — Simplification & Core Loop
+
+- [x] Collapse sidebar navigation to 5 items: The Nexus, Projects, Signal, Inbox, Settings
+- [x] Apply light theme with cyan (#00D4FF) and pink (#FF2D78) accents on white background
+- [x] Rebuild Nexus dashboard: RAG project cards, overnight completions, personal workspace card
+- [x] Build Projects Hub page: project cards with logo/name, click-through to sub-portal
+- [x] Build Project sub-portal: overview, tasks, documents, AI context, actions queue
+- [ ] Add/manage projects functionality (create new project, set name, colour, logo)
+- [x] Rebrand "Chief of Staff" → "Victoria" throughout all pages and labels
+- [ ] Remove/hide all non-core pages from navigation (routes kept, just hidden)
+- [x] Update index.css with new light theme palette

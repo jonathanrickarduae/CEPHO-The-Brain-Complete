@@ -47,7 +47,17 @@ export default function MorningSignal() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [victoriaBriefingText, setVictoriaBriefingText] = useState<string | undefined>(undefined);
+  const [isLoadingVictoriaBriefing, setIsLoadingVictoriaBriefing] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const victoriaBriefingMutation = trpc.morningSignal.generateVictoriaBriefing.useMutation({
+    onSuccess: (data) => {
+      setVictoriaBriefingText(data.text);
+      setIsLoadingVictoriaBriefing(false);
+    },
+    onError: () => setIsLoadingVictoriaBriefing(false),
+  });
 
   // Fetch evening review data
   const { data: eveningReviewData } = trpc.eveningReview.getLatest.useQuery(
@@ -57,6 +67,12 @@ export default function MorningSignal() {
 
   // Pattern data from evening review metadata
   const patternData = eveningReviewData?.metadata as any;
+
+  // Fetch real morning briefing (Gmail + Calendar + Projects)
+  const { data: briefingData, isLoading: briefingLoading } = trpc.morningSignal.getBriefing.useQuery(
+    undefined,
+    { enabled: !!user, staleTime: 5 * 60 * 1000 }
+  );
 
   // Update time every minute
   useEffect(() => {
@@ -438,7 +454,101 @@ export default function MorningSignal() {
           isPlaying={isPlaying}
           isGenerating={isGeneratingAudio}
           briefTitle="Morning Brief"
+          briefingText={victoriaBriefingText}
+          isLoadingBriefing={isLoadingVictoriaBriefing}
         />
+        {/* Generate Victoria Briefing Button */}
+        {!victoriaBriefingText && !isLoadingVictoriaBriefing && briefingData && (
+          <div className="flex justify-center">
+            <Button
+              size="sm"
+              variant="outline"
+              className="border-pink-500/30 text-pink-400 hover:bg-pink-500/10 text-xs"
+              onClick={() => {
+                setIsLoadingVictoriaBriefing(true);
+                victoriaBriefingMutation.mutate({
+                  projects: briefingData.projects,
+                  calendarEventCount: briefingData.calendarEvents.length,
+                  emailCount: briefingData.emails.length,
+                  userName: briefingData.userName,
+                });
+              }}
+            >
+              <Sparkles className="h-3.5 w-3.5 mr-1.5" />
+              Generate Victoria's Briefing
+            </Button>
+          </div>
+        )}
+
+        {/* Connection Status + Real Data */}
+        {briefingData && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Gmail Panel */}
+            <Card className="border-cyan-500/30">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${briefingData.connections.gmail ? 'bg-emerald-400' : 'bg-slate-500'}`} />
+                  Gmail {briefingData.connections.gmail ? `— ${briefingData.emails.length} unread` : '— Not connected'}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {briefingData.connections.gmail ? (
+                  briefingData.emails.length > 0 ? (
+                    briefingData.emails.slice(0, 5).map((email: any, i: number) => (
+                      <div key={i} className="p-2 rounded-lg bg-muted/50 border border-border">
+                        <p className="text-xs font-medium text-foreground truncate">{email.subject || '(no subject)'}</p>
+                        <p className="text-xs text-muted-foreground truncate">{email.from || ''}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-xs text-muted-foreground">No unread emails in the last 24 hours.</p>
+                  )
+                ) : (
+                  <div className="text-center py-3">
+                    <p className="text-xs text-muted-foreground mb-2">Connect Gmail to see your emails here.</p>
+                    <Button size="sm" variant="outline" className="text-xs" onClick={() => setLocation('/integrations')}>
+                      Connect Gmail
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Calendar Panel */}
+            <Card className="border-pink-500/30">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <Calendar className="h-4 w-4 text-pink-400" />
+                  Today's Calendar {briefingData.connections.calendar ? `— ${briefingData.calendarEvents.length} events` : '— Not connected'}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {briefingData.connections.calendar ? (
+                  briefingData.calendarEvents.length > 0 ? (
+                    briefingData.calendarEvents.slice(0, 5).map((event: any, i: number) => (
+                      <div key={i} className="p-2 rounded-lg bg-muted/50 border border-border">
+                        <p className="text-xs font-medium text-foreground truncate">{event.title}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {event.startTime ? new Date(event.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
+                          {event.location ? ` · ${event.location}` : ''}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-xs text-muted-foreground">No events scheduled for today.</p>
+                  )
+                ) : (
+                  <div className="text-center py-3">
+                    <p className="text-xs text-muted-foreground mb-2">Connect Google Calendar to see your schedule.</p>
+                    <Button size="sm" variant="outline" className="text-xs" onClick={() => setLocation('/integrations')}>
+                      Connect Calendar
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

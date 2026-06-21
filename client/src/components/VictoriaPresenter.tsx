@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Play, Pause, Volume2, Video, Loader2 } from 'lucide-react';
+import { Pause, Volume2, Video, Loader2 } from 'lucide-react';
 
 interface VictoriaPresenterProps {
   onPlayAudio: () => void;
@@ -9,6 +8,8 @@ interface VictoriaPresenterProps {
   isPlaying: boolean;
   isGenerating: boolean;
   briefTitle?: string;
+  briefingText?: string;
+  isLoadingBriefing?: boolean;
 }
 
 export function VictoriaPresenter({
@@ -16,16 +17,17 @@ export function VictoriaPresenter({
   onPlayVideo,
   isPlaying,
   isGenerating,
-  briefTitle = "Daily Brief"
+  briefTitle = "Daily Brief",
+  briefingText,
+  isLoadingBriefing,
 }: VictoriaPresenterProps) {
   return (
     <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-pink-500/30 overflow-hidden">
       <CardContent className="p-0">
         <div className="flex items-center gap-4 p-4">
           {/* Victoria Avatar */}
-          <div className="relative">
+          <div className="relative shrink-0">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center overflow-hidden border-2 border-pink-400/50">
-              {/* Placeholder avatar - can be replaced with actual image */}
               <svg viewBox="0 0 100 100" className="w-full h-full">
                 <defs>
                   <linearGradient id="victoriaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -49,14 +51,14 @@ export function VictoriaPresenter({
           </div>
 
           {/* Info */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <h3 className="text-lg font-semibold text-white">Victoria</h3>
-            <p className="text-sm text-pink-300/80">Head of Briefings</p>
-            <p className="text-xs text-foreground/60 mt-1">{briefTitle}</p>
+            <p className="text-sm text-pink-300/80">AI Chief of Staff</p>
+            <p className="text-xs text-white/40 mt-0.5">{briefTitle}</p>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 shrink-0">
             <Button
               variant="outline"
               size="sm"
@@ -81,7 +83,7 @@ export function VictoriaPresenter({
                 </>
               )}
             </Button>
-            
+
             {onPlayVideo && (
               <Button
                 variant="outline"
@@ -95,6 +97,22 @@ export function VictoriaPresenter({
             )}
           </div>
         </div>
+
+        {/* Victoria's AI Briefing Text */}
+        {(briefingText || isLoadingBriefing) && (
+          <div className="px-4 pb-4">
+            <div className="rounded-xl bg-white/5 border border-white/10 p-3">
+              {isLoadingBriefing ? (
+                <div className="flex items-center gap-2 text-xs text-pink-300/70">
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-pink-400 animate-ping" />
+                  Victoria is preparing your briefing...
+                </div>
+              ) : (
+                <p className="text-sm text-white/90 leading-relaxed">{briefingText}</p>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Voice Wave Animation when playing */}
         {isPlaying && (

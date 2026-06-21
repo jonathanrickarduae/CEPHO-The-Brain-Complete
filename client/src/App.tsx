@@ -44,6 +44,8 @@ import DocumentLibrary from "./pages/DocumentLibrary";
 import DevelopmentPathway from "./pages/DevelopmentPathway";
 import COSTraining from "./pages/COSTraining";
 import PortfolioCommandCenter from "./pages/PortfolioCommandCenter";
+import ProjectsHub from "./pages/ProjectsHub";
+import ProjectPortal from "./pages/ProjectPortal";
 import RevenueDashboard from "./pages/RevenueDashboard";
 import KpiDashboard from "./pages/KpiDashboard";
 import OperationsPage from "./pages/OperationsPage";
@@ -164,6 +166,12 @@ function Router() {
       </Route>
       <Route path="/portfolio">
         <WithLayout><PortfolioCommandCenter /></WithLayout>
+      </Route>
+      <Route path="/projects">
+        <WithLayout><ProjectsHub /></WithLayout>
+      </Route>
+      <Route path="/projects/:id">
+        <WithLayout><ProjectPortal /></WithLayout>
       </Route>
       <Route path="/revenue">
         <WithLayout><RevenueDashboard /></WithLayout>
