@@ -1,45 +1,18 @@
 import { COOKIE_NAME } from "@shared/const";
-import { projectsRouter } from "./routers/projects.router";
-import { projectCommandCenterRouter } from "./routers/projectCommandCenter.router";
-import { projectGenesisRouter } from "./routers/projectGenesis.router";
-import { innovationRouter } from "./routers/innovation.router";
-import { agentEngineRouter } from "./routers/agentEngine.router";
-import { aiAgentsMonitoringRouter } from "./routers/aiAgentsMonitoring.router";
-import { adminRouter } from "./routers/admin.router";
-import { aiCostTrackingRouter } from "./routers/aiCostTracking.router";
-import { analyticsRouter } from "./routers/analytics.router";
-import { autonomousExecutionRouter } from "./routers/autonomousExecution.router";
-import { brandKitRouter } from "./routers/brandKit.router";
-import { briefingPersonalisationRouter } from "./routers/briefingPersonalisation.router";
-import { cephoScoreRouter } from "./routers/cephoScore.router";
-import { chiefOfStaffRouter } from "./routers/chiefOfStaff.router";
-import { dataIngestionRouter } from "./routers/dataIngestion.router";
-import { digitalTwinRouter } from "./routers/digitalTwin.router";
-import { documentLibraryRouter } from "./routers/documentLibrary.router";
-import { emailAccountsRouter } from "./routers/emailAccounts.router";
-import { emailIntelligenceRouter } from "./routers/emailIntelligence.router";
-import { eveningReviewRouter } from "./routers/eveningReview.router";
-import { expertChatRouter } from "./routers/expertChat.router";
-import { expertConsultationRouter } from "./routers/expertConsultation.router";
-import { expertRecommendationRouter } from "./routers/expertRecommendation.router";
-import { integrationsRouter } from "./routers/integrations.router";
-import { kpiOkrRouter } from "./routers/kpiOkr.router";
-import { meetingIntelligenceRouter } from "./routers/meetingIntelligence.router";
-import { notificationsRouter } from "./routers/notifications.router";
-import { questionnaireRouter } from "./routers/questionnaire.router";
-import { subscriptionTrackerRouter } from "./routers/subscriptionTracker.router";
-import { twoFactorRouter } from "./routers/twoFactor.router";
-import { voiceNotesRouter } from "./routers/voiceNotes.router";
-import { workflowsRouter } from "./routers/workflows.router";
-import { smeTeamRouter } from "./routers/smeTeam.router";
-import { qaRouter } from "./routers/qa.router";
-import { libraryRouter } from "./routers/library.router";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { invokeLLM } from "./_core/llm";
 import { getDb } from "./db";
 import { z } from "zod";
+import { projectsRouter } from "./routers/projects";
+import { agentsRouter } from "./routers/agents";
+import { innovationRouter } from "./routers/innovation";
+import { genesisRouter } from "./routers/genesis";
+import { genesisPhaseAgentRouter } from "./routers/genesisPhaseAgent";
+import { agentReflectionRouter } from "./routers/agentReflection";
+import { voiceRouter } from "./routers/voice";
+import { inboxRouter } from "./routers/inbox";
 import {
   victoriaConversations,
   learningEntries,
@@ -49,6 +22,7 @@ import {
   documents,
   calendarEvents,
   settings,
+  projects,
 } from "../drizzle/schema";
 import { eq, desc, and } from "drizzle-orm";
 import { storagePut } from "./storage";
@@ -157,6 +131,58 @@ CAPABILITIES:
         .limit(20);
       return rows;
     }),
+
+  morningBrief: protectedProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) return { actions: [], summary: "" };
+
+    // Pull overdue/blocked tasks and recent decisions across all projects
+    const [allTasks, allProjects] = await Promise.all([
+      db.select().from(tasks).orderBy(desc(tasks.createdAt)).limit(50),
+      db.select().from(projects).limit(20),
+    ]);
+
+    const projectMap = Object.fromEntries(allProjects.map(p => [p.id, p]));
+
+    const blockedTasks = allTasks.filter(t => t.status === "blocked");
+    const overdueTasks = allTasks.filter(t => {
+      if (!t.dueDate || t.status === "done") return false;
+      return new Date(t.dueDate) < new Date();
+    });
+    const highPriorityTasks = allTasks.filter(t =>
+      (t.priority === "high" || t.priority === "critical") && t.status !== "done"
+    ).slice(0, 6);
+
+    // Build action items from live data
+    const actions = [
+      ...blockedTasks.slice(0, 3).map(t => ({
+        id: `blocked-${t.id}`,
+        project: projectMap[t.projectId ?? 0]?.name ?? "General",
+        projectColor: projectMap[t.projectId ?? 0]?.accentColor ?? "#6366f1",
+        action: `Unblock: ${t.title}`,
+        priority: "high" as const,
+        status: "red" as const,
+      })),
+      ...overdueTasks.slice(0, 3).map(t => ({
+        id: `overdue-${t.id}`,
+        project: projectMap[t.projectId ?? 0]?.name ?? "General",
+        projectColor: projectMap[t.projectId ?? 0]?.accentColor ?? "#f59e0b",
+        action: `Overdue: ${t.title}`,
+        priority: "high" as const,
+        status: "amber" as const,
+      })),
+      ...highPriorityTasks.slice(0, 4).map(t => ({
+        id: `priority-${t.id}`,
+        project: projectMap[t.projectId ?? 0]?.name ?? "General",
+        projectColor: projectMap[t.projectId ?? 0]?.accentColor ?? "#10b981",
+        action: t.title,
+        priority: (t.priority as "high" | "medium" | "low") ?? "medium",
+        status: "green" as const,
+      })),
+    ];
+
+    return { actions, summary: `${blockedTasks.length} blocked, ${overdueTasks.length} overdue, ${highPriorityTasks.length} high priority` };
+  }),
 });
 
 // ─── Financial Pulse Router ───────────────────────────────────────────────────
@@ -186,7 +212,7 @@ const financialRouter = router({
         burnMonthlyGbp: input.burnMonthlyGbp ?? 0,
         revenueMonthlyGbp: input.revenueMonthlyGbp ?? 0,
         notes: input.notes ?? "",
-      }).onConflictDoUpdate({ target: financialData.companySlug,
+      }).onDuplicateKeyUpdate({
         set: {
           cashGbp: input.cashGbp ?? 0,
           burnMonthlyGbp: input.burnMonthlyGbp ?? 0,
@@ -376,31 +402,7 @@ const calendarRouter = router({
     .query(async ({ input }) => {
       const db = await getDb();
       if (!db) return [];
-      // Manual + external calendar events
-      const events = await db.select().from(calendarEvents)
-        .orderBy(calendarEvents.startTime).limit(200);
-      // Tasks with due dates surface as calendar events automatically
-      const dueTasks = await db.select().from(tasks)
-        .where(and(eq(tasks.status, "todo" as any)))
-        .limit(200);
-      const taskEvents = dueTasks
-        .filter(t => t.dueDate)
-        .map(t => ({
-          id: -(t.id), // negative id = task-sourced event
-          title: `\u2713 ${t.title}`,
-          startTime: t.dueDate!,
-          endTime: new Date(t.dueDate!.getTime() + 60 * 60 * 1000),
-          projectSlug: "",
-          location: "",
-          notes: t.description ?? "",
-          isAllDay: false,
-          source: "task" as const,
-          externalId: `task-${t.id}`,
-          createdAt: t.createdAt,
-        }));
-      return [...events, ...taskEvents].sort(
-        (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
-      );
+      return db.select().from(calendarEvents).orderBy(calendarEvents.startTime).limit(200);
     }),
 
   create: protectedProcedure
@@ -462,6 +464,35 @@ const vaultRouter = router({
       patterns: Math.floor((decisionsCount.length + interactionsCount.length) / 5),
     };
   }),
+
+  add: protectedProcedure
+    .input(z.object({
+      category: z.enum(["task", "decision", "note", "document", "insight", "pattern"]).default("insight"),
+      insight: z.string().min(1).max(500),
+      context: z.string().optional(),
+      confidence: z.number().min(0).max(100).default(80),
+    }))
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("DB unavailable");
+      await db.insert(learningEntries).values({
+        source: "user",
+        category: input.category,
+        insight: input.insight,
+        context: input.context ?? "",
+        confidence: input.confidence,
+      });
+      return { success: true };
+    }),
+
+  delete: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("DB unavailable");
+      await db.delete(learningEntries).where(eq(learningEntries.id, input.id));
+      return { success: true };
+    }),
 });
 
 // ─── Settings Router ──────────────────────────────────────────────────────────
@@ -598,41 +629,13 @@ export const appRouter = router({
   settings: settingsRouter,
   sme: smeRouter,
   projects: projectsRouter,
-  projectCommandCenter: projectCommandCenterRouter,
-  genesis: projectGenesisRouter,
+  agents: agentsRouter,
   innovation: innovationRouter,
-  agents: agentEngineRouter,
-  agentEngine: agentEngineRouter,
-  aiAgentsMonitoring: aiAgentsMonitoringRouter,
-  admin: adminRouter,
-  aiCostTracking: aiCostTrackingRouter,
-  analytics: analyticsRouter,
-  autonomousExecution: autonomousExecutionRouter,
-  brandKit: brandKitRouter,
-  briefingPersonalisation: briefingPersonalisationRouter,
-  cephoScore: cephoScoreRouter,
-  chiefOfStaff: chiefOfStaffRouter,
-  dataIngestion: dataIngestionRouter,
-  digitalTwin: digitalTwinRouter,
-  documentLibrary: documentLibraryRouter,
-  emailAccounts: emailAccountsRouter,
-  emailIntelligence: emailIntelligenceRouter,
-  eveningReview: eveningReviewRouter,
-  expertChat: expertChatRouter,
-  expertConsultation: expertConsultationRouter,
-  expertRecommendation: expertRecommendationRouter,
-  integrations: integrationsRouter,
-  kpiOkr: kpiOkrRouter,
-  meetingIntelligence: meetingIntelligenceRouter,
-  notifications: notificationsRouter,
-  questionnaire: questionnaireRouter,
-  subscriptionTracker: subscriptionTrackerRouter,
-  twoFactor: twoFactorRouter,
-  voiceNotes: voiceNotesRouter,
-  workflows: workflowsRouter,
-  smeTeam: smeTeamRouter,
-  qa: qaRouter,
-  library: libraryRouter,
+  genesis: genesisRouter,
+  genesisAgent: genesisPhaseAgentRouter,
+  agentReflection: agentReflectionRouter,
+  voice: voiceRouter,
+  inbox: inboxRouter,
 });
 
 export type AppRouter = typeof appRouter;
