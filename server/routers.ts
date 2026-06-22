@@ -1,5 +1,6 @@
 import { COOKIE_NAME } from "@shared/const";
 import { projectsRouter } from "./routers/projects.router";
+import { projectCommandCenterRouter } from "./routers/projectCommandCenter.router";
 import { projectGenesisRouter } from "./routers/projectGenesis.router";
 import { innovationRouter } from "./routers/innovation.router";
 import { agentEngineRouter } from "./routers/agentEngine.router";
@@ -573,9 +574,11 @@ export const appRouter = router({
   settings: settingsRouter,
   sme: smeRouter,
   projects: projectsRouter,
+  projectCommandCenter: projectCommandCenterRouter,
   genesis: projectGenesisRouter,
   innovation: innovationRouter,
   agents: agentEngineRouter,
+  agentEngine: agentEngineRouter,
   aiAgentsMonitoring: aiAgentsMonitoringRouter,
   admin: adminRouter,
   aiCostTracking: aiCostTrackingRouter,

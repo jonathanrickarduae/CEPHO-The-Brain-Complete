@@ -47,6 +47,7 @@ import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from "./DashboardLayoutSkeleton";
 import { CephoLandingPage } from "./CephoLandingPage";
 import AnimatedBrainLogo from "./AnimatedBrainLogo";
+import { OnboardingOverlay } from "./OnboardingOverlay";
 
 type MenuItem = {
   icon: any;
@@ -136,6 +137,7 @@ export default function BrainLayout({ children }: { children: React.ReactNode })
       <BrainLayoutContent setSidebarWidth={setSidebarWidth} sidebarWidth={sidebarWidth}>
         {children}
       </BrainLayoutContent>
+      <OnboardingOverlay />
     </SidebarProvider>
   );
 }

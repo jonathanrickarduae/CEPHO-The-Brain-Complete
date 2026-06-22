@@ -890,3 +890,92 @@ export const voiceNotes = pgTable("voice_notes", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
+
+// ─── Project Milestones ───────────────────────────────────────────────────────
+export const projectMilestones = pgTable("project_milestones", {
+  id: serial("id").primaryKey(),
+  projectId: integer("projectId").notNull(),
+  title: varchar("title", { length: 256 }).notNull(),
+  description: text("description").default(""),
+  dueDate: timestamp("dueDate"),
+  completedAt: timestamp("completedAt"),
+  status: varchar("status", { length: 32 }).default("pending").notNull(),
+  owner: varchar("owner", { length: 128 }).default(""),
+  phase: varchar("phase", { length: 64 }).default(""),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+
+// ─── Project Team Members ─────────────────────────────────────────────────────
+export const projectTeamMembers = pgTable("project_team_members", {
+  id: serial("id").primaryKey(),
+  projectId: integer("projectId").notNull(),
+  name: varchar("name", { length: 128 }).notNull(),
+  role: varchar("role", { length: 128 }).notNull(),
+  email: varchar("email", { length: 320 }).default(""),
+  department: varchar("department", { length: 64 }).default(""),
+  isExternal: boolean("isExternal").default(false),
+  status: varchar("status", { length: 32 }).default("active"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+// ─── Project Finance ──────────────────────────────────────────────────────────
+export const projectFinance = pgTable("project_finance", {
+  id: serial("id").primaryKey(),
+  projectId: integer("projectId").notNull(),
+  category: varchar("category", { length: 64 }).notNull(),
+  lineItem: varchar("lineItem", { length: 256 }).notNull(),
+  budgeted: integer("budgeted").default(0),
+  actual: integer("actual").default(0),
+  forecast: integer("forecast").default(0),
+  currency: varchar("currency", { length: 8 }).default("BRL"),
+  period: varchar("period", { length: 16 }).default(""),
+  notes: text("notes").default(""),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+
+// ─── Project Risks ────────────────────────────────────────────────────────────
+export const projectRisks = pgTable("project_risks", {
+  id: serial("id").primaryKey(),
+  projectId: integer("projectId").notNull(),
+  title: varchar("title", { length: 256 }).notNull(),
+  description: text("description").default(""),
+  likelihood: varchar("likelihood", { length: 16 }).default("medium"),
+  impact: varchar("impact", { length: 16 }).default("medium"),
+  status: varchar("status", { length: 32 }).default("open"),
+  owner: varchar("owner", { length: 128 }).default(""),
+  mitigation: text("mitigation").default(""),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+
+// ─── Project Comms ────────────────────────────────────────────────────────────
+export const projectComms = pgTable("project_comms", {
+  id: serial("id").primaryKey(),
+  projectId: integer("projectId").notNull(),
+  type: varchar("type", { length: 32 }).default("note").notNull(),
+  subject: varchar("subject", { length: 256 }).notNull(),
+  body: text("body").default(""),
+  from: varchar("from", { length: 128 }).default(""),
+  to: text("to").default(""),
+  status: varchar("status", { length: 32 }).default("open"),
+  dueDate: timestamp("dueDate"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+
+// ─── Project Automation Ideas ─────────────────────────────────────────────────
+export const projectAutomation = pgTable("project_automation", {
+  id: serial("id").primaryKey(),
+  projectId: integer("projectId").notNull(),
+  title: varchar("title", { length: 256 }).notNull(),
+  description: text("description").default(""),
+  area: varchar("area", { length: 64 }).default("operations"),
+  estimatedSaving: varchar("estimated_saving", { length: 64 }).default(""),
+  complexity: varchar("complexity", { length: 16 }).default("medium"),
+  status: varchar("status", { length: 32 }).default("idea"),
+  priority: varchar("priority", { length: 16 }).default("medium"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
