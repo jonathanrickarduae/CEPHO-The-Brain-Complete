@@ -41,10 +41,14 @@ export type InsertUser = typeof users.$inferInsert;
 // ─── Projects ────────────────────────────────────────────────────────────────
 export const projects = pgTable("projects", {
   id: serial("id").primaryKey(),
+  userId: integer("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
   slug: varchar("slug", { length: 64 }).notNull().unique(),
   name: varchar("name", { length: 128 }).notNull(),
   description: text("description"),
   status: projectStatusEnum("status").default("green").notNull(),
+  priority: varchar("priority", { length: 16 }).default("medium").notNull(),
+  progress: integer("progress").default(0).notNull(),
+  dueDate: timestamp("dueDate"),
   accentColor: varchar("accentColor", { length: 16 }).default("#00D4FF").notNull(),
   initials: varchar("initials", { length: 4 }).notNull(),
   overview: text("overview"),

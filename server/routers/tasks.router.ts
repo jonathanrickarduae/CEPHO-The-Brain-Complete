@@ -11,6 +11,15 @@ import { tasks, activityFeed } from "../../drizzle/schema";
 import { createNotification } from "./notifications.router";
 import { writeAuditLog } from "./auditLog.router";
 import { cache } from "../services/cache";
+import { getTelegramBot } from "../services/telegram.service";
+
+/** Send a Telegram message to the owner (non-blocking, best-effort) */
+function notifyTelegram(message: string) {
+  const bot = getTelegramBot();
+  const chatId = process.env.TELEGRAM_OWNER_CHAT_ID;
+  if (!bot || !chatId) return;
+  bot.sendMessage(chatId, message, { parse_mode: "Markdown" }).catch(() => {});
+}
 
 /** Invalidate all task list caches for a user */
 async function invalidateTasksCache(userId: number) {
@@ -130,6 +139,9 @@ export const tasksRouter = router({
         severity: "info",
       }).catch(() => {});
 
+      // Telegram notification for new task (non-blocking)
+      notifyTelegram(`📌 *New task created:* ${task.title}${task.dueDate ? `\nDue: ${task.dueDate.toLocaleDateString("en-GB")}` : ""}`);
+
       return { id: task.id, title: task.title, status: task.status };
     }),
 
@@ -177,6 +189,8 @@ export const tasksRouter = router({
           actionUrl: "/tasks",
           actionLabel: "View Tasks",
         }).catch(() => {});
+        // Telegram notification
+        notifyTelegram(`✅ *Task completed:* ${updated.title}`);
       }
 
       return {
