@@ -10,7 +10,7 @@ import { assembleDTPersonalityInjection } from "../services/dynamicPromptAssembl
  * of the 14 Persephone Board members plus generic expert archetypes.
  */
 import { z } from "zod";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import {
@@ -19,11 +19,6 @@ import {
 } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
 
-function getOpenAIClient(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 // ─── Persephone Board Member Knowledge Corpora ────────────────────────────────
 // PB-01: Rich, deeply researched knowledge corpora for all 14 board members.
@@ -1095,7 +1090,6 @@ export const expertChatRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const openai = getOpenAIClient();
       const baseSystemPrompt = getSystemPrompt(
         input.expertId,
         input.expertName,
@@ -1149,13 +1143,13 @@ Tailor your advice, examples, and communication style to match this profile. Ref
       const systemPrompt =
         baseSystemPrompt + digitalTwinContext + dtPersonalityInjection;
 
-      const messages: OpenAI.ChatCompletionMessageParam[] = [
+      const messages: any[] = [
         { role: "system", content: systemPrompt },
         ...input.conversationHistory.slice(-12),
         { role: "user", content: input.message },
       ];
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("chat"),
         messages,
         max_tokens: 1200,

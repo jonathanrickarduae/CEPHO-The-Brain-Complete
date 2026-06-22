@@ -9,7 +9,7 @@
  */
 import { z } from "zod";
 import { eq, desc } from "drizzle-orm";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import {
@@ -18,14 +18,6 @@ import {
   digitalTwinProfile,
   activityFeed,
 } from "../../drizzle/schema";
-
-let _openaiClient: OpenAI | null = null;
-function getOpenAIClient(): OpenAI {
-  if (!_openaiClient) {
-    _openaiClient = new OpenAI({ apiKey: process.env.OPENAI_API_KEY ?? "" });
-  }
-  return _openaiClient;
-}
 
 // ─── SME Agent definitions ────────────────────────────────────────────────────
 const SME_AGENTS = [
@@ -126,7 +118,7 @@ Respond ONLY with valid JSON matching this exact structure:
   "successMetrics": ["metric 1", "metric 2"]
 }`;
 
-  const completion = await getOpenAIClient().chat.completions.create({
+  const completion = await invokeLLM({
     model: "gpt-4o-mini",
     max_tokens: 2000,
     messages: [{ role: "user", content: prompt }],
@@ -334,9 +326,6 @@ export const autonomousExecutionRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const OpenAI = (await import("openai")).default;
-      const openai = new OpenAI();
-
       const selectedAgents = input.agentIds
         ? SME_AGENTS.filter(a => (input.agentIds ?? []).includes(a.id))
         : SME_AGENTS;
@@ -345,7 +334,7 @@ export const autonomousExecutionRouter = router({
       const agentResults = await Promise.all(
         selectedAgents.map(async agent => {
           try {
-            const completion = await openai.chat.completions.create({
+            const completion = await invokeLLM({
               model: "gpt-4o-mini",
               messages: [
                 {
@@ -403,7 +392,7 @@ export const autonomousExecutionRouter = router({
       const allRisks = agentResults.flatMap(r => r.risks).slice(0, 10);
       const allQuickWins = agentResults.flatMap(r => r.quickWins).slice(0, 8);
 
-      const synthCompletion = await openai.chat.completions.create({
+      const synthCompletion = await invokeLLM({
         model: "gpt-4o-mini",
         messages: [
           {

@@ -14,7 +14,7 @@ import { logAiUsage } from "./aiCostTracking.router";
  * Tasks are executed via OpenAI and results are persisted to the DB.
  */
 
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { z } from "zod";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
@@ -29,11 +29,6 @@ import {
 import { desc, eq, and, gte, sql } from "drizzle-orm";
 
 // ─── OpenAI Client ────────────────────────────────────────────────────────────
-function getOpenAI(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 // ─── Agent Registry ───────────────────────────────────────────────────────────
 // Each agent has an id, name, category, specialization, and a system prompt
@@ -1190,9 +1185,7 @@ export const agentEngineRouter = router({
       const agent = AGENT_REGISTRY[input.agentId];
       if (!agent) throw new Error(`Agent ${input.agentId} not found`);
 
-      const openai = getOpenAI();
-
-      const messages: OpenAI.ChatCompletionMessageParam[] = [
+      const messages: any[] = [
         { role: "system", content: agent.systemPrompt },
         {
           role: "user",
@@ -1202,7 +1195,7 @@ export const agentEngineRouter = router({
         },
       ];
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("chat"),
         messages,
         max_tokens: 1000,
@@ -1254,8 +1247,6 @@ export const agentEngineRouter = router({
     .mutation(async ({ input }) => {
       const agent = AGENT_REGISTRY[input.agentId];
       if (!agent) throw new Error(`Agent ${input.agentId} not found`);
-
-      const openai = getOpenAI();
       const today = input.date ?? new Date().toISOString().split("T")[0];
 
       const prompt = `You are ${agent.name}, a CEPHO AI agent specialising in ${agent.specialization}.
@@ -1282,7 +1273,7 @@ Format as JSON with these exact keys:
   }
 }`;
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("chat"),
         messages: [
           { role: "system", content: agent.systemPrompt },
@@ -1713,8 +1704,6 @@ Format as JSON with these exact keys:
       const agent = AGENT_REGISTRY[input.agentId];
       if (!agent) throw new Error(`Agent ${input.agentId} not found`);
 
-      const openai = getOpenAI();
-
       // Get today's metrics for this agent
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -1743,7 +1732,7 @@ Format as JSON with these exact keys:
         .orderBy(desc(agentInsights.createdAt))
         .limit(3);
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: "gpt-4o-mini",
         messages: [
           { role: "system", content: agent.systemPrompt },

@@ -9,7 +9,7 @@ import { logAiUsage } from "./aiCostTracking.router";
  */
 import { z } from "zod";
 import { desc, eq, and, gte, count } from "drizzle-orm";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { aiProcedure, protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import {
@@ -22,11 +22,6 @@ import {
   conversations,
 } from "../../drizzle/schema";
 
-function getOpenAIClient(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 async function buildUserContext(userId: number): Promise<string> {
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
@@ -253,7 +248,6 @@ export const chiefOfStaffRouter = router({
     ]);
 
     const userContext = await buildUserContext(userId);
-    const openai = getOpenAIClient();
 
     const prompt = `You are Victoria, AI Chief of Staff for CEPHO. Generate a concise morning briefing for ${ctx.user.name}.
 
@@ -275,7 +269,7 @@ Provide:
 
 Keep it concise and actionable. Use a professional, direct tone.`;
 
-    const completion = await openai.chat.completions.create({
+    const completion = await invokeLLM({
       model: getModelForTask("score"),
       messages: [{ role: "user", content: prompt }],
       max_tokens: 600,
@@ -316,7 +310,6 @@ Keep it concise and actionable. Use a professional, direct tone.`;
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const openai = getOpenAIClient();
       const prompt = `You are a Chief of Staff AI performing a quality verification on a completed task.
 
 Task: "${input.taskTitle}"
@@ -329,7 +322,7 @@ Score this task on a scale of 1-10 for quality and completeness. Respond with JS
   "reasoning": "<one sentence explanation>",
   "approved": <true if score >= 7>
 }`;
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("score"),
         messages: [{ role: "user", content: prompt }],
         max_tokens: 150,
@@ -431,14 +424,12 @@ Score this task on a scale of 1-10 for quality and completeness. Respond with JS
         dueDate: null,
       })),
     ];
-
-    const openai = getOpenAIClient();
     const itemSummary = allItems
       .slice(0, 12)
       .map((item, i) => `${i + 1}. [${item.priority.toUpperCase()}] ${item.title} (id: ${item.id})`)
       .join("\n");
 
-    const completion = await openai.chat.completions.create({
+    const completion = await invokeLLM({
       model: getModelForTask("score"),
       messages: [
         {
