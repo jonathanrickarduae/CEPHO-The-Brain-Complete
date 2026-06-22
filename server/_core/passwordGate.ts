@@ -4,7 +4,7 @@
  * The password is stored in the SITE_PASSWORD env var.
  * Once entered correctly, a cookie is set for 30 days.
  */
-import { Request, Response, NextFunction } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import crypto from "crypto";
 
 const GATE_COOKIE = "cepho_gate";
