@@ -194,6 +194,13 @@ async function handleUpdate(update: any) {
 
   const chatId = message.chat.id;
   const text = message.text || message.caption || "";
+  console.log(`[Telegram] INCOMING chatId=${chatId} user=${message.from?.first_name || ''} @${message.from?.username || ''} text="${text.slice(0, 60)}"`);
+
+  // Handle /chatid command - returns the user's chat ID
+  if (text.startsWith("/chatid")) {
+    await sendMessage(chatId, `Your Telegram Chat ID is:\n\`${chatId}\`\n\nShare this with the system to enable direct notifications.`);
+    return;
+  }
 
   // Handle /start and /help commands
   if (text.startsWith("/start") || text.startsWith("/help")) {
