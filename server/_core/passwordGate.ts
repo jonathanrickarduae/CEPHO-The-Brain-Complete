@@ -221,6 +221,7 @@ export function registerPasswordGate(app: ReturnType<typeof import("express").de
     const path = req.path;
     if (
       path === "/__gate" ||
+      path === "/health" ||
       path.startsWith("/api/") ||
       path.startsWith("/manus-storage/") ||
       path.startsWith("/@") ||
