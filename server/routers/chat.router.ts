@@ -4,13 +4,13 @@ import { logAiUsage } from "./aiCostTracking.router";
  * Chat Router — Real Implementation
  *
  * Wires the chat.send, chat.history, and chat.clear procedures
- * to OpenAI GPT-4o and the conversations table in the database.
+ * to the invokeLLM helper and the conversations table in the database.
  *
  * The system prompt positions the AI as Victoria, CEPHO's Chief of Staff AI.
  */
 import { z } from "zod";
 import { desc, eq, and } from "drizzle-orm";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { aiProcedure, protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { conversations } from "../../drizzle/schema";
@@ -32,14 +32,6 @@ You have deep knowledge of:
 - Financial analysis and business planning
 
 Always respond in a professional, executive-appropriate tone. Use structured responses when helpful (bullet points, numbered lists) but avoid unnecessary padding.`;
-
-function getOpenAIClient(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    throw new Error("OPENAI_API_KEY is not configured");
-  }
-  return new OpenAI({ apiKey });
-}
 
 export const chatRouter = router({
   /**
@@ -72,8 +64,8 @@ export const chatRouter = router({
         .orderBy(desc(conversations.createdAt))
         .limit(20);
 
-      // Build messages array for OpenAI (reverse to chronological order)
-      const messages: OpenAI.ChatCompletionMessageParam[] = [
+      // Build messages array (reverse to chronological order)
+      const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
         { role: "system", content: VICTORIA_SYSTEM_PROMPT },
         ...history
           .reverse()
@@ -85,22 +77,22 @@ export const chatRouter = router({
         { role: "user", content: input.message },
       ];
 
-      // Call OpenAI
-      const openai = getOpenAIClient();
-      const completion = await openai.chat.completions.create({
+      // Call LLM via platform helper
+      const completion = await invokeLLM({
         model: getModelForTask("chat"),
         messages,
         max_tokens: 1500,
         temperature: 0.7,
       });
 
-      // p5-9: Track AI token usage and cost
+      // Track AI token usage and cost
       void logAiUsage(
         ctx.user.id,
         "chat.send",
         completion.model,
         completion.usage ?? null
       );
+
       const assistantMessage =
         completion.choices[0]?.message?.content ??
         "I apologise, I was unable to generate a response. Please try again.";
@@ -144,7 +136,6 @@ export const chatRouter = router({
         .where(
           and(
             eq(conversations.userId, ctx.user.id)
-            // Only return user/assistant messages, not system
           )
         )
         .orderBy(desc(conversations.createdAt))
@@ -163,7 +154,6 @@ export const chatRouter = router({
    */
   clear: protectedProcedure.mutation(async ({ ctx }) => {
     await db.delete(conversations).where(eq(conversations.userId, ctx.user.id));
-
     return { success: true, message: "Conversation history cleared." };
   }),
 });

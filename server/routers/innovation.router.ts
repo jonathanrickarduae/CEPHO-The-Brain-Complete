@@ -8,7 +8,7 @@ import { logAiUsage } from "./aiCostTracking.router";
  */
 import { z } from "zod";
 import { desc, eq, and } from "drizzle-orm";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { createNotification } from "./notifications.router";
 import { db } from "../db";
@@ -22,11 +22,6 @@ import {
   victoriaActions,
 } from "../../drizzle/schema";
 
-function getOpenAIClient(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 export const innovationRouter = router({
   /**
@@ -176,9 +171,7 @@ export const innovationRouter = router({
    * Generate daily ideas using OpenAI based on the user's context.
    */
   generateDailyIdeas: protectedProcedure.mutation(async ({ ctx }) => {
-    const openai = getOpenAIClient();
-
-    const prompt = `You are an innovation advisor for CEPHO, an AI-powered executive platform. Generate 5 innovative business ideas for today that are:
+        const prompt = `You are an innovation advisor for CEPHO, an AI-powered executive platform. Generate 5 innovative business ideas for today that are:
 - Relevant to AI, technology, and business transformation
 - Actionable and specific
 - Varied across different business domains
@@ -191,7 +184,7 @@ For each idea provide:
 
 Format as JSON array: [{"title": "...", "description": "...", "category": "...", "priority": "..."}]`;
 
-    const completion = await openai.chat.completions.create({
+    const completion = await invokeLLM({
       model: getModelForTask("score"),
       messages: [{ role: "user", content: prompt }],
       max_tokens: 1000,
@@ -286,8 +279,7 @@ Format as JSON array: [{"title": "...", "description": "...", "category": "...",
       if (rows.length === 0) throw new Error("Idea not found");
       const idea = rows[0];
 
-      const openai = getOpenAIClient();
-      const assessmentFocus =
+            const assessmentFocus =
         input.assessmentType?.replace(/_/g, " ") ?? "general viability";
       const prompt = `Perform a ${assessmentFocus} assessment for this business idea:
 
@@ -310,7 +302,7 @@ Provide a JSON assessment focused on ${assessmentFocus} with:
   "confidenceScore": 0-100
 }`;
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("score"),
         messages: [{ role: "user", content: prompt }],
         max_tokens: 600,
@@ -454,8 +446,7 @@ Provide a JSON assessment focused on ${assessmentFocus} with:
       if (rows.length === 0) throw new Error("Idea not found");
       const idea = rows[0];
 
-      const openai = getOpenAIClient();
-      const prompt = `Write a concise strategic brief for this business idea:
+            const prompt = `Write a concise strategic brief for this business idea:
 
 Title: ${idea.title}
 Description: ${idea.description ?? "No description"}
@@ -470,7 +461,7 @@ Include:
 
 Keep it professional and actionable. Max 400 words.`;
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("score"),
         messages: [{ role: "user", content: prompt }],
         max_tokens: 600,
@@ -521,8 +512,7 @@ Keep it professional and actionable. Max 400 words.`;
       if (rows.length === 0) throw new Error("Idea not found");
       const idea = rows[0];
 
-      const openai = getOpenAIClient();
-      const prompt = `Generate 3 investment scenarios for this business idea:
+            const prompt = `Generate 3 investment scenarios for this business idea:
 
 Title: ${idea.title}
 Description: ${idea.description ?? "No description"}
@@ -540,7 +530,7 @@ Provide JSON with 3 scenarios (conservative, moderate, optimistic):
   ]
 }`;
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("score"),
         messages: [{ role: "user", content: prompt }],
         max_tokens: 700,
@@ -574,9 +564,7 @@ Provide JSON with 3 scenarios (conservative, moderate, optimistic):
   analyzeArticle: protectedProcedure
     .input(z.object({ url: z.string().url() }))
     .mutation(async ({ input, ctx }) => {
-      const openai = getOpenAIClient();
-
-      const prompt = `Analyse this article URL and extract a business opportunity:
+            const prompt = `Analyse this article URL and extract a business opportunity:
 URL: ${input.url}
 
 Since I cannot access the URL directly, provide a framework for analysis:
@@ -586,7 +574,7 @@ Since I cannot access the URL directly, provide a framework for analysis:
 
 Return as JSON: { "title": "...", "description": "...", "category": "...", "priority": "medium" }`;
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("score"),
         messages: [{ role: "user", content: prompt }],
         max_tokens: 400,
@@ -941,8 +929,7 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
    * without waiting for the nightly cron job.
    */
   backfillAgentIdeas: protectedProcedure.mutation(async ({ ctx }) => {
-    const openai = getOpenAIClient();
-    const agentSamples = [
+        const agentSamples = [
       {
         id: "market_intelligence",
         name: "Market Intelligence Agent",
@@ -989,7 +976,7 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
     let inserted = 0;
     for (const agent of agentSamples) {
       try {
-        const completion = await openai.chat.completions.create({
+        const completion = await invokeLLM({
           model: getModelForTask("score"),
           messages: [
             {

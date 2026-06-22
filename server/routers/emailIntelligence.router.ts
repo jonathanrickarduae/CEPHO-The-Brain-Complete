@@ -13,15 +13,7 @@ import { desc, eq, and, lt } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { emailMessages } from "../../drizzle/schema";
-import OpenAI from "openai";
-
-let _openai: OpenAI | null = null;
-function getOpenAI(): OpenAI {
-  if (!_openai) {
-    _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  }
-  return _openai;
-}
+import { invokeLLM } from "../_core/llm";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -35,7 +27,7 @@ async function triageEmail(
   action: "reply" | "delegate" | "archive" | "follow_up" | "none";
   actionReason: string;
 }> {
-  const completion = await getOpenAI().chat.completions.create({
+  const completion = await invokeLLM({
     model: "gpt-4o-mini",
     messages: [
       {
@@ -110,7 +102,7 @@ async function draftEmailReply(
         ? "concise"
         : "very brief";
 
-  const completion = await getOpenAI().chat.completions.create({
+  const completion = await invokeLLM({
     model: "gpt-4o-mini",
     messages: [
       {

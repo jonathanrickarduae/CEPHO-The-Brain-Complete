@@ -10,16 +10,11 @@
  * like a genuine personal executive assistant.
  */
 import { z } from "zod";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import Anthropic from "@anthropic-ai/sdk";
 import { protectedProcedure, router } from "../_core/trpc";
 import { synthesizeSpeech, VICTORIA_VOICE_ID } from "../_core/text-to-speech";
 
-function getOpenAI(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 function getAnthropic(): Anthropic {
   const apiKey = process.env.ANTHROPIC_API_KEY;
@@ -100,9 +95,7 @@ export const voiceCommandRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      const openai = getOpenAI();
-
-      // Convert base64 to buffer
+            // Convert base64 to buffer
       const audioBuffer = Buffer.from(input.audioBase64, "base64");
       const audioBlob = new Blob([audioBuffer], { type: input.mimeType });
       const audioFile = new File([audioBlob], "recording.webm", {

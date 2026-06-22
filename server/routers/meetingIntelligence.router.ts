@@ -13,15 +13,7 @@ import { desc, eq, and } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { meetingNotes } from "../../drizzle/schema";
-import OpenAI from "openai";
-
-let _openai: OpenAI | null = null;
-function getOpenAI(): OpenAI {
-  if (!_openai) {
-    _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  }
-  return _openai;
-}
+import { invokeLLM } from "../_core/llm";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -31,7 +23,7 @@ async function generatePreMeetingBrief(
   agenda: string,
   context: string
 ): Promise<string> {
-  const completion = await getOpenAI().chat.completions.create({
+  const completion = await invokeLLM({
     model: "gpt-4o-mini",
     messages: [
       {
@@ -66,7 +58,7 @@ async function extractMeetingNotes(
   actionItems: { task: string; owner: string; dueDate?: string }[];
   nextSteps: string[];
 }> {
-  const completion = await getOpenAI().chat.completions.create({
+  const completion = await invokeLLM({
     model: "gpt-4o-mini",
     messages: [
       {

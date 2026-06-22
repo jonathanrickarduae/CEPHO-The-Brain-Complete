@@ -12,7 +12,7 @@
  * into the system prompt, grounding the AI's responses in real-world data.
  */
 import { z } from "zod";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { router, protectedProcedure } from "../_core/trpc";
 import { db } from "../db";
 import { boardKnowledgeCorpus } from "../../drizzle/schema";
@@ -20,11 +20,6 @@ import { eq, and, desc } from "drizzle-orm";
 import { getModelForTask, getEmbeddingModel } from "../utils/modelRouter";
 import { logAiUsage } from "./aiCostTracking.router";
 
-function getOpenAIClient(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 /**
  * Compute cosine similarity between two numeric vectors.
@@ -47,8 +42,7 @@ function cosineSimilarity(a: number[], b: number[]): number {
  * Generate an embedding for a text string using OpenAI.
  */
 async function embed(text: string): Promise<number[]> {
-  const openai = getOpenAIClient();
-  const response = await openai.embeddings.create({
+    const response = await openai.embeddings.create({
     model: getEmbeddingModel(),
     input: text.slice(0, 8000),
   });
@@ -337,8 +331,7 @@ export const persephoneRagRouter = router({
    * Idempotent — will not duplicate entries.
    */
   seedCorpus: protectedProcedure.mutation(async ({ ctx }) => {
-    const openai = getOpenAIClient();
-    let seeded = 0;
+        let seeded = 0;
     let skipped = 0;
 
     for (const chunk of SEED_CORPUS) {
@@ -410,8 +403,7 @@ export const persephoneRagRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const openai = getOpenAIClient();
-      const embeddingResponse = await openai.embeddings.create({
+            const embeddingResponse = await openai.embeddings.create({
         model: getEmbeddingModel(),
         input: `${input.memberName}: ${input.content}`,
       });
@@ -623,9 +615,7 @@ export const persephoneRagRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const openai = getOpenAIClient();
-
-      // Step 1: Retrieve relevant knowledge chunks (PB-02)
+            // Step 1: Retrieve relevant knowledge chunks (PB-02)
       let ragContext = "";
       try {
         const queryEmbedding = await embed(input.message);
@@ -671,13 +661,13 @@ ${ragContext}
 
 Remember: You are not playing a character. You are drawing on your genuine knowledge, experience, and worldview to provide the most valuable possible guidance.`;
 
-      const messages: OpenAI.ChatCompletionMessageParam[] = [
+      const messages.ChatCompletionMessageParam[] = [
         { role: "system", content: systemPrompt },
         ...input.conversationHistory.slice(-10),
         { role: "user", content: input.message },
       ];
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("chat"),
         messages,
         max_tokens: 1200,

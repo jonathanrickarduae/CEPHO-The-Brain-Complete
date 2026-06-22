@@ -13,7 +13,7 @@
  */
 
 import { z } from "zod";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import {
@@ -28,11 +28,6 @@ import { logger } from "../utils/logger";
 const log = logger.module("nlCommand");
 import { eventBus } from "../services/eventBus";
 
-function getOpenAI(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 // ─── Intent Classification ────────────────────────────────────────────────────
 
@@ -79,8 +74,7 @@ interface ParsedCommand {
 }
 
 async function parseCommand(command: string): Promise<ParsedCommand> {
-  const openai = getOpenAI();
-  const response = await openai.chat.completions.create({
+    const response = await invokeLLM({
     model: "gpt-4.1-mini",
     messages: [
       { role: "system", content: INTENT_SYSTEM_PROMPT },

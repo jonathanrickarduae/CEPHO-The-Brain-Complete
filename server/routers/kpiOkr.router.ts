@@ -7,7 +7,7 @@
  */
 
 import { z } from "zod";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { kpis, okrs, okrKeyResults, tasks } from "../../drizzle/schema";
@@ -16,11 +16,6 @@ import { logger } from "../utils/logger";
 const log = logger.module("kpiOkr");
 import { eventBus } from "../services/eventBus";
 
-function getOpenAI(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 // ─── KPI Router ───────────────────────────────────────────────────────────────
 
@@ -129,9 +124,7 @@ const kpiRouter = router({
    * Ask the AI to suggest KPIs based on the user's current tasks and projects.
    */
   suggestFromContext: protectedProcedure.mutation(async ({ ctx }) => {
-    const openai = getOpenAI();
-
-    // Get recent tasks for context
+        // Get recent tasks for context
     const recentTasks = await db
       .select({
         title: tasks.title,
@@ -147,7 +140,7 @@ const kpiRouter = router({
       .map(t => `- ${t.title} (${t.status}, ${t.priority})`)
       .join("\n");
 
-    const response = await openai.chat.completions.create({
+    const response = await invokeLLM({
       model: "gpt-4.1-mini",
       messages: [
         {
@@ -356,9 +349,7 @@ const okrRouter = router({
   suggestForQuarter: protectedProcedure
     .input(z.object({ quarter: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
-      const openai = getOpenAI();
-
-      const recentTasks = await db
+            const recentTasks = await db
         .select({ title: tasks.title, status: tasks.status })
         .from(tasks)
         .where(eq(tasks.userId, ctx.user.id))
@@ -369,7 +360,7 @@ const okrRouter = router({
         .map(t => `- ${t.title} (${t.status})`)
         .join("\n");
 
-      const response = await openai.chat.completions.create({
+      const response = await invokeLLM({
         model: "gpt-4.1-mini",
         messages: [
           {

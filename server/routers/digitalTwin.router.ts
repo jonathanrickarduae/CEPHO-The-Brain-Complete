@@ -514,12 +514,9 @@ Respond in JSON: { "insights": "narrative here", "recommendations": ["rec1", "re
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const OpenAI = (await import("openai")).default;
-      const openai = new OpenAI();
+                  const cogSnapshot = await getCognitiveModelSnapshot(ctx.user.id);
 
-      const cogSnapshot = await getCognitiveModelSnapshot(ctx.user.id);
-
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: "gpt-4o-mini",
         messages: [
           {

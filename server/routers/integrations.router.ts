@@ -1694,10 +1694,8 @@ export const aiRouter = router({
       z.object({ prompt: z.string().min(1), context: z.string().optional() })
     )
     .mutation(async ({ input }) => {
-      const { default: OpenAI } = await import("openai");
-      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-      const completion = await openai.chat.completions.create({
+      const { default } = await import("openai");
+            const completion = await invokeLLM({
         model: getModelForTask("summarise"),
         messages: [
           ...(input.context

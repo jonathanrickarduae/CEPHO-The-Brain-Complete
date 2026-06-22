@@ -7,7 +7,7 @@ import { getModelForTask } from "../utils/modelRouter";
  */
 import { z } from "zod";
 import { desc, eq, and } from "drizzle-orm";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import {
@@ -19,11 +19,6 @@ import { generateBriefPDF } from "../services/pdf-generation.service";
 import { readFile, unlink } from "fs/promises";
 import { existsSync } from "fs";
 
-function getOpenAIClient(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 // ─── Evening Review Router ────────────────────────────────────────────────────
 export const eveningReviewRouter = router({
@@ -229,9 +224,7 @@ export const eveningReviewRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      const openai = getOpenAIClient();
-
-      const prompt = `Generate a brief, encouraging evening review summary for an executive:
+            const prompt = `Generate a brief, encouraging evening review summary for an executive:
 
 What went well: ${input.wentWell ?? "Not specified"}
 What didn't go well: ${input.didntGoWell ?? "Not specified"}
@@ -244,7 +237,7 @@ Provide:
 
 Keep it concise, warm, and professional. Max 100 words.`;
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("analyse"),
         messages: [{ role: "user", content: prompt }],
         max_tokens: 200,

@@ -6,17 +6,12 @@ import { getModelForTask } from "../utils/modelRouter";
  */
 import { z } from "zod";
 import { desc, eq, and } from "drizzle-orm";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { generatedDocuments, documentEmailHistory } from "../../drizzle/schema";
 import { emailService } from "../services/email.service";
 
-function getOpenAIClient(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 function generateDocId(): string {
   return `DOC-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
@@ -84,9 +79,7 @@ export const documentLibraryRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const openai = getOpenAIClient();
-
-      const systemPrompt = `You are a professional document writer for CEPHO, an AI-powered executive intelligence platform. 
+            const systemPrompt = `You are a professional document writer for CEPHO, an AI-powered executive intelligence platform. 
 Generate a well-structured, professional document in Markdown format.
 The document should be comprehensive, well-organized, and suitable for executive review.`;
 
@@ -100,7 +93,7 @@ Format as a professional Markdown document with:
 - Key findings or recommendations
 - Next steps (if applicable)`;
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("generate"),
         messages: [
           { role: "system", content: systemPrompt },

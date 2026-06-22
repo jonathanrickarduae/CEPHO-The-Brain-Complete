@@ -11,16 +11,11 @@ import { getModelForTask } from "../utils/modelRouter";
  */
 import { z } from "zod";
 import { eq, and } from "drizzle-orm";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { projectGenesis, projectGenesisPhases } from "../../drizzle/schema";
 
-function getOpenAIClient(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 export const workflowsRouter = router({
   /**
@@ -283,16 +278,14 @@ export const workflowsRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      const openai = getOpenAIClient();
-
-      const prompt = `Generate a professional ${input.deliverableType} deliverable titled "${input.deliverableName}" for a startup project.
+            const prompt = `Generate a professional ${input.deliverableType} deliverable titled "${input.deliverableName}" for a startup project.
 ${input.context ? `Context: ${JSON.stringify(input.context, null, 2)}` : ""}
 
 Provide a comprehensive, well-structured document in Markdown format suitable for executive review.
 Include relevant sections, analysis, and actionable recommendations.
 Keep it concise but thorough — maximum 800 words.`;
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("analyse"),
         messages: [{ role: "user", content: prompt }],
         max_tokens: 1200,
@@ -377,8 +370,7 @@ Keep it concise but thorough — maximum 800 words.`;
   getStepGuidance: protectedProcedure
     .input(z.object({ workflowId: z.string(), stepNumber: z.number() }))
     .query(async ({ input }) => {
-      const openai = getOpenAIClient();
-      const prompt = `You are an expert workflow advisor for CEPHO. Provide concise guidance for step ${input.stepNumber} of workflow ${input.workflowId}.
+            const prompt = `You are an expert workflow advisor for CEPHO. Provide concise guidance for step ${input.stepNumber} of workflow ${input.workflowId}.
 
 Provide:
 1. A brief guidance paragraph (2-3 sentences)
@@ -387,7 +379,7 @@ Provide:
 
 Respond in JSON: { "guidance": string, "recommendations": string[], "deliverables": string[] }`;
       try {
-        const completion = await openai.chat.completions.create({
+        const completion = await invokeLLM({
           model: getModelForTask("analyse"),
           messages: [{ role: "user", content: prompt }],
           max_tokens: 400,

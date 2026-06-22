@@ -7,16 +7,11 @@ import { getModelForTask } from "../utils/modelRouter";
  */
 import { z } from "zod";
 import { desc, eq, and } from "drizzle-orm";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { trainingConversations, memoryBank } from "../../drizzle/schema";
 
-function getOpenAIClient(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 // Expert personas and their system prompts
 const EXPERT_PERSONAS: Record<
@@ -97,15 +92,13 @@ export const expertEvolutionRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       const persona = getExpertPersona(input.expertId);
-      const openai = getOpenAIClient();
-
-      const messages: OpenAI.ChatCompletionMessageParam[] = [
+            const messages.ChatCompletionMessageParam[] = [
         { role: "system", content: persona.systemPrompt },
         ...input.conversationHistory.slice(-10),
         { role: "user", content: input.message },
       ];
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("analyse"),
         messages,
         max_tokens: 1200,

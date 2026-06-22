@@ -376,7 +376,31 @@ const calendarRouter = router({
     .query(async ({ input }) => {
       const db = await getDb();
       if (!db) return [];
-      return db.select().from(calendarEvents).orderBy(calendarEvents.startTime).limit(200);
+      // Manual + external calendar events
+      const events = await db.select().from(calendarEvents)
+        .orderBy(calendarEvents.startTime).limit(200);
+      // Tasks with due dates surface as calendar events automatically
+      const dueTasks = await db.select().from(tasks)
+        .where(and(eq(tasks.status, "todo" as any)))
+        .limit(200);
+      const taskEvents = dueTasks
+        .filter(t => t.dueDate)
+        .map(t => ({
+          id: -(t.id), // negative id = task-sourced event
+          title: `\u2713 ${t.title}`,
+          startTime: t.dueDate!,
+          endTime: new Date(t.dueDate!.getTime() + 60 * 60 * 1000),
+          projectSlug: "",
+          location: "",
+          notes: t.description ?? "",
+          isAllDay: false,
+          source: "task" as const,
+          externalId: `task-${t.id}`,
+          createdAt: t.createdAt,
+        }));
+      return [...events, ...taskEvents].sort(
+        (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+      );
     }),
 
   create: protectedProcedure

@@ -10,7 +10,7 @@
  * - generateIntelligenceReport: Full AI-written competitive landscape report
  */
 import { z } from "zod";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { router, protectedProcedure } from "../_core/trpc";
 import { db } from "../db";
 import {
@@ -23,11 +23,6 @@ import { eq, desc, asc } from "drizzle-orm";
 import { getModelForTask } from "../utils/modelRouter";
 import { logAiUsage } from "./aiCostTracking.router";
 
-function getOpenAIClient(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 export const competitorRouter = router({
   /**
@@ -166,8 +161,7 @@ export const competitorRouter = router({
         .limit(1);
       if (!competitor) throw new Error("Competitor not found");
 
-      const openai = getOpenAIClient();
-      const prompt = `You are a world-class competitive intelligence analyst. Analyse the following competitor and provide a comprehensive strategic assessment.
+            const prompt = `You are a world-class competitive intelligence analyst. Analyse the following competitor and provide a comprehensive strategic assessment.
 
 Competitor: ${competitor.name}
 Website: ${competitor.website ?? "Unknown"}
@@ -190,7 +184,7 @@ Provide a JSON response with:
   "summary": "2-3 sentence executive summary"
 }`;
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("analyse"),
         messages: [{ role: "user", content: prompt }],
         response_format: { type: "json_object" },
@@ -393,8 +387,7 @@ Provide a JSON response with:
         .limit(1)
         .then(rows => rows[0] ?? null);
 
-      const openai = getOpenAIClient();
-      const prompt = `You are a world-class competitive intelligence analyst producing an executive-grade report.
+            const prompt = `You are a world-class competitive intelligence analyst producing an executive-grade report.
 
 Focus Area: ${input.focusArea.replace(/_/g, " ").toUpperCase()}
 
@@ -422,7 +415,7 @@ Write a comprehensive competitive intelligence report in Markdown format coverin
 
 Be specific, data-driven, and actionable. Write for a CEO/founder audience.`;
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("generate"),
         messages: [{ role: "user", content: prompt }],
         max_tokens: 2000,

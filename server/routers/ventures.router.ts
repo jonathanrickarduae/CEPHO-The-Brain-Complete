@@ -18,7 +18,7 @@
 
 import { z } from "zod";
 import { desc, eq, and } from "drizzle-orm";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { aiProcedure, protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import {
@@ -33,11 +33,6 @@ import {
 import { logAiUsage } from "./aiCostTracking.router";
 import { getModelForTask } from "../utils/modelRouter";
 
-function getOpenAI(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 // ─── Helper: Check Kill Switch ────────────────────────────────────────────────
 async function isKillSwitchActive(userId: number): Promise<boolean> {
@@ -444,10 +439,9 @@ export const venturesRouter = router({
       }
 
       // Execute the step with AI
-      const openai = getOpenAI();
-      const model = getModelForTask("generate");
+            const model = getModelForTask("generate");
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model,
         messages: [
           {
@@ -690,8 +684,7 @@ Execute this step and produce detailed, actionable output. Be specific, data-dri
 
       if (!venture) throw new Error("Venture not found");
 
-      const openai = getOpenAI();
-      const model = getModelForTask("generate");
+            const model = getModelForTask("generate");
 
       const focusLabels: Record<string, string> = {
         go_to_market: "Go-to-Market Strategy",
@@ -701,7 +694,7 @@ Execute this step and produce detailed, actionable output. Be specific, data-dri
         growth_hacking: "Growth Hacking Playbook",
       };
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model,
         messages: [
           {

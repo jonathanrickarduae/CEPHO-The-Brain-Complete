@@ -11,15 +11,7 @@ import { protectedProcedure, router } from "../_core/trpc";
 import { createNotification } from "./notifications.router";
 import { db } from "../db";
 import { projectGenesis, projectGenesisPhases } from "../../drizzle/schema";
-import OpenAI from "openai";
-
-let _openai: OpenAI | null = null;
-function getOpenAI(): OpenAI {
-  if (!_openai) {
-    _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  }
-  return _openai;
-}
+import { invokeLLM } from "../_core/llm";
 
 const GENESIS_PHASES = [
   { id: 1, name: "Discovery & Validation" },
@@ -394,7 +386,7 @@ Return a JSON object where each key is a slide type and the value is an object w
 
 Return ONLY valid JSON, no markdown.`;
 
-      const response = await getOpenAI().chat.completions.create({
+      const response = await invokeLLM({
         model: getModelForTask("generate"),
         messages: [{ role: "user", content: prompt }],
         response_format: { type: "json_object" },

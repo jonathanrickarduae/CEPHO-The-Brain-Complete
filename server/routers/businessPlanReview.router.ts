@@ -8,7 +8,7 @@ import { logAiUsage } from "./aiCostTracking.router";
  */
 import { z } from "zod";
 import { desc, eq, and } from "drizzle-orm";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import {
@@ -18,11 +18,6 @@ import {
   collaborativeReviewParticipants,
 } from "../../drizzle/schema";
 
-function getOpenAIClient(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 const EXPERT_PROFILES: Record<
   string,
@@ -122,8 +117,7 @@ export const businessPlanReviewRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const openai = getOpenAIClient();
-      const experts = input.expertIds?.length
+            const experts = input.expertIds?.length
         ? input.expertIds.map(
             id =>
               EXPERT_PROFILES[id] ?? {
@@ -136,7 +130,7 @@ export const businessPlanReviewRouter = router({
 
       const analyses = await Promise.all(
         experts.map(async expert => {
-          const completion = await openai.chat.completions.create({
+          const completion = await invokeLLM({
             model: getModelForTask("generate"),
             messages: [
               {
@@ -230,8 +224,7 @@ Format as JSON: { "score": number, "strengths": string[], "improvements": string
 
       if (input.mode === "chief-of-staff") {
         // AI selects the best team based on context
-        const openai = getOpenAIClient();
-        const completion = await openai.chat.completions.create({
+                const completion = await invokeLLM({
           model: getModelForTask("generate"),
           messages: [
             {
@@ -345,10 +338,8 @@ Return only a JSON array of IDs: ["id1", "id2", ...]`,
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const { default: OpenAI } = await import("openai");
-      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-      // Match by key (e.g. 'strategic-advisor') or by name
+      const { default } = await import("openai");
+            // Match by key (e.g. 'strategic-advisor') or by name
       const expert =
         EXPERT_PROFILES[input.expertId] ??
         Object.values(EXPERT_PROFILES).find(
@@ -366,7 +357,7 @@ Follow-up question: ${input.question}
 
 Provide a concise, expert response (2-3 sentences).`;
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("generate"),
         messages: [{ role: "user", content: prompt }],
         max_tokens: 200,

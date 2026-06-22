@@ -8,7 +8,7 @@ import { logAiUsage } from "./aiCostTracking.router";
  */
 import { z } from "zod";
 import { desc, eq, and } from "drizzle-orm";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { tasks, projects, briefings } from "../../drizzle/schema";
@@ -17,11 +17,6 @@ import { generateBriefPDF } from "../services/pdf-generation.service";
 import { readFile, unlink } from "fs/promises";
 import { existsSync } from "fs";
 
-function getOpenAIClient(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 export const victoriaBriefingRouter = router({
   /**
@@ -82,8 +77,7 @@ export const victoriaBriefingRouter = router({
         .limit(5),
     ]);
 
-    const openai = getOpenAIClient();
-    const dateStr = today.toLocaleDateString("en-GB", {
+        const dateStr = today.toLocaleDateString("en-GB", {
       weekday: "long",
       year: "numeric",
       month: "long",
@@ -111,7 +105,7 @@ Generate a structured daily briefing with:
 
 Keep it concise, professional, and actionable. Format with clear sections.`;
 
-    const completion = await openai.chat.completions.create({
+    const completion = await invokeLLM({
       model: getModelForTask("generate"),
       messages: [{ role: "user", content: prompt }],
       max_tokens: 700,

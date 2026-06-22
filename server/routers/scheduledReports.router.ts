@@ -18,7 +18,7 @@
  * - "custom": User-defined prompt-driven report
  */
 import { z } from "zod";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { router, protectedProcedure } from "../_core/trpc";
 import { db } from "../db";
 import {
@@ -31,11 +31,6 @@ import { eq, desc, count, avg, and } from "drizzle-orm";
 import { getModelForTask } from "../utils/modelRouter";
 import { logAiUsage } from "./aiCostTracking.router";
 
-function getOpenAIClient(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 function computeNextRunAt(frequency: string, hourUtc = 7): Date {
   const next = new Date();
@@ -193,8 +188,7 @@ export const scheduledReportsRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const openai = getOpenAIClient();
-      const since = new Date();
+            const since = new Date();
       since.setDate(since.getDate() - input.periodDays);
 
       // Gather context data based on report type
@@ -287,7 +281,7 @@ Generated: ${new Date().toISOString()}`;
           ? input.customPrompt
           : `Generate a comprehensive ${reportTypeLabel} report based on the following data:\n\n${contextData || "No data available for this period — provide a template report with placeholder sections."}`;
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("generate"),
         messages: [
           { role: "system", content: systemPrompt },

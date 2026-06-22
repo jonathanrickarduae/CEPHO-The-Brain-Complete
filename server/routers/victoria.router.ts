@@ -17,7 +17,7 @@
 
 import { z } from "zod";
 import { desc, eq, and, gte, lt, count, sql } from "drizzle-orm";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { aiProcedure, protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import {
@@ -44,11 +44,6 @@ import {
 import { logAiUsage } from "./aiCostTracking.router";
 import { getModelForTask } from "../utils/modelRouter";
 
-function getOpenAI(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 // ─── Victoria's System Prompt ─────────────────────────────────────────────────
 const VICTORIA_SYSTEM_PROMPT = `You are Victoria, the AI Chief of Staff for CEPHO.AI. You are the most capable, proactive, and strategic executive assistant in the world.
@@ -347,10 +342,9 @@ export const victoriaRouter = router({
   // ── 2. Generate Morning Briefing (AI-powered, persisted) ────────────────────
   generateMorningBriefing: aiProcedure.mutation(async ({ ctx }) => {
     const userId = ctx.user.id;
-    const openai = getOpenAI();
-    const userContext = await buildUserContextSafe(userId);
+        const userContext = await buildUserContextSafe(userId);
 
-    const completion = await openai.chat.completions.create({
+    const completion = await invokeLLM({
       model: getModelForTask("generate"),
       messages: [
         { role: "system", content: VICTORIA_SYSTEM_PROMPT },
@@ -435,8 +429,7 @@ export const victoriaRouter = router({
     .input(z.object({ message: z.string().min(1).max(2000) }))
     .mutation(async ({ input, ctx }) => {
       const userId = ctx.user.id;
-      const openai = getOpenAI();
-      const userContext = await buildUserContextSafe(userId);
+            const userContext = await buildUserContextSafe(userId);
 
       // Get recent conversation history
       const recentConversations = await db
@@ -446,7 +439,7 @@ export const victoriaRouter = router({
         .orderBy(desc(conversations.createdAt))
         .limit(10);
 
-      const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
+      const messages.Chat.ChatCompletionMessageParam[] = [
         {
           role: "system",
           content: `${VICTORIA_SYSTEM_PROMPT}\n\n## Current Context\n${userContext}`,
@@ -458,7 +451,7 @@ export const victoriaRouter = router({
         { role: "user", content: input.message },
       ];
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("chat"),
         messages,
         max_tokens: 800,
@@ -506,8 +499,7 @@ export const victoriaRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const openai = getOpenAI();
-      const completion = await openai.chat.completions.create({
+            const completion = await invokeLLM({
         model: getModelForTask("analyse"),
         messages: [
           { role: "system", content: VICTORIA_SYSTEM_PROMPT },
@@ -724,12 +716,11 @@ export const victoriaRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const openai = getOpenAI();
-      const userId = ctx.user.id;
+            const userId = ctx.user.id;
 
       if (input.items.length === 0) return { triaged: [] };
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model: getModelForTask("analyse"),
         messages: [
           { role: "system", content: VICTORIA_SYSTEM_PROMPT },
@@ -783,10 +774,9 @@ export const victoriaRouter = router({
   // ── 12. Identify workflow automation opportunities ───────────────────────────
   identifyAutomationOpportunities: aiProcedure.mutation(async ({ ctx }) => {
     const userId = ctx.user.id;
-    const openai = getOpenAI();
-    const userContext = await buildUserContextSafe(userId);
+        const userContext = await buildUserContextSafe(userId);
 
-    const completion = await openai.chat.completions.create({
+    const completion = await invokeLLM({
       model: getModelForTask("analyse"),
       messages: [
         { role: "system", content: VICTORIA_SYSTEM_PROMPT },
@@ -935,8 +925,7 @@ export const victoriaRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const openai = getOpenAI();
-      const completion = await openai.chat.completions.create({
+            const completion = await invokeLLM({
         model: getModelForTask("analyse"),
         messages: [
           {
@@ -1029,8 +1018,7 @@ export const victoriaRouter = router({
 
   // ─── DT-COS-04: Autonomous Project Review ────────────────────────────────────
   reviewProjects: aiProcedure.mutation(async ({ ctx }) => {
-    const openai = getOpenAI();
-    const activeProjects = await db
+        const activeProjects = await db
       .select()
       .from(projects)
       .where(
@@ -1050,7 +1038,7 @@ export const victoriaRouter = router({
           `${i + 1}. ${p.name} (${p.status}) — ${(p.description ?? "").slice(0, 150)}`
       )
       .join("\n");
-    const completion = await openai.chat.completions.create({
+    const completion = await invokeLLM({
       model: getModelForTask("analyse"),
       messages: [
         {
@@ -1123,8 +1111,7 @@ export const victoriaRouter = router({
 
   // ─── DT-COS-07: Autonomous Document Cleanup ──────────────────────────────────
   reviewDocuments: aiProcedure.mutation(async ({ ctx }) => {
-    const openai = getOpenAI();
-    const ninetyDaysAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
+        const ninetyDaysAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
     const docs = await db
       .select()
       .from(libraryDocuments)
@@ -1147,7 +1134,7 @@ export const victoriaRouter = router({
           `${i + 1}. "${d.name}" (${d.type ?? "unknown"}, created ${d.createdAt.toISOString().slice(0, 10)})`
       )
       .join("\n");
-    const completion = await openai.chat.completions.create({
+    const completion = await invokeLLM({
       model: getModelForTask("analyse"),
       messages: [
         {
@@ -1222,8 +1209,7 @@ export const victoriaRouter = router({
 
   // ─── DT-COS-08: Autonomous Task Delegation ───────────────────────────────────
   delegateTasks: aiProcedure.mutation(async ({ ctx }) => {
-    const openai = getOpenAI();
-    const unassigned = await db
+        const unassigned = await db
       .select()
       .from(tasks)
       .where(
@@ -1242,7 +1228,7 @@ export const victoriaRouter = router({
           `${i + 1}. "${t.title}" — ${(t.description ?? "").slice(0, 100)} [Priority: ${t.priority ?? "normal"}]`
       )
       .join("\n");
-    const completion = await openai.chat.completions.create({
+    const completion = await invokeLLM({
       model: getModelForTask("analyse"),
       messages: [
         {
@@ -1299,8 +1285,7 @@ export const victoriaRouter = router({
 
   // ─── DT-COS-06: Autonomous Meeting Pre-Briefs ────────────────────────────────
   prepareMeetingBriefs: aiProcedure.mutation(async ({ ctx }) => {
-    const openai = getOpenAI();
-    const now = new Date();
+        const now = new Date();
     const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
     const upcomingEvents = await db
       .select()
@@ -1326,7 +1311,7 @@ export const victoriaRouter = router({
           `${i + 1}. "${e.title}" at ${e.startTime.toISOString().slice(11, 16)} — ${e.location ?? "No location"}`
       )
       .join("\n");
-    const completion = await openai.chat.completions.create({
+    const completion = await invokeLLM({
       model: getModelForTask("generate"),
       messages: [
         {
@@ -1550,10 +1535,9 @@ export const victoriaRouter = router({
         ? `Risk tolerance: ${dtCognitive.riskTolerance}, Decision heuristics: ${(dtCognitive.decisionHeuristics ?? []).join(", ")}, Strategic priorities: ${(dtCognitive.strategicPriorities ?? []).map((p: { priority: string; weight: number }) => p.priority).join(", ")}, Values: ${(dtCognitive.values ?? []).join(", ")}`
         : "No cognitive model available";
 
-      const openai = getOpenAI();
-      const model = getModelForTask("analyse");
+            const model = getModelForTask("analyse");
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model,
         messages: [
           {
@@ -1671,10 +1655,9 @@ export const victoriaRouter = router({
         long_term: "next 6-24 months",
       }[input.timeHorizon];
 
-      const openai = getOpenAI();
-      const model = getModelForTask("analyse");
+            const model = getModelForTask("analyse");
 
-      const completion = await openai.chat.completions.create({
+      const completion = await invokeLLM({
         model,
         messages: [
           {

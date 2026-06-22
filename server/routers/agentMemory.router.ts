@@ -13,16 +13,11 @@ import { getEmbeddingModel } from "../utils/modelRouter";
  */
 import { z } from "zod";
 import { eq, and, desc } from "drizzle-orm";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { memoryBank } from "../../drizzle/schema";
 
-function getOpenAIClient(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 /**
  * Compute cosine similarity between two numeric vectors.
@@ -45,8 +40,7 @@ function cosineSimilarity(a: number[], b: number[]): number {
  * Generate an embedding for a text string using OpenAI.
  */
 async function embed(text: string): Promise<number[]> {
-  const openai = getOpenAIClient();
-  const response = await openai.embeddings.create({
+    const response = await openai.embeddings.create({
     model: getEmbeddingModel(),
     input: text.slice(0, 8000), // Stay within token limit
   });

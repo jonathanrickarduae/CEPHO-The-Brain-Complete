@@ -30,16 +30,8 @@ import {
   tasks,
   emailMessages,
 } from "../../drizzle/schema";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { logAiUsage } from "./aiCostTracking.router";
-
-let _openai: OpenAI | null = null;
-function getOpenAI(): OpenAI {
-  if (!_openai) {
-    _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  }
-  return _openai;
-}
 
 // ─── 10-Step Briefing Assembler ───────────────────────────────────────────────
 
@@ -134,7 +126,7 @@ async function assembleBriefing(
         : "Use a professional, executive tone.";
 
   // Step 9: Assemble with GPT-4o
-  const completion = await getOpenAI().chat.completions.create({
+  const completion = await invokeLLM({
     model: "gpt-4o-mini",
     messages: [
       {

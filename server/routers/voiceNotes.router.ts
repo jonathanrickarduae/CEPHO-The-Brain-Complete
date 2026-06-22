@@ -8,16 +8,11 @@ import { logAiUsage } from "./aiCostTracking.router";
  */
 import { z } from "zod";
 import { desc, eq, and } from "drizzle-orm";
-import OpenAI from "openai";
+import { invokeLLM } from "../_core/llm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { voiceNotes, tasks } from "../../drizzle/schema";
 
-function getOpenAIClient(): OpenAI {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
-  return new OpenAI({ apiKey });
-}
 
 export const voiceNotesRouter = router({
   /**
@@ -78,8 +73,7 @@ export const voiceNotesRouter = router({
       // Use OpenAI to extract tasks from the note content
       let extractedTasks: string[] = [];
       try {
-        const openai = getOpenAIClient();
-        const completion = await openai.chat.completions.create({
+                const completion = await invokeLLM({
           model: getModelForTask("summarise"),
           messages: [
             {
