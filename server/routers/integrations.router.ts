@@ -22,7 +22,7 @@ import {
   teamCapabilities,
 } from "../../drizzle/schema";
 import { calendarService } from "../services/calendar";
-import { calendarEventsCache } from "../../drizzle/schema";
+import { calendarEvents } from "../../drizzle/schema";
 import { lte } from "drizzle-orm";
 
 // ─── Auth Router ─────────────────────────────────────────────────────────────
@@ -723,13 +723,12 @@ export const calendarRouter = router({
       const start = new Date(input.startDate);
       const end = new Date(input.endDate);
       const { gte } = await import("drizzle-orm");
-      const events = await db.select().from(calendarEventsCache)
+      const events = await db.select().from(calendarEvents)
         .where(and(
-          eq(calendarEventsCache.userId, ctx.user.id),
-          gte(calendarEventsCache.startTime, start),
-          lte(calendarEventsCache.startTime, end)
+          gte(calendarEvents.startTime, start),
+          lte(calendarEvents.startTime, end)
         ))
-        .orderBy(calendarEventsCache.startTime);
+        .orderBy(calendarEvents.startTime);
       return events;
     }),
 
@@ -744,13 +743,12 @@ export const calendarRouter = router({
       isAllDay: z.boolean().optional(),
     }))
     .mutation(async ({ input, ctx }) => {
-      const result = await db.insert(calendarEventsCache).values({
-        userId: ctx.user.id,
+      await db.insert(calendarEvents).values({
         title: input.title,
         startTime: new Date(input.startTime),
         endTime: new Date(input.endTime),
         location: input.location ?? "",
-        isAllDay: input.isAllDay ?? false,
+        isAllDay: input.isAllDay ? 1 : 0,
         source: "manual",
       });
       return { success: true };
@@ -804,22 +802,21 @@ export const calendarRouter = router({
           const isAllDay = !ev.start?.dateTime;
 
           // Upsert by externalId
-          const existing = await db.select().from(calendarEventsCache)
-            .where(and(eq(calendarEventsCache.externalId, externalId), eq(calendarEventsCache.userId, ctx.user.id)))
+          const existing = await db.select().from(calendarEvents)
+            .where(eq(calendarEvents.externalId, externalId))
             .limit(1);
           if (existing.length > 0) {
-            await db.update(calendarEventsCache)
-              .set({ title, startTime, endTime, location: typeof location === "string" ? location : "", isAllDay, source: "outlook", syncedAt: new Date() })
-              .where(and(eq(calendarEventsCache.externalId, externalId), eq(calendarEventsCache.userId, ctx.user.id)));
+            await db.update(calendarEvents)
+              .set({ title, startTime, endTime, location: typeof location === "string" ? location : "", isAllDay: isAllDay ? 1 : 0, source: "outlook" })
+              .where(eq(calendarEvents.externalId, externalId));
           } else {
-            await db.insert(calendarEventsCache).values({
-              userId: ctx.user.id,
+            await db.insert(calendarEvents).values({
               externalId,
               title,
               startTime,
               endTime,
               location: typeof location === "string" ? location : "",
-              isAllDay,
+              isAllDay: isAllDay ? 1 : 0,
               source: "outlook",
             });
           }
@@ -839,9 +836,9 @@ export const calendarRouter = router({
       const dayStart = new Date(input.date + "T00:00:00.000Z");
       const dayEnd   = new Date(input.date + "T23:59:59.999Z");
 
-      const allEvents = await db.select().from(calendarEventsCache)
-        .where(and(eq(calendarEventsCache.userId, ctx.user.id), lte(calendarEventsCache.startTime, dayEnd)))
-        .orderBy(calendarEventsCache.startTime);
+      const allEvents = await db.select().from(calendarEvents)
+        .where(lte(calendarEvents.startTime, dayEnd))
+        .orderBy(calendarEvents.startTime);
 
       const dayEvents = allEvents.filter(ev => new Date(ev.endTime) > dayStart);
 
