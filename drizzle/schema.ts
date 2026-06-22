@@ -351,3 +351,1326 @@ export const agentRuns = mysqlTable("agent_runs", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 export type AgentRun = typeof agentRuns.$inferSelect;
+
+// ─── Activity Feed ────────────────────────────────────────────────────────────
+export const activityFeed = mysqlTable("activity_feed", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  actorType: varchar("actorType", { length: 32 }).notNull().default("user"),
+  actorName: varchar("actorName", { length: 128 }),
+  action: varchar("action", { length: 64 }).notNull(),
+  targetType: varchar("targetType", { length: 64 }),
+  targetId: int("targetId"),
+  targetName: varchar("targetName", { length: 256 }),
+  description: text("description"),
+  metadata: text("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type ActivityFeed = typeof activityFeed.$inferSelect;
+
+// ─── Notifications ────────────────────────────────────────────────────────────
+export const notifications = mysqlTable("notifications", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  type: varchar("type", { length: 64 }).notNull(),
+  title: varchar("title", { length: 256 }).notNull(),
+  message: text("message"),
+  actionUrl: varchar("actionUrl", { length: 512 }),
+  actionLabel: varchar("actionLabel", { length: 128 }),
+  metadata: text("metadata"),
+  read: boolean("read").default(false).notNull(),
+  readAt: timestamp("readAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type Notification = typeof notifications.$inferSelect;
+
+// ─── Chat Conversations ───────────────────────────────────────────────────────
+export const conversations = mysqlTable("conversations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  role: mysqlEnum("role", ["user", "assistant", "system"]).notNull(),
+  content: text("content").notNull(),
+  metadata: text("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type Conversation = typeof conversations.$inferSelect;
+
+// ─── Brand Kit ───────────────────────────────────────────────────────────────
+export const brandKit = mysqlTable("brand_kit", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  companyName: varchar("companyName", { length: 256 }).notNull(),
+  isDefault: boolean("isDefault").default(false).notNull(),
+  logoUrl: varchar("logoUrl", { length: 512 }),
+  logoLightUrl: varchar("logoLightUrl", { length: 512 }),
+  primaryColor: varchar("primaryColor", { length: 32 }),
+  secondaryColor: varchar("secondaryColor", { length: 32 }),
+  accentColor: varchar("accentColor", { length: 32 }),
+  fontFamily: varchar("fontFamily", { length: 128 }),
+  tagline: varchar("tagline", { length: 512 }),
+  description: text("description"),
+  website: varchar("website", { length: 512 }),
+  socialLinks: text("socialLinks"),
+  templates: text("templates"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type BrandKit = typeof brandKit.$inferSelect;
+
+// ─── AI Usage Logs ────────────────────────────────────────────────────────────
+export const aiUsageLogs = mysqlTable("ai_usage_logs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  feature: varchar("feature", { length: 128 }).notNull(),
+  model: varchar("model", { length: 128 }).notNull(),
+  promptTokens: int("promptTokens").default(0).notNull(),
+  completionTokens: int("completionTokens").default(0).notNull(),
+  totalTokens: int("totalTokens").default(0).notNull(),
+  estimatedCostUsd: text("estimatedCostUsd").default("0").notNull(),
+  errorCode: varchar("errorCode", { length: 64 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type AiUsageLog = typeof aiUsageLogs.$inferSelect;
+
+// ─── Questionnaire Responses ──────────────────────────────────────────────────
+export const questionnaireResponses = mysqlTable("questionnaire_responses", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  questionId: varchar("questionId", { length: 128 }).notNull(),
+  questionType: varchar("questionType", { length: 64 }).notNull(),
+  scaleValue: int("scaleValue"),
+  booleanValue: boolean("booleanValue"),
+  section: varchar("section", { length: 128 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type QuestionnaireResponse = typeof questionnaireResponses.$inferSelect;
+
+// ─── Digital Twin Profile ─────────────────────────────────────────────────────
+export const digitalTwinProfile = mysqlTable("digital_twin_profile", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  questionnaireCompletion: int("questionnaireCompletion").default(0).notNull(),
+  cosUnderstandingLevel: int("cosUnderstandingLevel").default(0),
+  measurementDriven: int("measurementDriven"),
+  processStandardization: int("processStandardization"),
+  automationPreference: int("automationPreference"),
+  ambiguityTolerance: int("ambiguityTolerance"),
+  techAdoptionSpeed: int("techAdoptionSpeed"),
+  aiBeliefLevel: int("aiBeliefLevel"),
+  dataVsIntuition: int("dataVsIntuition"),
+  nicheVsMass: int("nicheVsMass"),
+  firstMoverVsFollower: int("firstMoverVsFollower"),
+  structurePreference: int("structurePreference"),
+  interruptionTolerance: int("interruptionTolerance"),
+  batchingPreference: int("batchingPreference"),
+  scenarioPlanningLevel: int("scenarioPlanningLevel"),
+  pivotComfort: int("pivotComfort"),
+  trendLeadership: int("trendLeadership"),
+  portfolioDiversification: int("portfolioDiversification"),
+  lastCalculated: timestamp("lastCalculated"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type DigitalTwinProfile = typeof digitalTwinProfile.$inferSelect;
+
+// ─── Library Documents ────────────────────────────────────────────────────────
+export const libraryDocuments = mysqlTable("library_documents", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 256 }).notNull(),
+  folder: varchar("folder", { length: 128 }).default("personal").notNull(),
+  type: varchar("type", { length: 64 }).default("document").notNull(),
+  status: varchar("status", { length: 32 }).default("active").notNull(),
+  fileUrl: varchar("fileUrl", { length: 512 }),
+  metadata: text("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type LibraryDocument = typeof libraryDocuments.$inferSelect;
+
+// ─── Agent Daily Reports ──────────────────────────────────────────────────────
+export const agentDailyReports = mysqlTable("agent_daily_reports", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  agentId: varchar("agentId", { length: 128 }).notNull(),
+  agentName: varchar("agentName", { length: 256 }),
+  category: varchar("category", { length: 128 }),
+  tasksCompleted: text("tasksCompleted"),
+  achievements: text("achievements"),
+  challenges: text("challenges"),
+  newLearnings: text("newLearnings"),
+  suggestions: text("suggestions"),
+  capabilityRequest: text("capabilityRequest"),
+  approvalStatus: mysqlEnum("approvalStatus", ["pending", "approved", "rejected"]).default("pending").notNull(),
+  date: timestamp("date").defaultNow().notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type AgentDailyReport = typeof agentDailyReports.$inferSelect;
+
+// ─── Victoria Actions ─────────────────────────────────────────────────────────
+export const victoriaActions = mysqlTable("victoria_actions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  actionType: varchar("actionType", { length: 128 }).notNull(),
+  actionTitle: varchar("actionTitle", { length: 256 }),
+  description: text("description"),
+  relatedEntityType: varchar("relatedEntityType", { length: 64 }),
+  relatedEntityId: int("relatedEntityId"),
+  autonomous: boolean("autonomous").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type VictoriaAction = typeof victoriaActions.$inferSelect;
+
+// ─── Briefings ────────────────────────────────────────────────────────────────
+export const briefings = mysqlTable("briefings", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  date: timestamp("date").defaultNow().notNull(),
+  title: varchar("title", { length: 256 }).notNull(),
+  content: text("content").notNull(),
+  status: mysqlEnum("status", ["draft", "ready", "sent"]).default("draft").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type Briefing = typeof briefings.$inferSelect;
+
+// ─── Victoria Skills ──────────────────────────────────────────────────────────
+export const victoriaSkills = mysqlTable("victoria_skills", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 256 }).notNull(),
+  category: varchar("category", { length: 128 }).notNull(),
+  trigger: mysqlEnum("trigger", ["manual", "daily", "hourly", "on_event"]).default("manual").notNull(),
+  description: text("description"),
+  steps: text("steps"),
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type VictoriaSkill = typeof victoriaSkills.$inferSelect;
+
+// ─── Victoria QC Checks ───────────────────────────────────────────────────────
+export const victoriaQcChecks = mysqlTable("victoria_qc_checks", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  checkType: varchar("checkType", { length: 128 }).notNull(),
+  targetId: int("targetId"),
+  targetTitle: varchar("targetTitle", { length: 256 }),
+  score: int("score").default(0).notNull(),
+  grade: varchar("grade", { length: 4 }).default("F").notNull(),
+  passed: boolean("passed").default(false).notNull(),
+  issues: text("issues"),
+  recommendations: text("recommendations"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type VictoriaQcCheck = typeof victoriaQcChecks.$inferSelect;
+
+// ─── Agent Improvements ───────────────────────────────────────────────────────
+export const agentImprovements = mysqlTable("agent_improvements", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  agentKey: varchar("agentKey", { length: 128 }).notNull(),
+  suggestion: text("suggestion").notNull(),
+  rationale: text("rationale"),
+  status: mysqlEnum("status", ["pending", "approved", "rejected", "implemented"]).default("pending").notNull(),
+  approvedAt: timestamp("approvedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type AgentImprovement = typeof agentImprovements.$inferSelect;
+
+// ─── SME Review Triggers ──────────────────────────────────────────────────────
+export const smeReviewTriggers = mysqlTable("sme_review_triggers", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  triggerType: varchar("triggerType", { length: 128 }).notNull(),
+  sourceType: varchar("sourceType", { length: 64 }),
+  sourceId: int("sourceId"),
+  sourceTitle: varchar("sourceTitle", { length: 256 }),
+  expertType: varchar("expertType", { length: 64 }),
+  expertIds: text("expertIds"),
+  status: mysqlEnum("status", ["pending", "in_review", "completed", "cancelled"]).default("pending").notNull(),
+  triggeredAt: timestamp("triggeredAt").defaultNow().notNull(),
+  completedAt: timestamp("completedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type SmeReviewTrigger = typeof smeReviewTriggers.$inferSelect;
+
+// ─── Subphase Tasks ───────────────────────────────────────────────────────────
+export const subphaseTasks = mysqlTable("subphase_tasks", {
+  id: int("id").autoincrement().primaryKey(),
+  taskId: varchar("taskId", { length: 128 }).notNull().unique(),
+  name: varchar("name", { length: 256 }).notNull(),
+  phase: varchar("phase", { length: 128 }),
+  subphase: varchar("subphase", { length: 128 }),
+  status: mysqlEnum("status", ["not_started", "in_progress", "complete", "blocked"]).default("not_started").notNull(),
+  commitSha: varchar("commitSha", { length: 64 }),
+  evidence: text("evidence"),
+  startedAt: timestamp("startedAt"),
+  completedAt: timestamp("completedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type SubphaseTask = typeof subphaseTasks.$inferSelect;
+
+// ─── User Settings ────────────────────────────────────────────────────────────
+export const userSettings = mysqlTable("user_settings", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  theme: varchar("theme", { length: 32 }).default("dark").notNull(),
+  governanceMode: varchar("governanceMode", { length: 64 }).default("standard").notNull(),
+  dailyBriefTime: varchar("dailyBriefTime", { length: 8 }).default("07:00").notNull(),
+  eveningReviewTime: varchar("eveningReviewTime", { length: 8 }).default("18:00").notNull(),
+  twinAutonomyLevel: int("twinAutonomyLevel").default(1).notNull(),
+  notificationsEnabled: boolean("notificationsEnabled").default(true).notNull(),
+  sidebarCollapsed: boolean("sidebarCollapsed").default(false).notNull(),
+  onboardingComplete: boolean("onboardingComplete").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type UserSettings = typeof userSettings.$inferSelect;
+
+// ─── Calendar Events Cache ────────────────────────────────────────────────────
+export const calendarEventsCache = mysqlTable("calendar_events_cache", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 512 }).notNull(),
+  startTime: timestamp("startTime").notNull(),
+  endTime: timestamp("endTime"),
+  isAllDay: boolean("isAllDay").default(false).notNull(),
+  location: varchar("location", { length: 512 }),
+  description: text("description"),
+  source: varchar("source", { length: 32 }).default("manual").notNull(),
+  externalId: varchar("externalId", { length: 256 }),
+  syncedAt: timestamp("syncedAt").defaultNow().notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type CalendarEventsCache = typeof calendarEventsCache.$inferSelect;
+
+// ─── Audit Logs ───────────────────────────────────────────────────────────────
+export const auditLogs = mysqlTable("audit_logs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  action: varchar("action", { length: 128 }).notNull(),
+  resourceType: varchar("resourceType", { length: 64 }),
+  resourceId: varchar("resourceId", { length: 128 }),
+  ipAddress: varchar("ipAddress", { length: 64 }),
+  userAgent: text("userAgent"),
+  metadata: text("metadata"),
+  severity: mysqlEnum("severity", ["info", "warning", "error", "critical"]).default("info").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type AuditLog = typeof auditLogs.$inferSelect;
+
+// ─── Agent 1 Messages ─────────────────────────────────────────────────────────
+export const agent1Messages = mysqlTable("agent1_messages", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  role: mysqlEnum("role", ["user", "assistant", "system"]).notNull(),
+  content: text("content").notNull(),
+  operatingMode: varchar("operatingMode", { length: 64 }),
+  responseLevel: varchar("responseLevel", { length: 64 }),
+  metadata: text("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type Agent1Message = typeof agent1Messages.$inferSelect;
+
+// ─── Mood History ─────────────────────────────────────────────────────────────
+export const moodHistory = mysqlTable("mood_history", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  score: int("score").notNull(),
+  note: text("note"),
+  timeOfDay: varchar("timeOfDay", { length: 32 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type MoodHistory = typeof moodHistory.$inferSelect;
+
+// ─── Digital Twin Cognitive Model ─────────────────────────────────────────────
+export const digitalTwinCognitiveModel = mysqlTable("digital_twin_cognitive_model", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  communicationStyle: text("communicationStyle"),
+  riskTolerance: varchar("riskTolerance", { length: 16 }),
+  decisionHeuristics: text("decisionHeuristics"),
+  strategicPriorities: text("strategicPriorities"),
+  values: text("values"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type DigitalTwinCognitiveModel = typeof digitalTwinCognitiveModel.$inferSelect;
+
+// ─── Agent Insights ───────────────────────────────────────────────────────────
+export const agentInsights = mysqlTable("agent_insights", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  agentKey: varchar("agentKey", { length: 128 }).notNull(),
+  insight: text("insight").notNull(),
+  source: varchar("source", { length: 128 }),
+  confidence: int("confidence").default(70).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type AgentInsight = typeof agentInsights.$inferSelect;
+
+// ─── Agent Performance Metrics ────────────────────────────────────────────────
+export const agentPerformanceMetrics = mysqlTable("agent_performance_metrics", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  agentId: varchar("agentId", { length: 128 }).notNull(),
+  agentName: varchar("agentName", { length: 256 }),
+  date: timestamp("date").defaultNow().notNull(),
+  tasksExecuted: int("tasksExecuted").default(0).notNull(),
+  tasksSucceeded: int("tasksSucceeded").default(0).notNull(),
+  tasksFailed: int("tasksFailed").default(0).notNull(),
+  avgResponseMs: int("avgResponseMs").default(0).notNull(),
+  totalTokensUsed: int("totalTokensUsed").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type AgentPerformanceMetric = typeof agentPerformanceMetrics.$inferSelect;
+
+// ─── Agent Ratings ────────────────────────────────────────────────────────────
+export const agentRatings = mysqlTable("agent_ratings", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  agentId: varchar("agentId", { length: 128 }).notNull(),
+  agentName: varchar("agentName", { length: 256 }),
+  sessionId: varchar("sessionId", { length: 128 }),
+  rating: int("rating").notNull(),
+  feedback: text("feedback"),
+  taskType: varchar("taskType", { length: 128 }),
+  wasHelpful: boolean("wasHelpful"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type AgentRating = typeof agentRatings.$inferSelect;
+
+// ─── Training Conversations ───────────────────────────────────────────────────
+export const trainingConversations = mysqlTable("training_conversations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  role: mysqlEnum("role", ["user", "assistant", "system"]).notNull(),
+  content: text("content").notNull(),
+  contentType: varchar("contentType", { length: 64 }),
+  context: varchar("context", { length: 256 }),
+  sessionId: varchar("sessionId", { length: 128 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type TrainingConversation = typeof trainingConversations.$inferSelect;
+
+// ─── Voice Notes ──────────────────────────────────────────────────────────────
+export const voiceNotes = mysqlTable("voice_notes", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  content: text("content").notNull(),
+  category: varchar("category", { length: 128 }),
+  audioUrl: varchar("audioUrl", { length: 512 }),
+  duration: int("duration"),
+  projectId: int("projectId"),
+  projectName: varchar("projectName", { length: 256 }),
+  isActionItem: boolean("isActionItem").default(false).notNull(),
+  isProcessed: boolean("isProcessed").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type VoiceNote = typeof voiceNotes.$inferSelect;
+
+// ─── Digital Twin Vocabulary ──────────────────────────────────────────────────
+export const digitalTwinVocabulary = mysqlTable("digital_twin_vocabulary", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  preferredTerms: text("preferredTerms"),
+  avoidedTerms: text("avoidedTerms"),
+  commonPhrases: text("commonPhrases"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type DigitalTwinVocabulary = typeof digitalTwinVocabulary.$inferSelect;
+
+// ─── Digital Twin Decision Log ────────────────────────────────────────────────
+export const digitalTwinDecisionLog = mysqlTable("digital_twin_decision_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  decision: text("decision"),
+  outcome: varchar("outcome", { length: 64 }),
+  modifiedTo: varchar("modifiedTo", { length: 256 }),
+  decisionRationale: text("decisionRationale"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type DigitalTwinDecisionLog = typeof digitalTwinDecisionLog.$inferSelect;
+
+// ─── Expert Performance ───────────────────────────────────────────────────────
+export const expertPerformance = mysqlTable("expert_performance", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  expertId: varchar("expertId", { length: 128 }).notNull(),
+  score: int("score").default(0).notNull(),
+  projectsCompleted: int("projectsCompleted").default(0).notNull(),
+  positiveFeedback: int("positiveFeedback").default(0).notNull(),
+  negativeFeedback: int("negativeFeedback").default(0).notNull(),
+  lastUsed: timestamp("lastUsed"),
+  notes: text("notes"),
+  status: varchar("status", { length: 32 }).default("active").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type ExpertPerformance = typeof expertPerformance.$inferSelect;
+
+// ─── Innovation Ideas ─────────────────────────────────────────────────────────
+export const innovationIdeas = mysqlTable("innovation_ideas", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 256 }).notNull(),
+  description: text("description"),
+  source: varchar("source", { length: 128 }),
+  sourceUrl: varchar("sourceUrl", { length: 512 }),
+  status: varchar("status", { length: 64 }).default("captured").notNull(),
+  currentStage: int("currentStage").default(1).notNull(),
+  priority: varchar("priority", { length: 32 }),
+  category: varchar("category", { length: 128 }).default("general").notNull(),
+  metadata: text("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type InnovationIdea = typeof innovationIdeas.$inferSelect;
+
+// ─── Memory Bank ──────────────────────────────────────────────────────────────
+export const memoryBank = mysqlTable("memory_bank", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  category: varchar("category", { length: 128 }).notNull(),
+  key: varchar("key", { length: 256 }).notNull(),
+  value: text("value").notNull(),
+  confidence: int("confidence").default(70).notNull(),
+  source: varchar("source", { length: 128 }),
+  embedding: text("embedding"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type MemoryBank = typeof memoryBank.$inferSelect;
+
+// ─── Project Genesis ──────────────────────────────────────────────────────────
+export const projectGenesis = mysqlTable("project_genesis", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 256 }).notNull(),
+  type: varchar("type", { length: 64 }).default("startup").notNull(),
+  stage: varchar("stage", { length: 64 }).default("discovery").notNull(),
+  status: varchar("status", { length: 32 }).default("active").notNull(),
+  description: text("description"),
+  metadata: text("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type ProjectGenesis = typeof projectGenesis.$inferSelect;
+
+// ─── Project Genesis Phases ───────────────────────────────────────────────────
+export const projectGenesisPhases = mysqlTable("project_genesis_phases", {
+  id: int("id").autoincrement().primaryKey(),
+  projectId: int("projectId").notNull(),
+  phaseNumber: int("phaseNumber").notNull(),
+  phaseName: varchar("phaseName", { length: 128 }).notNull(),
+  status: varchar("status", { length: 32 }).default("not_started").notNull(),
+  startedAt: timestamp("startedAt"),
+  completedAt: timestamp("completedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type ProjectGenesisPhase = typeof projectGenesisPhases.$inferSelect;
+
+// ─── Evening Review Sessions ──────────────────────────────────────────────────
+export const eveningReviewSessions = mysqlTable("evening_review_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  reviewDate: timestamp("reviewDate").defaultNow().notNull(),
+  startedAt: timestamp("startedAt").defaultNow().notNull(),
+  completedAt: timestamp("completedAt"),
+  mode: varchar("mode", { length: 64 }).default("standard").notNull(),
+  tasksAccepted: int("tasksAccepted").default(0).notNull(),
+  tasksDeferred: int("tasksDeferred").default(0).notNull(),
+  tasksRejected: int("tasksRejected").default(0).notNull(),
+  summary: text("summary"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type EveningReviewSession = typeof eveningReviewSessions.$inferSelect;
+
+// ─── Generated Documents ──────────────────────────────────────────────────────
+export const generatedDocuments = mysqlTable("generated_documents", {
+  id: int("id").autoincrement().primaryKey(),
+  documentId: varchar("documentId", { length: 128 }).notNull().unique(),
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 512 }).notNull(),
+  type: varchar("type", { length: 64 }).notNull(),
+  content: text("content").notNull(),
+  classification: varchar("classification", { length: 64 }),
+  qaStatus: varchar("qaStatus", { length: 32 }).default("pending").notNull(),
+  metadata: text("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type GeneratedDocument = typeof generatedDocuments.$inferSelect;
+
+// ─── Idea Assessments ─────────────────────────────────────────────────────────
+export const ideaAssessments = mysqlTable("idea_assessments", {
+  id: int("id").autoincrement().primaryKey(),
+  ideaId: int("ideaId").notNull(),
+  assessmentType: varchar("assessmentType", { length: 128 }).notNull(),
+  stage: int("stage").default(1).notNull(),
+  assessorType: varchar("assessorType", { length: 64 }).default("ai").notNull(),
+  assessorId: varchar("assessorId", { length: 128 }),
+  questions: text("questions"),
+  findings: text("findings"),
+  score: int("score").default(0).notNull(),
+  recommendation: varchar("recommendation", { length: 64 }),
+  refinementSuggestions: text("refinementSuggestions"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type IdeaAssessment = typeof ideaAssessments.$inferSelect;
+
+// ─── Investment Scenarios ─────────────────────────────────────────────────────
+export const investmentScenarios = mysqlTable("investment_scenarios", {
+  id: int("id").autoincrement().primaryKey(),
+  ideaId: int("ideaId").notNull(),
+  scenarioName: varchar("scenarioName", { length: 256 }).notNull(),
+  investmentAmount: int("investmentAmount").notNull(),
+  currency: varchar("currency", { length: 8 }).default("GBP").notNull(),
+  breakdown: text("breakdown"),
+  projectedRevenue: text("projectedRevenue"),
+  projectedProfit: text("projectedProfit"),
+  timeToBreakeven: varchar("timeToBreakeven", { length: 128 }),
+  riskLevel: mysqlEnum("riskLevel", ["low", "medium", "high", "very_high"]).default("medium").notNull(),
+  keyAssumptions: text("keyAssumptions"),
+  recommendations: text("recommendations"),
+  isRecommended: boolean("isRecommended").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type InvestmentScenario = typeof investmentScenarios.$inferSelect;
+
+// ─── Partnerships ─────────────────────────────────────────────────────────────
+export const partnerships = mysqlTable("partnerships", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 256 }).notNull(),
+  type: varchar("type", { length: 64 }).notNull(),
+  status: varchar("status", { length: 32 }).notNull(),
+  priority: varchar("priority", { length: 32 }).default("medium").notNull(),
+  contactName: varchar("contactName", { length: 256 }),
+  contactEmail: varchar("contactEmail", { length: 256 }),
+  value: varchar("value", { length: 128 }),
+  notes: text("notes"),
+  nextAction: text("nextAction"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type Partnership = typeof partnerships.$inferSelect;
+
+// ─── Subscriptions ────────────────────────────────────────────────────────────
+export const subscriptions = mysqlTable("subscriptions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 256 }).notNull(),
+  provider: varchar("provider", { length: 256 }),
+  description: text("description"),
+  category: varchar("category", { length: 128 }).notNull(),
+  cost: varchar("cost", { length: 32 }).notNull(),
+  billingCycle: varchar("billingCycle", { length: 32 }).notNull(),
+  currency: varchar("currency", { length: 8 }).default("GBP").notNull(),
+  status: varchar("status", { length: 32 }).default("active").notNull(),
+  nextBillingDate: timestamp("nextBillingDate"),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type Subscription = typeof subscriptions.$inferSelect;
+
+// ─── API Keys ─────────────────────────────────────────────────────────────────
+export const apiKeys = mysqlTable("api_keys", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 256 }).notNull(),
+  keyHash: varchar("keyHash", { length: 256 }).notNull(),
+  keyPrefix: varchar("keyPrefix", { length: 16 }).notNull(),
+  scopes: text("scopes"),
+  expiresAt: timestamp("expiresAt"),
+  isActive: boolean("isActive").default(true).notNull(),
+  lastUsedAt: timestamp("lastUsedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type ApiKey = typeof apiKeys.$inferSelect;
+
+// ─── CoS Training Modules ─────────────────────────────────────────────────────
+export const cosTrainingModules = mysqlTable("cos_training_modules", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 256 }).notNull(),
+  description: text("description"),
+  duration: varchar("duration", { length: 32 }),
+  requiredLevel: int("requiredLevel").default(1).notNull(),
+  sortOrder: int("sortOrder").default(0).notNull(),
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type CosTrainingModule = typeof cosTrainingModules.$inferSelect;
+
+// ─── CoS Training Progress ────────────────────────────────────────────────────
+export const cosTrainingProgress = mysqlTable("cos_training_progress", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  currentLevel: int("currentLevel").default(1).notNull(),
+  trainingPercentage: int("trainingPercentage").default(0).notNull(),
+  completedModules: text("completedModules"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type CosTrainingProgress = typeof cosTrainingProgress.$inferSelect;
+
+// ─── Document Email History ───────────────────────────────────────────────────
+export const documentEmailHistory = mysqlTable("document_email_history", {
+  id: int("id").autoincrement().primaryKey(),
+  documentId: varchar("documentId", { length: 128 }).notNull(),
+  userId: int("userId").notNull(),
+  recipients: text("recipients"),
+  subject: varchar("subject", { length: 512 }),
+  message: text("message"),
+  status: varchar("status", { length: 32 }).default("sent").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type DocumentEmailHistory = typeof documentEmailHistory.$inferSelect;
+
+// ─── Feedback History ─────────────────────────────────────────────────────────
+export const feedbackHistory = mysqlTable("feedback_history", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  expertId: varchar("expertId", { length: 128 }),
+  rating: int("rating"),
+  feedbackType: varchar("feedbackType", { length: 64 }).default("general").notNull(),
+  feedbackText: text("feedbackText"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type FeedbackHistory = typeof feedbackHistory.$inferSelect;
+
+// ─── NPS Responses ────────────────────────────────────────────────────────────
+export const npsResponses = mysqlTable("nps_responses", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  score: int("score").notNull(),
+  category: varchar("category", { length: 128 }).default("general").notNull(),
+  feedback: text("feedback"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type NpsResponse = typeof npsResponses.$inferSelect;
+
+// ─── KPIs ─────────────────────────────────────────────────────────────────────
+export const kpis = mysqlTable("kpis", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 200 }).notNull(),
+  description: text("description"),
+  unit: varchar("unit", { length: 64 }),
+  targetValue: varchar("targetValue", { length: 128 }),
+  currentValue: varchar("currentValue", { length: 128 }),
+  category: varchar("category", { length: 128 }),
+  suggestedByAgent: varchar("suggestedByAgent", { length: 128 }),
+  status: varchar("status", { length: 32 }).default("on_track").notNull(),
+  trend: varchar("trend", { length: 32 }).default("stable").notNull(),
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type Kpi = typeof kpis.$inferSelect;
+
+// ─── OKRs ─────────────────────────────────────────────────────────────────────
+export const okrs = mysqlTable("okrs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  objective: varchar("objective", { length: 500 }).notNull(),
+  quarter: varchar("quarter", { length: 16 }),
+  status: varchar("status", { length: 32 }).default("active").notNull(),
+  overallProgress: int("overallProgress").default(0).notNull(),
+  suggestedByAgent: varchar("suggestedByAgent", { length: 128 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type Okr = typeof okrs.$inferSelect;
+
+// ─── OKR Key Results ──────────────────────────────────────────────────────────
+export const okrKeyResults = mysqlTable("okr_key_results", {
+  id: int("id").autoincrement().primaryKey(),
+  okrId: int("okrId").notNull(),
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 500 }).notNull(),
+  targetValue: varchar("targetValue", { length: 128 }),
+  unit: varchar("unit", { length: 64 }),
+  progress: int("progress").default(0).notNull(),
+  status: varchar("status", { length: 32 }).default("active").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type OkrKeyResult = typeof okrKeyResults.$inferSelect;
+
+// ─── Briefing Feedback ────────────────────────────────────────────────────────
+export const briefingFeedback = mysqlTable("briefing_feedback", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  briefingId: int("briefingId").notNull(),
+  sectionId: varchar("sectionId", { length: 128 }),
+  rating: int("rating"),
+  comment: text("comment"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type BriefingFeedback = typeof briefingFeedback.$inferSelect;
+
+// ─── Briefing Preferences ─────────────────────────────────────────────────────
+export const briefingPreferences = mysqlTable("briefing_preferences", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  preferredLength: mysqlEnum("preferredLength", ["brief", "standard", "detailed"]).default("standard"),
+  tone: mysqlEnum("tone", ["professional", "casual", "motivational"]).default("professional"),
+  enabledSections: text("enabledSections"),
+  deliveryTime: varchar("deliveryTime", { length: 16 }),
+  includeWeather: boolean("includeWeather").default(true),
+  includeMarketData: boolean("includeMarketData").default(true),
+  maxInsightsPerSection: int("maxInsightsPerSection").default(5),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type BriefingPreference = typeof briefingPreferences.$inferSelect;
+
+// ─── Email Accounts ───────────────────────────────────────────────────────────
+export const emailAccounts = mysqlTable("email_accounts", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  email: varchar("email", { length: 256 }).notNull(),
+  provider: varchar("provider", { length: 64 }).notNull(),
+  status: varchar("status", { length: 32 }).default("active").notNull(),
+  imapHost: varchar("imapHost", { length: 256 }),
+  imapPort: int("imapPort"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type EmailAccount = typeof emailAccounts.$inferSelect;
+
+// ─── Email Messages ───────────────────────────────────────────────────────────
+export const emailMessages = mysqlTable("email_messages", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  provider: varchar("provider", { length: 64 }).notNull(),
+  externalId: varchar("externalId", { length: 256 }).notNull(),
+  threadId: varchar("threadId", { length: 256 }),
+  fromAddress: varchar("fromAddress", { length: 256 }),
+  fromName: varchar("fromName", { length: 256 }),
+  toAddresses: text("toAddresses"),
+  subject: varchar("subject", { length: 512 }),
+  bodyText: text("bodyText"),
+  aiSummary: text("aiSummary"),
+  aiPriority: varchar("aiPriority", { length: 32 }),
+  aiAction: varchar("aiAction", { length: 64 }),
+  aiActionReason: text("aiActionReason"),
+  aiCategory: varchar("aiCategory", { length: 64 }),
+  aiActionItems: text("aiActionItems"),
+  isRead: boolean("isRead").default(false).notNull(),
+  isArchived: boolean("isArchived").default(false).notNull(),
+  followUpAt: timestamp("followUpAt"),
+  receivedAt: timestamp("receivedAt").defaultNow().notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type EmailMessage = typeof emailMessages.$inferSelect;
+
+// ─── Meeting Notes ────────────────────────────────────────────────────────────
+export const meetingNotes = mysqlTable("meeting_notes", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 512 }).notNull(),
+  attendees: text("attendees"),
+  preMeetingBrief: text("preMeetingBrief"),
+  transcript: text("transcript"),
+  summary: text("summary"),
+  actionItems: text("actionItems"),
+  followUpTasks: text("followUpTasks"),
+  source: varchar("source", { length: 64 }).default("manual").notNull(),
+  status: varchar("status", { length: 32 }).default("draft").notNull(),
+  meetingAt: timestamp("meetingAt"),
+  durationMinutes: int("durationMinutes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type MeetingNote = typeof meetingNotes.$inferSelect;
+
+// ─── Approval Requests ────────────────────────────────────────────────────────
+export const approvalRequests = mysqlTable("approval_requests", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  workflowId: int("workflowId"),
+  gateName: varchar("gateName", { length: 256 }),
+  requestSummary: text("requestSummary"),
+  outcomeDescription: text("outcomeDescription"),
+  contextDocs: text("contextDocs"),
+  severity: varchar("severity", { length: 32 }).default("medium").notNull(),
+  status: varchar("status", { length: 32 }).default("pending").notNull(),
+  resolvedAt: timestamp("resolvedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type ApprovalRequest = typeof approvalRequests.$inferSelect;
+
+// ─── Market Launch Campaigns ──────────────────────────────────────────────────
+export const marketLaunchCampaigns = mysqlTable("market_launch_campaigns", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 256 }).notNull(),
+  productName: varchar("productName", { length: 256 }),
+  targetAudience: text("targetAudience"),
+  launchDate: timestamp("launchDate"),
+  budget: varchar("budget", { length: 64 }),
+  channels: text("channels"),
+  goals: text("goals"),
+  stage: varchar("stage", { length: 64 }).default("pre_launch").notNull(),
+  status: varchar("status", { length: 32 }).default("draft").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type MarketLaunchCampaign = typeof marketLaunchCampaigns.$inferSelect;
+
+// ─── Push Subscriptions ───────────────────────────────────────────────────────
+export const pushSubscriptions = mysqlTable("push_subscriptions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  endpoint: text("endpoint").notNull(),
+  p256dh: text("p256dh").notNull(),
+  auth: varchar("auth", { length: 256 }).notNull(),
+  deviceName: varchar("deviceName", { length: 256 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type PushSubscription = typeof pushSubscriptions.$inferSelect;
+
+// ─── Real World Integrations ──────────────────────────────────────────────────
+export const realWorldIntegrations = mysqlTable("real_world_integrations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  provider: varchar("provider", { length: 128 }).notNull(),
+  displayName: varchar("displayName", { length: 256 }),
+  credentialsVaultKey: varchar("credentialsVaultKey", { length: 256 }),
+  metadata: text("metadata"),
+  status: varchar("status", { length: 32 }).default("active").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type RealWorldIntegration = typeof realWorldIntegrations.$inferSelect;
+
+// ─── Workspaces ───────────────────────────────────────────────────────────────
+export const workspaces = mysqlTable("workspaces", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 256 }).notNull(),
+  slug: varchar("slug", { length: 128 }).notNull().unique(),
+  ownerId: int("ownerId").notNull(),
+  isPersonal: boolean("isPersonal").default(true).notNull(),
+  plan: varchar("plan", { length: 32 }).default("free").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type Workspace = typeof workspaces.$inferSelect;
+
+// ─── Workspace Members ────────────────────────────────────────────────────────
+export const workspaceMembers = mysqlTable("workspace_members", {
+  id: int("id").autoincrement().primaryKey(),
+  workspaceId: int("workspaceId").notNull(),
+  userId: int("userId").notNull(),
+  role: varchar("role", { length: 32 }).default("member").notNull(),
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type WorkspaceMember = typeof workspaceMembers.$inferSelect;
+
+// ─── Ventures ─────────────────────────────────────────────────────────────────
+export const ventures = mysqlTable("ventures", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 256 }).notNull(),
+  description: text("description"),
+  industry: varchar("industry", { length: 128 }),
+  targetMarket: text("targetMarket"),
+  businessModel: text("businessModel"),
+  stage: varchar("stage", { length: 64 }),
+  status: varchar("status", { length: 32 }).default("draft").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type Venture = typeof ventures.$inferSelect;
+
+// ─── Autonomous Workflows ─────────────────────────────────────────────────────
+export const autonomousWorkflows = mysqlTable("autonomous_workflows", {
+  id: int("id").autoincrement().primaryKey(),
+  ventureId: int("ventureId"),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 256 }).notNull(),
+  type: varchar("type", { length: 128 }).notNull(),
+  status: varchar("status", { length: 32 }).default("in_progress").notNull(),
+  currentStep: int("currentStep").default(0).notNull(),
+  totalSteps: int("totalSteps").default(0).notNull(),
+  steps: text("steps"),
+  startedAt: timestamp("startedAt").defaultNow().notNull(),
+  completedAt: timestamp("completedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type AutonomousWorkflow = typeof autonomousWorkflows.$inferSelect;
+
+// ─── Orchestrator Jobs ────────────────────────────────────────────────────────
+export const orchestratorJobs = mysqlTable("orchestrator_jobs", {
+  id: int("id").autoincrement().primaryKey(),
+  workflowId: int("workflowId").notNull(),
+  userId: int("userId").notNull(),
+  agentId: varchar("agentId", { length: 128 }).notNull(),
+  taskType: varchar("taskType", { length: 256 }).notNull(),
+  input: text("input"),
+  output: text("output"),
+  status: varchar("status", { length: 32 }).default("pending").notNull(),
+  error: text("error"),
+  startedAt: timestamp("startedAt"),
+  completedAt: timestamp("completedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type OrchestratorJob = typeof orchestratorJobs.$inferSelect;
+
+// ─── System Kill Switch ───────────────────────────────────────────────────────
+export const systemKillSwitch = mysqlTable("system_kill_switch", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  isActive: boolean("isActive").default(false).notNull(),
+  reason: text("reason"),
+  activatedAt: timestamp("activatedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type SystemKillSwitch = typeof systemKillSwitch.$inferSelect;
+
+// ─── User Workspace Prefs ─────────────────────────────────────────────────────
+export const userWorkspacePrefs = mysqlTable("user_workspace_prefs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  activeWorkspaceId: int("activeWorkspaceId"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type UserWorkspacePref = typeof userWorkspacePrefs.$inferSelect;
+
+// ─── Workflow Approval Gates ──────────────────────────────────────────────────
+export const workflowApprovalGates = mysqlTable("workflow_approval_gates", {
+  id: int("id").autoincrement().primaryKey(),
+  workflowId: int("workflowId").notNull(),
+  userId: int("userId").notNull(),
+  stepName: varchar("stepName", { length: 256 }),
+  stepIndex: int("stepIndex").default(0).notNull(),
+  description: text("description"),
+  proposedAction: text("proposedAction"),
+  impactLevel: varchar("impactLevel", { length: 32 }).default("medium").notNull(),
+  status: varchar("status", { length: 32 }).default("pending").notNull(),
+  expiresAt: timestamp("expiresAt"),
+  resolvedAt: timestamp("resolvedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type WorkflowApprovalGate = typeof workflowApprovalGates.$inferSelect;
+
+// ─── Competitors ──────────────────────────────────────────────────────────────
+export const competitors = mysqlTable("competitors", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 256 }).notNull(),
+  website: varchar("website", { length: 512 }),
+  description: text("description"),
+  category: varchar("category", { length: 128 }),
+  pricing: text("pricing"),
+  targetMarket: text("targetMarket"),
+  threatLevel: varchar("threatLevel", { length: 32 }).default("medium").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type Competitor = typeof competitors.$inferSelect;
+
+// ─── Competitive Threats ──────────────────────────────────────────────────────
+export const competitiveThreats = mysqlTable("competitive_threats", {
+  id: int("id").autoincrement().primaryKey(),
+  type: varchar("type", { length: 128 }).notNull(),
+  severity: varchar("severity", { length: 32 }).default("medium").notNull(),
+  competitorId: int("competitorId"),
+  title: varchar("title", { length: 512 }).notNull(),
+  description: text("description"),
+  impact: text("impact"),
+  recommendedAction: text("recommendedAction"),
+  status: varchar("status", { length: 32 }).default("open").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type CompetitiveThreat = typeof competitiveThreats.$inferSelect;
+
+// ─── Feature Comparison ───────────────────────────────────────────────────────
+export const featureComparison = mysqlTable("feature_comparison", {
+  id: int("id").autoincrement().primaryKey(),
+  category: varchar("category", { length: 128 }).notNull(),
+  featureName: varchar("featureName", { length: 256 }).notNull(),
+  theBrainStatus: mysqlEnum("theBrainStatus", ["implemented", "in_progress", "planned", "not_planned"]).default("planned"),
+  theBrainScore: int("theBrainScore").default(0),
+  competitorData: text("competitorData"),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type FeatureComparison = typeof featureComparison.$inferSelect;
+
+// ─── Market Position History ──────────────────────────────────────────────────
+export const marketPositionHistory = mysqlTable("market_position_history", {
+  id: int("id").autoincrement().primaryKey(),
+  date: timestamp("date").defaultNow().notNull(),
+  overallScore: int("overallScore").default(50).notNull(),
+  analysis: text("analysis"),
+  factors: text("factors"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type MarketPositionHistory = typeof marketPositionHistory.$inferSelect;
+
+// ─── Report Schedules ─────────────────────────────────────────────────────────
+export const reportSchedules = mysqlTable("report_schedules", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 256 }).notNull(),
+  reportType: varchar("reportType", { length: 128 }).notNull(),
+  frequency: varchar("frequency", { length: 32 }).notNull(),
+  dayOfWeek: int("dayOfWeek"),
+  hourUtc: int("hourUtc").default(8).notNull(),
+  recipients: text("recipients"),
+  filters: text("filters"),
+  isActive: boolean("isActive").default(true).notNull(),
+  lastRunAt: timestamp("lastRunAt"),
+  nextRunAt: timestamp("nextRunAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type ReportSchedule = typeof reportSchedules.$inferSelect;
+
+// ─── Board Knowledge Corpus ───────────────────────────────────────────────────
+export const boardKnowledgeCorpus = mysqlTable("board_knowledge_corpus", {
+  id: int("id").autoincrement().primaryKey(),
+  memberId: varchar("memberId", { length: 128 }).notNull(),
+  memberName: varchar("memberName", { length: 256 }),
+  chunkIndex: int("chunkIndex").default(0).notNull(),
+  content: text("content").notNull(),
+  source: varchar("source", { length: 256 }),
+  contentType: varchar("contentType", { length: 64 }),
+  embedding: text("embedding"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type BoardKnowledgeCorpus = typeof boardKnowledgeCorpus.$inferSelect;
+
+// ─── Agent1 Settings ──────────────────────────────────────────────────────────
+export const agent1Settings = mysqlTable("agent1_settings", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  systemPromptPatch: text("systemPromptPatch"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type Agent1Settings = typeof agent1Settings.$inferSelect;
+
+// ─── Agent1 Identity Profiles ─────────────────────────────────────────────────
+export const agent1IdentityProfiles = mysqlTable("agent1_identity_profiles", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  identityMd: text("identityMd"),
+  valuesMd: text("valuesMd"),
+  relationshipsMd: text("relationshipsMd"),
+  preferencesMd: text("preferencesMd"),
+  onboardingComplete: boolean("onboardingComplete").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type Agent1IdentityProfile = typeof agent1IdentityProfiles.$inferSelect;
+
+// ─── Agent1 Decision Log ──────────────────────────────────────────────────────
+export const agent1DecisionLog = mysqlTable("agent1_decision_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  date: varchar("date", { length: 32 }),
+  decision: text("decision").notNull(),
+  optionsConsidered: text("optionsConsidered"),
+  chosen: text("chosen"),
+  reasons: text("reasons"),
+  tolerance: mysqlEnum("tolerance", ["low", "medium", "high"]).default("medium"),
+  outcome: text("outcome"),
+  whatIdChange: text("whatIdChange"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type Agent1DecisionLog = typeof agent1DecisionLog.$inferSelect;
+
+// ─── Agent1 Reflections ───────────────────────────────────────────────────────
+export const agent1Reflections = mysqlTable("agent1_reflections", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  weekStart: varchar("weekStart", { length: 32 }),
+  wellDone: text("wellDone"),
+  missed: text("missed"),
+  proposedPatch: text("proposedPatch"),
+  status: varchar("status", { length: 32 }).default("pending").notNull(),
+  reviewedAt: timestamp("reviewedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type Agent1Reflection = typeof agent1Reflections.$inferSelect;
+
+// ─── Agent1 Training Progress ─────────────────────────────────────────────────
+export const agent1TrainingProgress = mysqlTable("agent1_training_progress", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  phase: varchar("phase", { length: 128 }).notNull(),
+  dayOrWeek: varchar("dayOrWeek", { length: 64 }),
+  completed: boolean("completed").default(false).notNull(),
+  notes: text("notes"),
+  completedAt: timestamp("completedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type Agent1TrainingProgress = typeof agent1TrainingProgress.$inferSelect;
+
+// ─── Prompt Versions ──────────────────────────────────────────────────────────
+export const promptVersions = mysqlTable("prompt_versions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  promptKey: varchar("promptKey", { length: 256 }).notNull(),
+  version: int("version").default(1).notNull(),
+  content: text("content").notNull(),
+  description: text("description"),
+  isActive: boolean("isActive").default(false).notNull(),
+  createdBy: varchar("createdBy", { length: 256 }),
+  tokenCount: int("tokenCount"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type PromptVersion = typeof promptVersions.$inferSelect;
+
+// ─── Business Plan Review Versions ───────────────────────────────────────────
+export const businessPlanReviewVersions = mysqlTable("business_plan_review_versions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  projectName: varchar("projectName", { length: 256 }).notNull(),
+  versionNumber: int("versionNumber").default(1).notNull(),
+  versionLabel: varchar("versionLabel", { length: 128 }),
+  overallScore: int("overallScore"),
+  sectionScores: text("sectionScores"),
+  reviewData: text("reviewData"),
+  expertTeam: text("expertTeam"),
+  teamSelectionMode: varchar("teamSelectionMode", { length: 64 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type BusinessPlanReviewVersion = typeof businessPlanReviewVersions.$inferSelect;
+
+// ─── Collaborative Review Sessions ───────────────────────────────────────────
+export const collaborativeReviewSessions = mysqlTable("collaborative_review_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  ownerId: int("ownerId").notNull(),
+  projectName: varchar("projectName", { length: 256 }).notNull(),
+  templateId: int("templateId"),
+  status: varchar("status", { length: 32 }).default("active").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type CollaborativeReviewSession = typeof collaborativeReviewSessions.$inferSelect;
+
+// ─── Collaborative Review Participants ───────────────────────────────────────
+export const collaborativeReviewParticipants = mysqlTable("collaborative_review_participants", {
+  id: int("id").autoincrement().primaryKey(),
+  sessionId: int("sessionId").notNull(),
+  userId: int("userId").notNull(),
+  role: varchar("role", { length: 64 }).default("reviewer").notNull(),
+  invitedBy: int("invitedBy"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type CollaborativeReviewParticipant = typeof collaborativeReviewParticipants.$inferSelect;
+
+// ─── Collaborative Review Comments ───────────────────────────────────────────
+export const collaborativeReviewComments = mysqlTable("collaborative_review_comments", {
+  id: int("id").autoincrement().primaryKey(),
+  sessionId: int("sessionId").notNull(),
+  userId: int("userId").notNull(),
+  sectionId: varchar("sectionId", { length: 128 }),
+  comment: text("comment").notNull(),
+  parentCommentId: int("parentCommentId"),
+  status: varchar("status", { length: 32 }).default("open").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type CollaborativeReviewComment = typeof collaborativeReviewComments.$inferSelect;
+
+// ─── SME Idea Submissions ─────────────────────────────────────────────────────
+export const smeIdeaSubmissions = mysqlTable("sme_idea_submissions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  expertId: varchar("expertId", { length: 128 }).notNull(),
+  expertName: varchar("expertName", { length: 256 }),
+  expertCategory: varchar("expertCategory", { length: 128 }),
+  title: varchar("title", { length: 512 }).notNull(),
+  description: text("description"),
+  sourceUrl: varchar("sourceUrl", { length: 1024 }),
+  sourceTitle: varchar("sourceTitle", { length: 512 }),
+  cephoArea: varchar("cephoArea", { length: 128 }),
+  status: varchar("status", { length: 32 }).default("pending").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type SmeIdeaSubmission = typeof smeIdeaSubmissions.$inferSelect;
+
+// ─── SME Activity Log ─────────────────────────────────────────────────────────
+export const smeActivityLog = mysqlTable("sme_activity_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  expertId: varchar("expertId", { length: 128 }).notNull(),
+  expertName: varchar("expertName", { length: 256 }),
+  activityType: varchar("activityType", { length: 64 }).notNull(),
+  summary: text("summary"),
+  ideasSubmitted: int("ideasSubmitted").default(0).notNull(),
+  ideasApproved: int("ideasApproved").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type SmeActivityLog = typeof smeActivityLog.$inferSelect;
+
+// ─── Favorite Contacts ────────────────────────────────────────────────────────
+export const favoriteContacts = mysqlTable("favorite_contacts", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  contactId: varchar("contactId", { length: 256 }).notNull(),
+  contactType: varchar("contactType", { length: 64 }).notNull(),
+  contactName: varchar("contactName", { length: 256 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type FavoriteContact = typeof favoriteContacts.$inferSelect;
+
+// ─── Integrations ─────────────────────────────────────────────────────────────
+export const integrations = mysqlTable("integrations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  provider: varchar("provider", { length: 128 }).notNull(),
+  status: varchar("status", { length: 32 }).default("active").notNull(),
+  accessToken: text("accessToken"),
+  metadata: text("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type Integration = typeof integrations.$inferSelect;
+
+// ─── SME Teams ────────────────────────────────────────────────────────────────
+export const smeTeams = mysqlTable("sme_teams", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 256 }).notNull(),
+  description: text("description"),
+  purpose: text("purpose"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type SmeTeam = typeof smeTeams.$inferSelect;
+
+// ─── Team Capabilities ────────────────────────────────────────────────────────
+export const teamCapabilities = mysqlTable("team_capabilities", {
+  id: int("id").autoincrement().primaryKey(),
+  teamMember: varchar("teamMember", { length: 256 }).notNull(),
+  role: varchar("role", { length: 128 }),
+  skillCategory: varchar("skillCategory", { length: 128 }),
+  skillName: varchar("skillName", { length: 256 }).notNull(),
+  currentLevel: int("currentLevel").default(0).notNull(),
+  targetLevel: int("targetLevel"),
+  gap: int("gap"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type TeamCapability = typeof teamCapabilities.$inferSelect;
