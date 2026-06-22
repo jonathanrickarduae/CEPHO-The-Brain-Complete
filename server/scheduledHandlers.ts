@@ -234,8 +234,8 @@ async function handleVictoriaBrief(req: Request, res: Response) {
     // ── Pillar 2: Today's meetings from Outlook ────────────────────────────────
     let meetingsSection = "";
     const calResult = await callMCP("outlook-calendar", "outlook_calendar_search_events", {
-      start_datetime: todayStart.toISOString(),
-      end_datetime: todayEnd.toISOString(),
+      time_min: todayStart.toISOString(),
+      time_max: todayEnd.toISOString(),
       max_results: 10,
     });
     const meetings = calResult?.events ?? calResult?.value ?? [];
