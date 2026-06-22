@@ -31,6 +31,14 @@ services:
         sync: false
       - key: TELEGRAM_BOT_TOKEN
         sync: false
+      - key: TELEGRAM_OWNER_CHAT_ID
+        sync: false
+      - key: ELEVENLABS_API_KEY
+        sync: false
+      - key: SITE_PASSWORD
+        sync: false
+      - key: BREVO_API_KEY
+        sync: false
       - key: OWNER_OPEN_ID
         sync: false
       - key: OWNER_NAME
