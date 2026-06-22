@@ -22,6 +22,8 @@ import {
   teamCapabilities,
 } from "../../drizzle/schema";
 import { calendarService } from "../services/calendar";
+import { calendarEventsCache } from "../../drizzle/schema";
+import { lte } from "drizzle-orm";
 
 // ─── Auth Router ─────────────────────────────────────────────────────────────
 export const authRouter = router({
@@ -712,6 +714,148 @@ export const calendarRouter = router({
         );
 
       return { success: true, message: `${input.provider} calendar synced` };
+    }),
+
+  // ── Get Events ──────────────────────────────────────────────────────────────
+  getEvents: protectedProcedure
+    .input(z.object({ startDate: z.string(), endDate: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const start = new Date(input.startDate);
+      const end = new Date(input.endDate);
+      const { gte } = await import("drizzle-orm");
+      const events = await db.select().from(calendarEventsCache)
+        .where(and(
+          eq(calendarEventsCache.userId, ctx.user.id),
+          gte(calendarEventsCache.startTime, start),
+          lte(calendarEventsCache.startTime, end)
+        ))
+        .orderBy(calendarEventsCache.startTime);
+      return events;
+    }),
+
+  // ── Create Event ─────────────────────────────────────────────────────────────
+  create: protectedProcedure
+    .input(z.object({
+      title: z.string().min(1),
+      startTime: z.string(),
+      endTime: z.string(),
+      location: z.string().optional(),
+      notes: z.string().optional(),
+      isAllDay: z.boolean().optional(),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      const result = await db.insert(calendarEventsCache).values({
+        userId: ctx.user.id,
+        title: input.title,
+        startTime: new Date(input.startTime),
+        endTime: new Date(input.endTime),
+        location: input.location ?? "",
+        isAllDay: input.isAllDay ?? false,
+        source: "manual",
+      });
+      return { success: true };
+    }),
+
+  // ── Outlook MCP Sync ─────────────────────────────────────────────────────────
+  syncOutlook: protectedProcedure
+    .mutation(async ({ ctx }) => {
+      const now = new Date();
+      const twoWeeksOut = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+      const timeMin = now.toISOString();
+      const timeMax = twoWeeksOut.toISOString();
+
+      let outlookEvents: any[] = [];
+      const errors: string[] = [];
+
+      try {
+        const { exec: _exec } = await import("child_process");
+        const { promisify } = await import("util");
+        const execAsync = promisify(_exec);
+        const inputJson = JSON.stringify({ time_min: timeMin, time_max: timeMax, max_results: 50 });
+        const { stdout } = await execAsync(
+          `manus-mcp-cli tool call outlook_calendar_search_events --server outlook-calendar --input '${inputJson.replace(/'/g, "'\\''")}' `,
+          { timeout: 25000 }
+        );
+        const lines = stdout.trim().split("\n");
+        for (let i = lines.length - 1; i >= 0; i--) {
+          const l = lines[i].trim();
+          if (l.startsWith("{") || l.startsWith("[")) {
+            const parsed = JSON.parse(l);
+            outlookEvents = parsed?.value ?? parsed?.events ?? (Array.isArray(parsed) ? parsed : []);
+            break;
+          }
+        }
+      } catch (err) {
+        errors.push(String(err));
+      }
+
+      let synced = 0;
+      for (const ev of outlookEvents) {
+        try {
+          const externalId = ev.id ?? ev.iCalUId ?? null;
+          if (!externalId) continue;
+          const title = ev.subject ?? ev.summary ?? "(No title)";
+          const startRaw = ev.start?.dateTime ?? ev.start?.date ?? null;
+          const endRaw = ev.end?.dateTime ?? ev.end?.date ?? null;
+          if (!startRaw || !endRaw) continue;
+          const startTime = new Date(startRaw);
+          const endTime = new Date(endRaw);
+          const location = ev.location?.displayName ?? ev.location ?? "";
+          const isAllDay = !ev.start?.dateTime;
+
+          // Upsert by externalId
+          const existing = await db.select().from(calendarEventsCache)
+            .where(and(eq(calendarEventsCache.externalId, externalId), eq(calendarEventsCache.userId, ctx.user.id)))
+            .limit(1);
+          if (existing.length > 0) {
+            await db.update(calendarEventsCache)
+              .set({ title, startTime, endTime, location: typeof location === "string" ? location : "", isAllDay, source: "outlook", syncedAt: new Date() })
+              .where(and(eq(calendarEventsCache.externalId, externalId), eq(calendarEventsCache.userId, ctx.user.id)));
+          } else {
+            await db.insert(calendarEventsCache).values({
+              userId: ctx.user.id,
+              externalId,
+              title,
+              startTime,
+              endTime,
+              location: typeof location === "string" ? location : "",
+              isAllDay,
+              source: "outlook",
+            });
+          }
+          synced++;
+        } catch (e) {
+          errors.push(String(e));
+        }
+      }
+
+      return { success: true, synced, total: outlookEvents.length, errors };
+    }),
+
+  // ── Conflict Detection ───────────────────────────────────────────────────────
+  detectConflicts: protectedProcedure
+    .input(z.object({ date: z.string() })) // YYYY-MM-DD
+    .query(async ({ input, ctx }) => {
+      const dayStart = new Date(input.date + "T00:00:00.000Z");
+      const dayEnd   = new Date(input.date + "T23:59:59.999Z");
+
+      const allEvents = await db.select().from(calendarEventsCache)
+        .where(and(eq(calendarEventsCache.userId, ctx.user.id), lte(calendarEventsCache.startTime, dayEnd)))
+        .orderBy(calendarEventsCache.startTime);
+
+      const dayEvents = allEvents.filter(ev => new Date(ev.endTime) > dayStart);
+
+      const conflicts: Array<{ event1: typeof dayEvents[0]; event2: typeof dayEvents[0] }> = [];
+      for (let i = 0; i < dayEvents.length; i++) {
+        for (let j = i + 1; j < dayEvents.length; j++) {
+          const a = dayEvents[i];
+          const b = dayEvents[j];
+          if (new Date(a.startTime) < new Date(b.endTime) && new Date(b.startTime) < new Date(a.endTime)) {
+            conflicts.push({ event1: a, event2: b });
+          }
+        }
+      }
+      return conflicts;
     }),
 });
 
