@@ -182,7 +182,29 @@ Output exactly 5 ideas in the format above, separated by ---`;
   }
 }
 
-// ─── Handler 2: Victoria Morning Brief ───────────────────────────────────────
+// ─── MCP helper (module-level) ───────────────────────────────────────────────
+import { exec as _exec } from "child_process";
+import { promisify as _promisify } from "util";
+const _execAsync = _promisify(_exec);
+async function callMCP(server: string, toolName: string, input: Record<string, unknown>) {
+  try {
+    const inputJson = JSON.stringify(input).replace(/'/g, "'\\''" );
+    const { stdout } = await _execAsync(
+      `manus-mcp-cli tool call ${toolName} --server ${server} --input '${inputJson}'`,
+      { timeout: 20000 }
+    );
+    const lines = stdout.trim().split("\n");
+    for (let i = lines.length - 1; i >= 0; i--) {
+      const l = lines[i].trim();
+      if (l.startsWith("{") || l.startsWith("[")) return JSON.parse(l);
+    }
+    return JSON.parse(stdout.trim());
+  } catch { return null; }
+}
+
+// ─── Handler 2: Victoria Daily Brief ────────────────────────────────────────
+// Six pillars: UK news, today's meetings, overnight emails, tasks/actions,
+// approvals needed, and overnight ideas — all delivered to Telegram by 06:00 UAE.
 async function handleVictoriaBrief(req: Request, res: Response) {
   try {
     const user = await sdk.authenticateRequest(req);
@@ -191,64 +213,165 @@ async function handleVictoriaBrief(req: Request, res: Response) {
     const db = await getDb();
     if (!db) return res.status(500).json({ error: "db-unavailable" });
 
+
+    const now = new Date();
+    const todayStart = new Date(now); todayStart.setHours(0, 0, 0, 0);
+    const todayEnd   = new Date(now); todayEnd.setHours(23, 59, 59, 999);
+    const yesterday  = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+    // ── Pillar 1: BBC UK News headlines ───────────────────────────────────────
+    let newsSection = "";
+    try {
+      const bbcRss = await fetch("https://feeds.bbci.co.uk/news/rss.xml", { signal: AbortSignal.timeout(8000) });
+      const xml = await bbcRss.text();
+      const headlines = Array.from(xml.matchAll(/<title><!\[CDATA\[([^\]]+)\]\]><\/title>/g))
+        .map(m => m[1]).filter(h => !h.includes("BBC")).slice(0, 3);
+      if (headlines.length) {
+        newsSection = `📰 *UK NEWS*\n${headlines.map((h, i) => `${i + 1}. ${h}`).join("\n")}`;
+      }
+    } catch { newsSection = "📰 *UK NEWS*\nUnavailable"; }
+
+    // ── Pillar 2: Today's meetings from Outlook ────────────────────────────────
+    let meetingsSection = "";
+    const calResult = await callMCP("outlook-calendar", "outlook_calendar_search_events", {
+      start_datetime: todayStart.toISOString(),
+      end_datetime: todayEnd.toISOString(),
+      max_results: 10,
+    });
+    const meetings = calResult?.events ?? calResult?.value ?? [];
+    if (meetings.length > 0) {
+      const meetingLines = meetings.slice(0, 5).map((m: any) => {
+        const start = m.start?.dateTime ? new Date(m.start.dateTime).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Dubai" }) : "All day";
+        return `• ${start} — ${m.subject ?? m.summary ?? "Meeting"}`;
+      }).join("\n");
+      meetingsSection = `📅 *TODAY'S MEETINGS (${meetings.length})*\n${meetingLines}`;
+    } else {
+      meetingsSection = "📅 *TODAY'S MEETINGS*\nNo meetings scheduled";
+    }
+
+    // ── Pillar 3: Overnight emails (unread since yesterday) ───────────────────
+    let emailsSection = "";
+    const gmailResult = await callMCP("gmail", "gmail_search_messages", {
+      q: `in:inbox is:unread after:${Math.floor(yesterday.getTime() / 1000)}`,
+      max_results: 20,
+    });
+    const emails = gmailResult?.messages ?? [];
+    const emailCount = gmailResult?.resultSizeEstimate ?? emails.length;
+    if (emails.length > 0) {
+      const emailLines = emails.slice(0, 5).map((e: any) => {
+        const from = e.from ?? e.payload?.headers?.find((h: any) => h.name === "From")?.value ?? "Unknown";
+        const subject = e.subject ?? e.payload?.headers?.find((h: any) => h.name === "Subject")?.value ?? "(no subject)";
+        return `• ${from.split("<")[0].trim()}: ${subject.slice(0, 60)}`;
+      }).join("\n");
+      emailsSection = `📧 *OVERNIGHT EMAILS (${emailCount} unread)*\n${emailLines}${emailCount > 5 ? `\n  ...and ${emailCount - 5} more` : ""}`;
+    } else {
+      emailsSection = "📧 *OVERNIGHT EMAILS*\nInbox clear";
+    }
+
+    // ── Pillar 4: Tasks — what Victoria has done, what needs approval, what's due ─
     const [allTasks, allProjects, recentIdeas] = await Promise.all([
-      db.select().from(tasks).orderBy(desc(tasks.createdAt)).limit(50),
+      db.select().from(tasks).orderBy(desc(tasks.createdAt)).limit(100),
       db.select().from(projects).limit(20),
       db.select().from(innovations)
-        .where(gte(innovations.createdAt, new Date(Date.now() - 24 * 60 * 60 * 1000)))
-        .orderBy(desc(innovations.createdAt))
-        .limit(10),
+        .where(gte(innovations.createdAt, yesterday))
+        .orderBy(desc(innovations.createdAt)).limit(10),
     ]);
 
-    const blockedTasks = allTasks.filter(t => t.status === "blocked");
+    const todayDue = allTasks.filter(t => {
+      if (!t.dueDate || t.status === "done") return false;
+      const d = new Date(t.dueDate);
+      return d >= todayStart && d <= todayEnd;
+    });
     const overdueTasks = allTasks.filter(t => {
       if (!t.dueDate || t.status === "done") return false;
-      return new Date(t.dueDate) < new Date();
+      return new Date(t.dueDate) < todayStart;
+    });
+    const needsApproval = allTasks.filter(t => t.status === "blocked");
+    const completedYesterday = allTasks.filter(t => {
+      if (t.status !== "done") return false;
+      return t.updatedAt && new Date(t.updatedAt) >= yesterday;
     });
     const highPriority = allTasks.filter(t =>
       (t.priority === "high" || t.priority === "critical") && t.status !== "done"
-    );
+    ).slice(0, 5);
 
-    const briefContext = `
-BLOCKED TASKS (${blockedTasks.length}):
-${blockedTasks.slice(0, 5).map(t => `- ${t.title}`).join("\n") || "None"}
+    const tasksSection = [
+      completedYesterday.length > 0
+        ? `✅ *COMPLETED (last 24h)*\n${completedYesterday.slice(0, 3).map(t => `• ${t.title}`).join("\n")}`
+        : null,
+      needsApproval.length > 0
+        ? `⚠️ *NEEDS YOUR APPROVAL (${needsApproval.length})*\n${needsApproval.slice(0, 3).map(t => `• ${t.title}`).join("\n")}`
+        : null,
+      todayDue.length > 0
+        ? `🎯 *DUE TODAY (${todayDue.length})*\n${todayDue.slice(0, 3).map(t => `• [${t.priority ?? "med"}] ${t.title}`).join("\n")}`
+        : null,
+      overdueTasks.length > 0
+        ? `🔴 *OVERDUE (${overdueTasks.length})*\n${overdueTasks.slice(0, 3).map(t => `• ${t.title}`).join("\n")}`
+        : null,
+      highPriority.length > 0
+        ? `⚡ *HIGH PRIORITY*\n${highPriority.map(t => `• ${t.title}`).join("\n")}`
+        : null,
+    ].filter(Boolean).join("\n\n") || "🎯 *TASKS*\nNo urgent items";
 
-OVERDUE TASKS (${overdueTasks.length}):
-${overdueTasks.slice(0, 5).map(t => `- ${t.title} (due: ${t.dueDate?.toISOString().split("T")[0] ?? "unknown"})`).join("\n") || "None"}
+    // ── Pillar 5: Projects status ──────────────────────────────────────────────
+    const redProjects = allProjects.filter(p => p.status === "red");
+    const amberProjects = allProjects.filter(p => p.status === "amber");
+    const projectsSection = (redProjects.length > 0 || amberProjects.length > 0)
+      ? `🚦 *PROJECTS*\n${redProjects.map(p => `🔴 ${p.name}`).join("\n")}${redProjects.length && amberProjects.length ? "\n" : ""}${amberProjects.map(p => `🟡 ${p.name}`).join("\n")}`
+      : `🚦 *PROJECTS*\nAll ${allProjects.length} projects on track`;
 
-HIGH PRIORITY TASKS (${highPriority.length}):
-${highPriority.slice(0, 5).map(t => `- [${t.priority}] ${t.title}`).join("\n") || "None"}
+    // ── Pillar 6: Overnight ideas ──────────────────────────────────────────────
+    const ideasSection = recentIdeas.length > 0
+      ? `💡 *OVERNIGHT IDEAS (${recentIdeas.length})*\n${recentIdeas.slice(0, 3).map(i => `• ${i.title}`).join("\n")}`
+      : "";
 
-NEW IDEAS (last 24h): ${recentIdeas.length}
-${recentIdeas.slice(0, 3).map(i => `- ${i.title}`).join("\n") || "None"}
-`;
+    // ── Victoria's synthesis — top 3 actions ──────────────────────────────────
+    const contextForLLM = `Date: ${now.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "Asia/Dubai" })}
+Meetings today: ${meetings.length}
+Unread emails: ${emailCount}
+Due today: ${todayDue.length}, Overdue: ${overdueTasks.length}, Needs approval: ${needsApproval.length}
+Red projects: ${redProjects.map(p => p.name).join(", ") || "none"}
+New ideas overnight: ${recentIdeas.length}`;
 
-    const response = await invokeLLM({
+    const llmResp = await invokeLLM({
       messages: [
-        { role: "system", content: "You are Victoria, AI Chief of Staff for Jonathan Rickard at CEPHO. Be direct, data-led, no pleasantries." },
-        { role: "user", content: `Generate a morning brief based on this data:\n${briefContext}\n\nProvide: 1) Top 3 actions for today 2) Key risks to address 3) One strategic observation. Maximum 200 words total.` },
+        { role: "system", content: "You are Victoria, AI Chief of Staff for Jonathan Rickard at CEPHO. You are direct, sharp, and action-oriented. No pleasantries. Jonathan is based in UAE." },
+        { role: "user", content: `Based on this data, give Jonathan his top 3 actions for today and one strategic observation. Maximum 80 words. Be specific.\n\n${contextForLLM}` },
       ],
-      max_tokens: 400,
+      max_tokens: 200,
     });
+    const synthesis = typeof llmResp.choices[0]?.message?.content === "string"
+      ? llmResp.choices[0].message.content
+      : "";
 
-    const brief = typeof response.choices[0]?.message?.content === "string"
-      ? response.choices[0].message.content
-      : "Morning brief unavailable.";
+    // ── Assemble the full brief ────────────────────────────────────────────────
+    const dateStr = now.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "Asia/Dubai" });
+    const sections = [
+      `🌅 *VICTORIA — DAILY BRIEF*\n_${dateStr}_`,
+      synthesis ? `🧠 *VICTORIA'S TAKE*\n${synthesis}` : null,
+      newsSection,
+      meetingsSection,
+      emailsSection,
+      tasksSection,
+      projectsSection,
+      ideasSection,
+    ].filter(Boolean).join("\n\n─────────────────\n\n");
 
+    // Send to Telegram via notifyOwner (which routes to Telegram)
     await notifyOwner({
-      title: "Victoria — Morning Brief",
-      content: brief,
+      title: `Victoria — Daily Brief — ${dateStr}`,
+      content: sections,
     });
 
     await db.insert(learningEntries).values({
       source: "victoria",
       category: "brief",
-      insight: `Morning brief: ${blockedTasks.length} blocked, ${overdueTasks.length} overdue, ${recentIdeas.length} new ideas`,
-      context: JSON.stringify({ blockedCount: blockedTasks.length, overdueCount: overdueTasks.length }),
+      insight: `Daily brief: ${meetings.length} meetings, ${emailCount} emails, ${todayDue.length} due today, ${recentIdeas.length} new ideas`,
+      context: JSON.stringify({ meetings: meetings.length, emails: emailCount, due: todayDue.length, overdue: overdueTasks.length }),
       confidence: 90,
     });
 
-    return res.json({ ok: true, brief: brief.slice(0, 200) });
+    return res.json({ ok: true, pillars: { news: !!newsSection, meetings: meetings.length, emails: emailCount, tasks: allTasks.length, ideas: recentIdeas.length } });
   } catch (err) {
     console.error("[Scheduled/victoria-brief] Error:", err);
     return res.status(500).json({ error: String(err), timestamp: new Date().toISOString() });
