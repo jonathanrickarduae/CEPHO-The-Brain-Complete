@@ -43,3 +43,5 @@ services:
         sync: false
       - key: OWNER_NAME
         sync: false
+      - key: CEPHO_AGENT_SECRET
+        sync: false
