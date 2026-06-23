@@ -92,7 +92,7 @@ export const expertEvolutionRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       const persona = getExpertPersona(input.expertId);
-            const messages.ChatCompletionMessageParam[] = [
+            const messages = [
         { role: "system", content: persona.systemPrompt },
         ...input.conversationHistory.slice(-10),
         { role: "user", content: input.message },

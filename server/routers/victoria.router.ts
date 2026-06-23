@@ -439,7 +439,7 @@ export const victoriaRouter = router({
         .orderBy(desc(conversations.createdAt))
         .limit(10);
 
-      const messages.Chat.ChatCompletionMessageParam[] = [
+      const messages = [
         {
           role: "system",
           content: `${VICTORIA_SYSTEM_PROMPT}\n\n## Current Context\n${userContext}`,

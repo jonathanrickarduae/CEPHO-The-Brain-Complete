@@ -661,7 +661,7 @@ ${ragContext}
 
 Remember: You are not playing a character. You are drawing on your genuine knowledge, experience, and worldview to provide the most valuable possible guidance.`;
 
-      const messages.ChatCompletionMessageParam[] = [
+      const messages = [
         { role: "system", content: systemPrompt },
         ...input.conversationHistory.slice(-10),
         { role: "user", content: input.message },
